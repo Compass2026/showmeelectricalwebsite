@@ -44,12 +44,12 @@ export default function CareerTimeline() {
           >
             <BoltIcon />
           </div>
-          <div className="rounded-xl border border-white/10 bg-navy-800/60 p-6 backdrop-blur transition-colors hover:border-lime-500/50">
+          <div className="flex h-full flex-col rounded-xl border border-white/10 bg-navy-800/60 p-6 backdrop-blur transition-colors hover:border-lime-500/50">
             <p className="text-xs font-bold uppercase tracking-widest text-lime-500">
               Step {s.stage} · {s.years}
             </p>
             <h3 className="mt-2 text-xl font-bold text-white">{s.title}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-white/70">
+            <p className="mt-3 flex-1 text-sm leading-relaxed text-white/70">
               {s.description}
             </p>
             <ul className="mt-4 space-y-1.5">
