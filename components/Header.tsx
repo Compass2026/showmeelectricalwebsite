@@ -47,9 +47,7 @@ export default function Header() {
       <div className="bg-navy-900">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6">
           <a href={`${WP_URL}/`} aria-label="Show Me Electrical — Home">
-            {/* Full 2.5x size from sm up; capped on phones, where 2.5x (368px)
-                would be wider than the viewport. */}
-            <Logo className="h-24 sm:h-40" />
+            <Logo className="h-12 sm:h-20" />
           </a>
 
           <nav aria-label="Main" className="hidden items-center gap-8 md:flex">

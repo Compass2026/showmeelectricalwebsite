@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 import { getJob } from "@/lib/jobs";
 
 export const runtime = "nodejs";
+
+/** Verified Resend sending domain. Override with RESEND_FROM. */
+const FROM = "Show Me Electrical Careers <careers@send.compassmarketing.ai>";
+/** Override with APPLICATION_RECIPIENT (comma-separated for multiple). */
+const TO = ["info@showmeelectrical.com", "thomas@compassmarketing.ai"];
 
 const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 const RESUME_TYPES: Record<string, string> = {
@@ -188,35 +194,30 @@ export async function POST(request: NextRequest) {
   </body>
 </html>`;
 
-  const payload = {
-    from: process.env.RESEND_FROM ?? "applications@send.compassmarketing.ai",
-    to: [process.env.APPLICATION_RECIPIENT ?? "info@showmeelectrical.com"],
-    reply_to: email,
-    subject: `New Job Application — ${job.title} — ${fullName}`,
-    html,
-    ...(attachments.length ? { attachments } : {}),
-  };
+  const recipients = process.env.APPLICATION_RECIPIENT
+    ? process.env.APPLICATION_RECIPIENT.split(",").map((a) => a.trim()).filter(Boolean)
+    : TO;
 
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+    const resend = new Resend(apiKey);
+    const { error } = await resend.emails.send({
+      from: process.env.RESEND_FROM ?? FROM,
+      to: recipients,
+      replyTo: email,
+      subject: `New Job Application — ${job.title} — ${fullName}`,
+      html,
+      ...(attachments.length ? { attachments } : {}),
     });
 
-    if (!res.ok) {
-      const body = await res.text();
-      console.error(`[apply] Resend error ${res.status}: ${body}`);
+    if (error) {
+      console.error("[apply] Resend send failed:", error);
       return NextResponse.json(
         { error: "We couldn't send your application. Please try again or call 314-571-9756." },
         { status: 502 }
       );
     }
   } catch (err) {
-    console.error("[apply] Resend request failed:", err);
+    console.error("[apply] Resend threw:", err);
     return NextResponse.json(
       { error: "We couldn't send your application. Please try again or call 314-571-9756." },
       { status: 502 }

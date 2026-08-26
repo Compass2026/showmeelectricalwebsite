@@ -8,9 +8,9 @@ Set these in Vercel → Project → Settings → Environment Variables:
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| `RESEND_API_KEY` | **Yes** | — | Resend API key used by `/api/apply` to send application emails. Server-side only — never exposed to the client. |
-| `RESEND_FROM` | No | `applications@send.compassmarketing.ai` | The verified "from" address. Switch to a verified `showmeelectrical.com` sender later without touching code. |
-| `APPLICATION_RECIPIENT` | No | `info@showmeelectrical.com` | Where applications are delivered. Reply-to is always set to the applicant's email. |
+| `RESEND_API_KEY` | **Yes** | — | Resend API key used by `/api/apply`. Server-side only — never exposed to the client. |
+| `RESEND_FROM` | No | `Show Me Electrical Careers <careers@send.compassmarketing.ai>` | The verified "from" address. Switch to a verified `showmeelectrical.com` sender later without touching code. |
+| `APPLICATION_RECIPIENT` | No | `info@showmeelectrical.com,thomas@compassmarketing.ai` | Where applications are delivered — comma-separated for multiple recipients. Reply-to is always the applicant's email. |
 
 ## Local development
 
