@@ -40,7 +40,7 @@ export default function CareerTimeline() {
           {/* node */}
           <div
             aria-hidden="true"
-            className="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border-2 border-lime-500 bg-navy-950 shadow-[0_0_24px_rgba(166,206,57,0.45)] md:left-1/2 md:top-3 md:-translate-x-1/2"
+            className="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border-2 border-lime-500 bg-navy-950 shadow-[0_0_24px_rgba(192,214,52,0.45)] md:left-1/2 md:top-3 md:-translate-x-1/2"
           >
             <BoltIcon />
           </div>
