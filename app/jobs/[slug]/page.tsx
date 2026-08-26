@@ -118,7 +118,7 @@ export default async function JobPage({
                         className="flex items-start gap-2.5 rounded-lg bg-cream px-4 py-3 text-sm leading-relaxed text-navy-900/85"
                       >
                         <svg
-                          className="mt-0.5 h-4 w-4 shrink-0 text-lime-600"
+                          className="mt-0.5 h-4 w-4 shrink-0 text-lime-700"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 /*
- * Brand tokens — matched to showmeelectrical.com (deep navy + lime/chartreuse).
- * NOTE: the build sandbox could not reach the live site's CSS, so verify the
- * two core values below against Elementor → Site Settings → Global Colors
- * and adjust here if needed. Everything on the page derives from these tokens.
+ * Brand tokens. --color-lime-500 is sampled directly from the brand logo
+ * artwork (rgb 192,214,52); the rest of the lime scale is derived from it.
+ * lime-700 is the only shade that meets 4.5:1 for text on white/cream —
+ * use lime-500 on navy and lime-700 on light backgrounds.
  */
 @theme {
   --color-navy-950: #06101f;
@@ -12,10 +12,11 @@
   --color-navy-800: #0f2647;
   --color-navy-700: #17345f;
   --color-navy-600: #22457a;
-  --color-lime-300: #c9e96a;
-  --color-lime-400: #b8dc4b;
-  --color-lime-500: #a6ce39; /* primary accent */
-  --color-lime-600: #8fb52b;
+  --color-lime-300: #d9e878;
+  --color-lime-400: #cde04f;
+  --color-lime-500: #c0d634; /* brand accent, sampled from the logo */
+  --color-lime-600: #a3b62a;
+  --color-lime-700: #667512;
   --color-cream: #f6f8f3;
 
   --font-heading: var(--font-poppins), "Poppins", "Segoe UI", system-ui,

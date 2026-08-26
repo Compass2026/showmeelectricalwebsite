@@ -21,7 +21,7 @@ export default function Footer() {
     <footer className="bg-navy-900 text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Logo className="h-12" />
+          <Logo className="h-16" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
             Family-owned electrical contractor serving the greater St. Louis
             area with residential, commercial, and industrial expertise.

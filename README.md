@@ -24,12 +24,8 @@ Create a `.env.local` with `RESEND_API_KEY=re_...` to test the application form 
 
 ## Brand notes
 
-- **Colors** live in one place: the `@theme` block in `app/globals.css`. The build environment for the initial scaffold could not reach the live site's CSS, so the navy (`--color-navy-900: #0a1b33`) and lime (`--color-lime-500: #a6ce39`) values are close matches to the brand — verify them against **WP Admin → Elementor → Site Settings → Global Colors** and adjust the two tokens if needed. Every color on the page derives from them.
-- **Logo**: `scripts/download-logo.mjs` runs automatically before every build (`prebuild`) and downloads the white logo from the WordPress media library into `public/logo-white.png` (skipped if the file already exists). On Vercel this succeeds on the first deploy. To pin it permanently, download it once and commit it:
-  ```bash
-  curl -o public/logo-white.png https://showmeelectrical.com/wp-content/uploads/2024/08/Show-me-electric-white-logo-4.png
-  ```
-  If the file is ever missing, the header/footer fall back to a styled text wordmark.
+- **Colors** live in one place: the `@theme` block in `app/globals.css`. `--color-lime-500: #c0d634` is sampled directly from the brand logo artwork; the rest of the lime scale is derived from it. Only `lime-700` (`#667512`) meets 4.5:1 contrast for text on white/cream — use `lime-500` on navy and `lime-700` on light backgrounds.
+- **Logo**: `public/logo-white.webp` (700×266, cropped to the artwork bounds from the brand original). The header and footer fall back to a styled text wordmark if it ever fails to load.
 - **Fonts**: Poppins (headings) + Inter (body) via `next/font` — self-hosted at build time, zero layout shift.
 
 ## Architecture

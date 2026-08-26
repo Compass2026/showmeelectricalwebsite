@@ -3,9 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * White brand logo. Falls back to a styled text wordmark if
- * public/logo-white.png is missing (e.g. the prebuild download
- * couldn't reach showmeelectrical.com).
+ * White brand logo (700x266, cropped to the artwork bounds). Falls back to a
+ * styled text wordmark if the asset ever fails to load.
  */
 export default function Logo({ className = "h-12" }: { className?: string }) {
   const [failed, setFailed] = useState(false);
@@ -37,10 +36,10 @@ export default function Logo({ className = "h-12" }: { className?: string }) {
     // eslint-disable-next-line @next/next/no-img-element
     <img
       ref={imgRef}
-      src="/logo-white.png"
-      alt="Show Me Electrical Services"
-      width={220}
-      height={64}
+      src="/logo-white.webp"
+      alt="Show Me Electrical Services — Residential, Commercial, Industrial"
+      width={700}
+      height={266}
       className={`w-auto ${className}`}
       onError={() => setFailed(true)}
     />

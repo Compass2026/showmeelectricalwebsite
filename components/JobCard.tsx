@@ -8,7 +8,7 @@ export default function JobCard({ job }: { job: Job }) {
         <span
           className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${
             job.category === "Field"
-              ? "bg-lime-500/15 text-lime-600"
+              ? "bg-lime-500/15 text-lime-700"
               : "bg-navy-900/8 text-navy-700"
           }`}
         >
@@ -40,7 +40,7 @@ export default function JobCard({ job }: { job: Job }) {
       <div className="mt-6 flex items-center justify-between border-t border-navy-900/10 pt-5">
         <Link
           href={`/jobs/${job.slug}`}
-          className="text-sm font-bold text-navy-900 after:absolute after:inset-0 group-hover:text-lime-600"
+          className="text-sm font-bold text-navy-900 after:absolute after:inset-0 group-hover:text-lime-700"
         >
           View details
           <span aria-hidden="true" className="ml-1 inline-block transition-transform group-hover:translate-x-1">

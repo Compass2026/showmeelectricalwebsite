@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
   <body style="margin:0;padding:0;background:#f4f6f9;font-family:Arial,Helvetica,sans-serif;">
     <div style="max-width:640px;margin:0 auto;padding:24px 16px;">
       <div style="background:#0a1b33;border-radius:12px 12px 0 0;padding:24px 28px;">
-        <p style="margin:0;color:#a6ce39;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">New Job Application</p>
+        <p style="margin:0;color:#c0d634;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">New Job Application</p>
         <h1 style="margin:8px 0 0;color:#ffffff;font-size:22px;">${esc(job.title)} — ${esc(fullName)}</h1>
       </div>
       <div style="background:#ffffff;border-radius:0 0 12px 12px;padding:8px 12px 20px;">

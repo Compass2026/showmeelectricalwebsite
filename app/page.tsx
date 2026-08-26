@@ -95,7 +95,7 @@ export default function HomePage() {
         <section className="bg-cream py-20 sm:py-28" aria-labelledby="why-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <Reveal className="max-w-2xl">
-              <p className="text-sm font-bold uppercase tracking-widest text-lime-600">
+              <p className="text-sm font-bold uppercase tracking-widest text-lime-700">
                 Why Show Me Electrical
               </p>
               <h2 id="why-heading" className="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">
@@ -157,7 +157,7 @@ export default function HomePage() {
         <section id="open-roles" className="scroll-mt-24 bg-white py-20 sm:py-28" aria-labelledby="roles-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <Reveal className="max-w-2xl">
-              <p className="text-sm font-bold uppercase tracking-widest text-lime-600">
+              <p className="text-sm font-bold uppercase tracking-widest text-lime-700">
                 Open Roles
               </p>
               <h2 id="roles-heading" className="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">
