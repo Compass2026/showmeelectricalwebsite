@@ -144,6 +144,13 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
       if (!form.ownTools) e.ownTools = "Required.";
       if (!form.experienceSummary.trim())
         e.experienceSummary = "Give us a brief summary of your experience.";
+    } else if (form.role === "electrical-estimator") {
+      if (!form.yearsExperience)
+        e.yearsExperience = "Enter your years of estimating experience.";
+      if (!form.software.trim())
+        e.software = "List the estimating software you've used.";
+      if (!form.experienceSummary.trim())
+        e.experienceSummary = "Tell us briefly about your estimating background.";
     } else if (form.role === "administrative-assistant") {
       if (!form.yearsExperience)
         e.yearsExperience = "Enter your years of experience.";
@@ -422,6 +429,49 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
           </fieldset>
         )}
 
+        {step === 2 && form.role === "electrical-estimator" && (
+          <fieldset className="grid gap-6">
+            <legend className="sr-only">Electrical Estimator questions</legend>
+            <Field label="Years of electrical estimating experience" required error={errors.yearsExperience}>
+              <input
+                type="number"
+                min={0}
+                max={60}
+                className={inputClass("yearsExperience")}
+                value={form.yearsExperience}
+                onChange={(e) => set("yearsExperience", e.target.value)}
+                aria-invalid={!!errors.yearsExperience}
+              />
+            </Field>
+            <Field
+              label="Estimating software you've used (Accubid, McCormick, Bluebeam…)"
+              required
+              error={errors.software}
+            >
+              <input
+                className={inputClass("software")}
+                value={form.software}
+                onChange={(e) => set("software", e.target.value)}
+                aria-invalid={!!errors.software}
+              />
+            </Field>
+            <Field
+              label="Brief summary of your estimating background"
+              required
+              error={errors.experienceSummary}
+            >
+              <textarea
+                rows={4}
+                className={inputClass("experienceSummary")}
+                value={form.experienceSummary}
+                onChange={(e) => set("experienceSummary", e.target.value)}
+                aria-invalid={!!errors.experienceSummary}
+              />
+            </Field>
+            <ResumeField resume={resume} error={errors.resume} onChange={handleResume} />
+          </fieldset>
+        )}
+
         {step === 2 && form.role === "administrative-assistant" && (
           <fieldset className="grid gap-6">
             <legend className="sr-only">Administrative Assistant questions</legend>
@@ -489,6 +539,13 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
                   <ReviewRow label="Years of experience" value={form.yearsExperience} />
                   <ReviewRow label="Owns tools" value={form.ownTools} />
                   <ReviewRow label="Experience summary" value={form.experienceSummary} />
+                </>
+              )}
+              {form.role === "electrical-estimator" && (
+                <>
+                  <ReviewRow label="Years of estimating experience" value={form.yearsExperience} />
+                  <ReviewRow label="Estimating software" value={form.software} />
+                  <ReviewRow label="Estimating background" value={form.experienceSummary} />
                 </>
               )}
               {form.role === "administrative-assistant" && (

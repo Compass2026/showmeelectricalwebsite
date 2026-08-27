@@ -1,6 +1,7 @@
 export type RoleSlug =
   | "apprentice-electrician"
   | "journeyman-electrician"
+  | "electrical-estimator"
   | "administrative-assistant";
 
 export interface JobSection {
@@ -132,6 +133,80 @@ export const jobs: Job[] = [
     datePosted: "2026-08-26",
   },
   {
+    slug: "electrical-estimator",
+    title: "Electrical Estimator",
+    shortTitle: "Estimator",
+    employmentType: "FULL_TIME",
+    typeLabel: "Full-time · Office + site visits",
+    category: "Office",
+    overview:
+      "Prepare accurate cost estimates for commercial, industrial, and residential electrical projects. Review project plans, specifications, and bid documents to determine labor, material, equipment, and subcontractor costs while ensuring competitive and profitable bids.",
+    cardSummary:
+      "Own the numbers behind our projects — takeoffs, vendor quotes, budgets, and bid proposals for work across the greater St. Louis area.",
+    highlights: ["3+ yrs estimating", "Accubid / Bluebeam", "Salary + bonuses"],
+    sections: [
+      {
+        heading: "Key responsibilities",
+        items: [
+          "Review project drawings, specifications, and contract documents",
+          "Prepare detailed and accurate cost estimates for electrical construction projects",
+          "Perform quantity takeoffs for labor, materials, and equipment",
+          "Solicit and evaluate vendor and subcontractor quotations",
+          "Develop project budgets and bid proposals",
+          "Identify project risks and recommend cost-saving alternatives",
+          "Collaborate with project managers, engineers, and clients during the bidding process",
+          "Maintain current pricing databases for labor, materials, and equipment",
+          "Attend pre-bid meetings and site visits as required",
+          "Ensure estimates comply with project specifications, building codes, and company standards",
+          "Assist with project handoff to operations after contract award",
+        ],
+      },
+      {
+        heading: "Qualifications",
+        items: [
+          "High school diploma or equivalent required; Associate's or Bachelor's degree in Construction Management, Electrical Engineering, or a related field preferred",
+          "3+ years of electrical estimating experience (commercial, industrial, or residential)",
+          "Strong understanding of electrical systems, construction methods, and applicable codes",
+          "Proficiency with estimating software such as Accubid, McCormick, Bluebeam, or similar",
+          "Ability to read and interpret electrical drawings and specifications",
+          "Strong analytical, mathematical, and organizational skills",
+          "Excellent written and verbal communication skills",
+          "Proficiency in Microsoft Excel, Word, and Outlook",
+        ],
+      },
+      {
+        heading: "Preferred skills",
+        items: [
+          "Knowledge of NEC (National Electrical Code)",
+          "Experience with design-build and negotiated projects",
+          "Strong negotiation and vendor management skills",
+          "Ability to manage multiple bids and meet tight deadlines",
+          "High attention to detail and problem-solving abilities",
+        ],
+      },
+      {
+        heading: "Physical requirements",
+        items: [
+          "Ability to sit for extended periods while working on estimates",
+          "Occasional travel to job sites for field verification and pre-bid meetings",
+          "Ability to lift up to 25 pounds, as needed",
+        ],
+      },
+      {
+        heading: "Benefits",
+        items: [
+          "Competitive salary",
+          "Health, dental, and vision insurance",
+          "Paid time off and holidays",
+          "Retirement savings plan (401(k))",
+          "Professional development and training opportunities",
+          "Performance-based bonuses",
+        ],
+      },
+    ],
+    datePosted: "2026-08-27",
+  },
+  {
     slug: "administrative-assistant",
     title: "Administrative Assistant",
     shortTitle: "Admin Assistant",
@@ -159,6 +234,7 @@ export const jobs: Job[] = [
           "Prepare reports, spreadsheets, and correspondence",
           "Maintain organized electronic and paper filing systems",
           "Assist with onboarding paperwork, timekeeping, and office administration",
+          "Support management with special projects and other duties as needed",
         ],
       },
       {
@@ -171,7 +247,16 @@ export const jobs: Job[] = [
           "Strong written and verbal communication",
           "Ability to prioritize multiple tasks and meet deadlines",
           "Professional, dependable, customer-service oriented",
-          "Preferred: experience with an electrical/mechanical/plumbing/HVAC/general contractor; familiarity with construction documents; construction management, estimating, accounting, or service software",
+          "Ability to learn electrical contracting terminology, procedures, and software",
+        ],
+      },
+      {
+        heading: "Preferred experience",
+        items: [
+          "Experience working for an electrical, mechanical, plumbing, HVAC, or general contractor",
+          "Familiarity with construction documents, purchase orders, invoices, change orders, and project schedules",
+          "Experience with construction management, estimating, accounting, or service software",
+          "Basic understanding of electrical construction terminology is a plus",
         ],
       },
       {

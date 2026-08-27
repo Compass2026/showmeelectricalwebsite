@@ -61,7 +61,7 @@ export default function HomePage() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-lime-500 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-lime-500" />
                 </span>
-                Now hiring — 3 open roles
+                Now hiring — {jobs.length} open roles
               </p>
               <h1 className="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
                 Build Your Career.
@@ -161,14 +161,14 @@ export default function HomePage() {
                 Open Roles
               </p>
               <h2 id="roles-heading" className="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">
-                Three ways to join the team
+                Four ways to join the team
               </h2>
               <p className="mt-4 text-lg text-navy-900/70">
                 Serving {AREAS_SERVED.slice(0, 3).join(", ")} and beyond — from
                 our home base in Affton, MO.
               </p>
             </Reveal>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
+            <div className="mt-12 grid gap-6 md:grid-cols-2">
               {jobs.map((job, i) => (
                 <Reveal key={job.slug} delay={i * 120} className="h-full">
                   <JobCard job={job} />

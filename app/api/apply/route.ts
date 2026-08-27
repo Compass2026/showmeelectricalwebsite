@@ -162,6 +162,12 @@ export async function POST(request: NextRequest) {
       row("Owns personal tools", field(form, "ownTools")),
       row("Experience summary", field(form, "experienceSummary", 3000))
     );
+  } else if (roleSlug === "electrical-estimator") {
+    roleRows.push(
+      row("Years of estimating experience", field(form, "yearsExperience", 10)),
+      row("Estimating software", field(form, "software", 500)),
+      row("Estimating background", field(form, "experienceSummary", 3000))
+    );
   } else {
     roleRows.push(
       row("Years of admin/office experience", field(form, "yearsExperience", 10)),
