@@ -4,7 +4,7 @@ Standalone careers page for [showmeelectrical.com](https://showmeelectrical.com)
 
 ## Environment variables
 
-Set these in Vercel → Project → Settings → Environment Variables:
+Set these in Vercel → Project → Settings → Environment Variables. **Paste raw values with no surrounding quotes** — the Vercel UI stores quotes as part of the value. Env vars are snapshotted per deployment, so redeploy after changing one.
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |

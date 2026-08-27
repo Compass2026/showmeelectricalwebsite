@@ -62,10 +62,37 @@ function row(label: string, value: string): string {
   </tr>`;
 }
 
+/**
+ * Reads an env var defensively: trims whitespace and strips wrapping quotes.
+ * Pasting a quoted value into the Vercel dashboard keeps the quotes as part
+ * of the value, which silently breaks the from address / API key.
+ */
+function readEnv(name: string): string {
+  const raw = process.env[name];
+  if (typeof raw !== "string") return "";
+  return raw.trim().replace(/^["']|["']$/g, "").trim();
+}
+
+/** Describes an env var for logs without ever revealing a secret value. */
+function describeSecret(name: string): string {
+  const raw = process.env[name];
+  if (typeof raw !== "string") return `${name}=absent`;
+  const clean = readEnv(name);
+  if (!clean) return `${name}=empty(rawLength=${raw.length})`;
+  return `${name}=set(length=${clean.length},startsWith="${clean.slice(0, 3)}")`;
+}
+
 export async function POST(request: NextRequest) {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = readEnv("RESEND_API_KEY");
   if (!apiKey) {
-    console.error("[apply] RESEND_API_KEY is not configured");
+    console.error(
+      "[apply] RESEND_API_KEY is not usable. " +
+        [
+          describeSecret("RESEND_API_KEY"),
+          `RESEND_FROM=${JSON.stringify(readEnv("RESEND_FROM")) || "absent"}`,
+          `APPLICATION_RECIPIENT=${JSON.stringify(readEnv("APPLICATION_RECIPIENT")) || "absent"}`,
+        ].join(" ")
+    );
     return NextResponse.json(
       { error: "Application service is not configured. Please call us at 314-571-9756." },
       { status: 500 }
@@ -194,14 +221,15 @@ export async function POST(request: NextRequest) {
   </body>
 </html>`;
 
-  const recipients = process.env.APPLICATION_RECIPIENT
-    ? process.env.APPLICATION_RECIPIENT.split(",").map((a) => a.trim()).filter(Boolean)
+  const recipientEnv = readEnv("APPLICATION_RECIPIENT");
+  const recipients = recipientEnv
+    ? recipientEnv.split(",").map((a) => a.trim()).filter(Boolean)
     : TO;
 
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: process.env.RESEND_FROM ?? FROM,
+      from: readEnv("RESEND_FROM") || FROM,
       to: recipients,
       replyTo: email,
       subject: `New Job Application — ${job.title} — ${fullName}`,
