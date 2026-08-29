@@ -5,7 +5,7 @@ import CareerTimeline from "@/components/CareerTimeline";
 import JobCard from "@/components/JobCard";
 import ApplicationForm from "@/components/ApplicationForm";
 import Reveal from "@/components/Reveal";
-import { jobs, jobPostingJsonLd, AREAS_SERVED } from "@/lib/jobs";
+import { jobs, jobPostingJsonLd, SERVICE_AREA } from "@/lib/jobs";
 
 export const dynamic = "force-static";
 
@@ -13,13 +13,13 @@ const whyCards = [
   {
     title: "Paid Training",
     description:
-      "Earn a real paycheck from day one while you learn the trade — classroom instruction plus thousands of hours of hands-on experience alongside our licensed electricians.",
+      "Earn a real paycheck from day one while you learn the trade — classroom instruction plus thousands of hours of hands-on experience alongside our certified electricians.",
     icon: "graduation",
   },
   {
     title: "A Clear Career Path",
     description:
-      "Apprentice → Journeyman. We invest in your licensing and advancement, so you always know your next step and what it takes to get there.",
+      "Apprentice → Journeyman. We invest in your certification and advancement, so you always know your next step and what it takes to get there.",
     icon: "path",
   },
   {
@@ -31,7 +31,7 @@ const whyCards = [
   {
     title: "Steady, Varied Work",
     description:
-      "Residential, commercial, and industrial projects across six Missouri counties mean consistent hours and work that never gets stale.",
+      "Residential, commercial, and industrial projects across the Greater St. Louis area mean consistent hours and work that never gets stale.",
     icon: "bolt",
   },
 ] as const;
@@ -71,7 +71,7 @@ export default function HomePage() {
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
                 Join a family-owned electrical contractor serving the greater
                 St. Louis area. Paid training, steady work, and a clear path
-                from Apprentice to licensed Journeyman.
+                from Apprentice to certified Journeyman.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <a
@@ -142,7 +142,7 @@ export default function HomePage() {
                 Your Career Path
               </p>
               <h2 id="path-heading" className="mt-3 text-3xl font-extrabold text-white sm:text-4xl">
-                From first day to licensed Journeyman
+                From first day to certified Journeyman
               </h2>
               <p className="mt-4 text-lg text-white/70">
                 A proven progression with paid training at every step. This is
@@ -164,8 +164,8 @@ export default function HomePage() {
                 Four ways to join the team
               </h2>
               <p className="mt-4 text-lg text-navy-900/70">
-                Serving {AREAS_SERVED.slice(0, 3).join(", ")} and beyond — from
-                our home base in Affton, MO.
+                Serving the {SERVICE_AREA} — from our home base in
+                Affton, MO.
               </p>
             </Reveal>
             <div className="mt-12 grid gap-6 md:grid-cols-2">

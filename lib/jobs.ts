@@ -35,14 +35,7 @@ export const ADDRESS = {
   state: "MO",
   zip: "63123",
 };
-export const AREAS_SERVED = [
-  "St. Louis County",
-  "St. Charles County",
-  "Jefferson County",
-  "Franklin County",
-  "Warren County",
-  "Lincoln County",
-];
+export const SERVICE_AREA = "Greater St. Louis area";
 
 export const jobs: Job[] = [
   {
@@ -53,9 +46,9 @@ export const jobs: Job[] = [
     typeLabel: "Full-time · Paid training",
     category: "Field",
     overview:
-      "Learn the trade through first-hand experience alongside our licensed electricians. No experience required — just a strong work ethic and the drive to build a career.",
+      "Learn the trade through first-hand experience alongside our certified electricians. No experience required — just a strong work ethic and the drive to build a career.",
     cardSummary:
-      "Start your electrical career with paid on-the-job training alongside our licensed electricians. Earn while you learn — no experience required.",
+      "Start your electrical career with paid on-the-job training alongside our certified electricians. Earn while you learn — no experience required.",
     highlights: ["Paid training", "No experience needed", "~4-year path to Journeyman"],
     sections: [
       {
@@ -76,7 +69,7 @@ export const jobs: Job[] = [
       {
         heading: "What the apprenticeship looks like",
         body:
-          "A blend of classroom and paid on-the-job training — typically 144 hours in the classroom and 2,000 hours on the job under the supervision of a licensed electrician, lasting approximately 4 years. Apprentices learn theory, mathematics, blueprint and schematic reading, safety, and state and local codes. Once training is complete, apprentices are eligible to become Journeyman Electricians.",
+          "A blend of classroom and paid on-the-job training — typically 144 hours in the classroom and 2,000 hours on the job under the supervision of a certified electrician, lasting approximately 4 years. Apprentices learn theory, mathematics, blueprint and schematic reading, safety, and state and local codes. Once training is complete, apprentices are eligible to become Journeyman Electricians.",
       },
     ],
     datePosted: "2026-08-26",
@@ -86,12 +79,12 @@ export const jobs: Job[] = [
     title: "Journeyman Electrician",
     shortTitle: "Journeyman",
     employmentType: "FULL_TIME",
-    typeLabel: "Full-time · Licensed trade",
+    typeLabel: "Full-time · Certified trade",
     category: "Field",
     overview:
-      "Work alongside other Licensed Journeymen and Electricians on high-profile residential, commercial, and industrial projects — installing, maintaining, and repairing electrical wiring, equipment, and fixtures. You may also work on power distribution, fire alarm, audio/visual, automation, and low-voltage systems.",
+      "Work alongside other Certified Journeymen and Electricians on high-profile residential, commercial, and industrial projects — installing, maintaining, and repairing electrical wiring, equipment, and fixtures. You may also work on power distribution, fire alarm, audio/visual, automation, and low-voltage systems.",
     cardSummary:
-      "Join high-profile residential, commercial, and industrial projects across greater St. Louis. Licensed or license-ready electricians welcome.",
+      "Join high-profile residential, commercial, and industrial projects across the Greater St. Louis area. Certified or certification-ready electricians welcome.",
     highlights: ["High-profile projects", "Varied systems & sites", "Room to specialize"],
     sections: [
       {
@@ -99,7 +92,7 @@ export const jobs: Job[] = [
         items: [
           "Understanding and enthusiastic agreement with the vision and mission of Show Me Electrical Services",
           "Pass a background check, including drug test",
-          "Journeyman License, or equivalent experience and willingness to get licensed",
+          "Journeyman certification, or equivalent experience and willingness to get certified",
           "Experience installing conduit and wiring systems",
           "Owns personal electrician tools",
           "Reliable transportation",

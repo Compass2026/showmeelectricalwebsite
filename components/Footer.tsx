@@ -1,7 +1,7 @@
 import Logo from "./Logo";
 import {
   ADDRESS,
-  AREAS_SERVED,
+  SERVICE_AREA,
   EMAIL,
   PHONE,
   PHONE_HREF,
@@ -51,11 +51,9 @@ export default function Footer() {
             Areas Served
           </h3>
           <ul className="mt-4 space-y-2.5">
-            {AREAS_SERVED.map((area) => (
-              <li key={area} className="text-sm text-white/80">
-                {area}
-              </li>
-            ))}
+            <li className="text-sm leading-relaxed text-white/80">
+              Proudly serving the {SERVICE_AREA} and surrounding communities.
+            </li>
           </ul>
         </div>
 

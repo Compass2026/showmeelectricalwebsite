@@ -138,7 +138,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
       if (!form.whyElectrician.trim())
         e.whyElectrician = "Tell us briefly why you're interested.";
     } else if (form.role === "journeyman-electrician") {
-      if (!form.licenseStatus) e.licenseStatus = "Select your license status.";
+      if (!form.licenseStatus) e.licenseStatus = "Select your certification status.";
       if (!form.yearsExperience)
         e.yearsExperience = "Enter your years of experience.";
       if (!form.ownTools) e.ownTools = "Required.";
@@ -387,7 +387,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
         {step === 2 && form.role === "journeyman-electrician" && (
           <fieldset className="grid gap-6">
             <legend className="sr-only">Journeyman Electrician questions</legend>
-            <Field label="License status" required error={errors.licenseStatus}>
+            <Field label="Certification status" required error={errors.licenseStatus}>
               <select
                 className={inputClass("licenseStatus")}
                 value={form.licenseStatus}
@@ -395,8 +395,8 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
                 aria-invalid={!!errors.licenseStatus}
               >
                 <option value="">Select…</option>
-                <option>Licensed Journeyman</option>
-                <option>Equivalent experience — willing to get licensed</option>
+                <option>Certified Journeyman</option>
+                <option>Equivalent experience — willing to get certified</option>
               </select>
             </Field>
             <Field label="Years of electrical experience" required error={errors.yearsExperience}>
@@ -535,7 +535,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
               )}
               {form.role === "journeyman-electrician" && (
                 <>
-                  <ReviewRow label="License status" value={form.licenseStatus} />
+                  <ReviewRow label="Certification status" value={form.licenseStatus} />
                   <ReviewRow label="Years of experience" value={form.yearsExperience} />
                   <ReviewRow label="Owns tools" value={form.ownTools} />
                   <ReviewRow label="Experience summary" value={form.experienceSummary} />

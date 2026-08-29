@@ -6,7 +6,7 @@ const stages = [
     title: "Apprentice Electrician",
     years: "Years 0–4",
     description:
-      "Earn while you learn. 144 classroom hours and 2,000 paid on-the-job hours per year alongside our licensed electricians — theory, math, blueprints, safety, and code.",
+      "Earn while you learn. 144 classroom hours and 2,000 paid on-the-job hours per year alongside our certified electricians — theory, math, blueprints, safety, and code.",
     points: [
       "Paid from day one",
       "Classroom instruction",
@@ -19,9 +19,9 @@ const stages = [
     title: "Journeyman Electrician",
     years: "Year 4 onward",
     description:
-      "Finish your training, earn your license, and take on high-profile residential, commercial, and industrial work — power distribution, fire alarm, automation, low-voltage, and more.",
+      "Finish your training, earn your certification, and take on high-profile residential, commercial, and industrial work — power distribution, fire alarm, automation, low-voltage, and more.",
     points: [
-      "Journeyman license",
+      "Journeyman certification",
       "Run your own installations",
       "Grow your specialties",
       "Top earning potential",

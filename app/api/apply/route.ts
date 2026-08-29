@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
     );
   } else if (roleSlug === "journeyman-electrician") {
     roleRows.push(
-      row("License status", field(form, "licenseStatus")),
+      row("Certification status", field(form, "licenseStatus")),
       row("Years of experience", field(form, "yearsExperience", 10)),
       row("Owns personal tools", field(form, "ownTools")),
       row("Experience summary", field(form, "experienceSummary", 3000))
