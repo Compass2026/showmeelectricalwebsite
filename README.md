@@ -30,7 +30,7 @@ Create a `.env.local` with `RESEND_API_KEY=re_...` to test the application form 
 
 ## Architecture
 
-- `app/page.tsx` — fully static home page: hero (animated SVG circuit motif), "Why Show Me Electrical" cards, Apprentice → Journeyman → Master timeline, job cards, and the multi-step application form.
+- `app/page.tsx` — fully static home page: hero (animated SVG circuit motif), "Why Show Me Electrical" cards, Apprentice → Journeyman timeline, job cards, and the multi-step application form.
 - `app/jobs/[slug]/page.tsx` — statically generated detail page per role with `JobPosting` JSON-LD structured data (Google Jobs eligible).
 - `app/api/apply/route.ts` — validates the submission (honeypot + per-IP rate limiting + field validation), formats an HTML email, base64-encodes the optional resume (PDF/DOC/DOCX, max 5MB), and sends via the Resend API with `reply_to` set to the applicant.
 - `lib/jobs.ts` — single source of truth for role content, contact info, and structured data.

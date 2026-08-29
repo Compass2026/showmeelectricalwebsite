@@ -3,33 +3,35 @@ import Reveal from "./Reveal";
 const stages = [
   {
     stage: "01",
-    title: "Apprentice",
+    title: "Apprentice Electrician",
     years: "Years 0–4",
     description:
-      "Earn while you learn. 144 classroom hours and 2,000 paid on-the-job hours per year under a Master or Foreman Electrician — theory, math, blueprints, safety, and code.",
-    points: ["Paid on-the-job training", "Classroom instruction", "Mentored by Masters"],
+      "Earn while you learn. 144 classroom hours and 2,000 paid on-the-job hours per year alongside our licensed electricians — theory, math, blueprints, safety, and code.",
+    points: [
+      "Paid from day one",
+      "Classroom instruction",
+      "Mentored on every job",
+      "No experience required",
+    ],
   },
   {
     stage: "02",
-    title: "Journeyman",
-    years: "Years 4–8+",
+    title: "Journeyman Electrician",
+    years: "Year 4 onward",
     description:
-      "Licensed and trusted on high-profile residential, commercial, and industrial projects — power distribution, fire alarm, automation, low-voltage, and more.",
-    points: ["Journeyman license", "Lead real installations", "Grow your specialties"],
-  },
-  {
-    stage: "03",
-    title: "Master Electrician",
-    years: "Your career peak",
-    description:
-      "Run jobs, mentor the next generation of apprentices, and take on the most complex electrical work in the region as a recognized expert in the trade.",
-    points: ["Supervise & mentor", "Top earning potential", "Industry recognition"],
+      "Finish your training, earn your license, and take on high-profile residential, commercial, and industrial work — power distribution, fire alarm, automation, low-voltage, and more.",
+    points: [
+      "Journeyman license",
+      "Run your own installations",
+      "Grow your specialties",
+      "Top earning potential",
+    ],
   },
 ];
 
 export default function CareerTimeline() {
   return (
-    <ol className="relative mx-auto mt-14 grid max-w-5xl gap-10 md:grid-cols-3 md:gap-8">
+    <ol className="relative mx-auto mt-14 grid max-w-4xl gap-10 md:grid-cols-2 md:gap-10">
       {/* connecting line */}
       <div
         aria-hidden="true"

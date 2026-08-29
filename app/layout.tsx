@@ -23,13 +23,13 @@ export const metadata: Metadata = {
     template: "%s | Show Me Electrical Careers",
   },
   description:
-    "Build your electrical career with Show Me Electrical Services. Now hiring Apprentice Electricians, Journeyman Electricians, and an Administrative Assistant in the greater St. Louis area. Paid training and a clear path from Apprentice to Master.",
+    "Build your electrical career with Show Me Electrical Services. Now hiring Apprentice Electricians, Journeyman Electricians, an Electrical Estimator, and an Administrative Assistant in the greater St. Louis area. Paid training and a clear path from Apprentice to licensed Journeyman.",
   openGraph: {
     type: "website",
     siteName: "Show Me Electrical Careers",
     title: "Careers | Show Me Electrical — Electrician Jobs in St. Louis, MO",
     description:
-      "Now hiring Apprentice Electricians, Journeyman Electricians, and an Administrative Assistant. Paid training, steady work, and a clear path from Apprentice to Master.",
+      "Now hiring Apprentice Electricians, Journeyman Electricians, an Electrical Estimator, and an Administrative Assistant. Paid training, steady work, and a clear path from Apprentice to licensed Journeyman.",
     url: SITE_URL,
     images: [
       {
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Careers | Show Me Electrical",
     description:
-      "Electrician jobs in St. Louis, MO — paid training and a clear path from Apprentice to Master.",
+      "Electrician jobs in St. Louis, MO — paid training and a clear path from Apprentice to licensed Journeyman.",
   },
   alternates: { canonical: SITE_URL },
 };

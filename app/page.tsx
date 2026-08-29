@@ -13,13 +13,13 @@ const whyCards = [
   {
     title: "Paid Training",
     description:
-      "Earn a real paycheck from day one while you learn the trade — classroom instruction plus thousands of hours of hands-on experience under Master Electricians.",
+      "Earn a real paycheck from day one while you learn the trade — classroom instruction plus thousands of hours of hands-on experience alongside our licensed electricians.",
     icon: "graduation",
   },
   {
     title: "A Clear Career Path",
     description:
-      "Apprentice → Journeyman → Master. We invest in your licensing and advancement, so you always know your next step and what it takes to get there.",
+      "Apprentice → Journeyman. We invest in your licensing and advancement, so you always know your next step and what it takes to get there.",
     icon: "path",
   },
   {
@@ -71,7 +71,7 @@ export default function HomePage() {
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
                 Join a family-owned electrical contractor serving the greater
                 St. Louis area. Paid training, steady work, and a clear path
-                from Apprentice to Master Electrician.
+                from Apprentice to licensed Journeyman.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <a
@@ -142,11 +142,11 @@ export default function HomePage() {
                 Your Career Path
               </p>
               <h2 id="path-heading" className="mt-3 text-3xl font-extrabold text-white sm:text-4xl">
-                From first day to Master Electrician
+                From first day to licensed Journeyman
               </h2>
               <p className="mt-4 text-lg text-white/70">
                 A proven progression with paid training at every step. This is
-                the roadmap our own Masters followed.
+                the roadmap our own electricians followed.
               </p>
             </Reveal>
             <CareerTimeline />
