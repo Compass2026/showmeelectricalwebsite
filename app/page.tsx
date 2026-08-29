@@ -19,7 +19,7 @@ const whyCards = [
   {
     title: "A Clear Career Path",
     description:
-      "Apprentice → Journeyman. We invest in your certification and advancement, so you always know your next step and what it takes to get there.",
+      "Apprentice → Journeyman. We invest in your training and advancement, so you always know your next step and what it takes to get there.",
     icon: "path",
   },
   {
