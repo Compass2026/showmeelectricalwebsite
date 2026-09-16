@@ -10,7 +10,7 @@
   --color-navy-950: #06101f;
   --color-navy-900: #0a1b33;
   --color-navy-800: #0f2647;
-  --color-navy-700: #17345f;
+  --color-navy-700: #04345c; /* brand board navy, reconciled into the scale */
   --color-navy-600: #22457a;
   --color-lime-300: #d9e878;
   --color-lime-400: #cde04f;
@@ -18,6 +18,7 @@
   --color-lime-600: #a3b62a;
   --color-lime-700: #667512;
   --color-cream: #f6f8f3;
+  --color-charcoal: #121217; /* brand board body text */
 
   --font-heading: var(--font-poppins), "Poppins", "Segoe UI", system-ui,
     sans-serif;
@@ -26,9 +27,19 @@
 
 html {
   scroll-behavior: smooth;
+  /* Pairs with body's clip — see the note there. */
+  overflow-x: clip;
 }
 
 body {
+  /*
+   * Horizontal reveal animations translate elements a few px outside the
+   * viewport before settling, which would otherwise create a transient
+   * horizontal scrollbar. `clip` is used rather than `hidden` because
+   * `overflow-x: hidden` on body turns it into a scroll container and breaks
+   * `position: sticky` on the header.
+   */
+  overflow-x: clip;
   font-family: var(--font-body);
   background-color: white;
   color: var(--color-navy-900);

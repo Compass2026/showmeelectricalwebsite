@@ -39,7 +39,7 @@ export default function JobCard({ job }: { job: Job }) {
 
       <div className="mt-6 flex items-center justify-between border-t border-navy-900/10 pt-5">
         <Link
-          href={`/jobs/${job.slug}`}
+          href={`/careers/jobs/${job.slug}`}
           className="text-sm font-bold text-navy-900 after:absolute after:inset-0 group-hover:text-lime-700"
         >
           View details
@@ -48,7 +48,7 @@ export default function JobCard({ job }: { job: Job }) {
           </span>
         </Link>
         <Link
-          href={`/?role=${job.slug}#apply`}
+          href={`/careers?role=${job.slug}#apply`}
           className="relative z-10 rounded-md bg-navy-900 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white transition-colors hover:bg-lime-500 hover:text-navy-950"
         >
           Apply

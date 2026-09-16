@@ -1,44 +1,169 @@
-# Show Me Electrical — Careers Site
+# Show Me Electrical — Website
 
-Standalone careers page for [showmeelectrical.com](https://showmeelectrical.com), built with Next.js (App Router), TypeScript, and Tailwind CSS v4. Deployed to Vercel at **careers.showmeelectrical.com** and designed to feel like a seamless (but more polished) extension of the WordPress site.
+Next.js (App Router) + TypeScript + Tailwind CSS v4. Two properties share this
+codebase:
+
+| Property | Routes | Status |
+|---|---|---|
+| **Careers site** | `/careers`, `/careers/jobs/[slug]`, `/api/apply` | **LIVE** at `careers.showmeelectrical.com` |
+| **Main site** | `/`, `/contact` | **Prototype** — homepage under review |
+
+This repo is also the first draft of the reusable **Compass Marketing website
+template**. See "Reusing this for another client" below.
+
+---
+
+## Routing: how the two properties coexist
+
+The careers site is live and serves its pages at `/` and `/jobs/<slug>` on
+`careers.showmeelectrical.com`. The main-site rebuild needs `/` for its own
+homepage, so the careers routes moved to `/careers/*` internally, and
+`middleware.ts` rewrites the careers host back onto them:
+
+```
+careers.showmeelectrical.com/              → /careers
+careers.showmeelectrical.com/jobs/<slug>   → /careers/jobs/<slug>
+```
+
+A **rewrite**, not a redirect — every existing public careers URL is unchanged
+in the address bar, in search results and in any existing link.
+
+---
 
 ## Environment variables
 
-Set these in Vercel → Project → Settings → Environment Variables. **Paste raw values with no surrounding quotes** — the Vercel UI stores quotes as part of the value. Env vars are snapshotted per deployment, so redeploy after changing one.
+Set in Vercel → Project → Settings → Environment Variables. **Paste raw values
+with no surrounding quotes** — the Vercel UI stores quotes as part of the
+value. Env vars are snapshotted per deployment, so redeploy after changing one.
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| `RESEND_API_KEY` | **Yes** | — | Resend API key used by `/api/apply`. Server-side only — never exposed to the client. |
-| `RESEND_FROM` | No | `Show Me Electrical Careers <careers@send.compassmarketing.ai>` | The verified "from" address. Switch to a verified `showmeelectrical.com` sender later without touching code. |
-| `APPLICATION_RECIPIENT` | No | `info@showmeelectrical.com,thomas@compassmarketing.ai` | Where applications are delivered — comma-separated for multiple recipients. Reply-to is always the applicant's email. |
+| `RESEND_API_KEY` | **Yes** | — | Careers application email via `/api/apply`. Server-side only. |
+| `RESEND_FROM` | No | `Show Me Electrical Careers <careers@send.compassmarketing.ai>` | Verified sender. |
+| `APPLICATION_RECIPIENT` | No | `info@showmeelectrical.com,thomas@compassmarketing.ai` | Comma-separated recipients. Reply-to is the applicant. |
+| `NEXT_PUBLIC_SITE_URL` | No | `https://showmeelectrical.com` | Production domain for canonicals and structured data. |
+| `NEXT_PUBLIC_ALLOW_INDEXING` | No | *(unset = noindex)* | See below. |
+
+### Preview vs production indexing
+
+Every build is **non-indexable by default**. `app/layout.tsx` emits
+`noindex, nofollow` and `app/robots.ts` returns `Disallow: /` unless indexing
+is explicitly enabled.
+
+To enable indexing **at launch, on the production deployment only**:
+
+```
+NEXT_PUBLIC_ALLOW_INDEXING=true
+NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com
+```
+
+Then redeploy. Verify with `curl -s https://<domain>/ | grep robots` and
+`curl -s https://<domain>/robots.txt` — never in a browser alone, per the SOP's
+raw-HTML rule. Leave the variable unset on every preview environment.
+
+---
+
+## Architecture
+
+```
+config/
+  site.config.ts     Client identity: name, contact, service area, nav, CTAs
+  theme.config.ts    Motion settings + the brand reconciliation record
+content/
+  home.ts            Homepage copy, with provenance notes per block
+components/
+  motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
+  site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice
+  home/              Hero, TrustBar, ServicePathways, AboutSection, Testimonials
+  (root)             Careers components — Header, Footer, JobCard, ApplicationForm
+lib/
+  seo.ts             Structured data helpers
+  jobs.ts            Careers role data
+docs/
+  migration-inventory.md   WordPress → Next.js page-by-page plan
+  open-questions.md        Conflicts and decisions needed from Tom
+```
+
+### Separation of concerns
+
+- **Client content** lives in `config/site.config.ts` and `content/`.
+- **Design tokens** live in the `@theme` block of `app/globals.css`.
+- **Motion settings** live in `config/theme.config.ts`.
+- **Components** read from those and hard-code nothing client-specific.
+
+---
+
+## Motion system
+
+GSAP + ScrollTrigger, via `@gsap/react`'s `useGSAP` so every animation is
+scoped to a container ref and reverted on unmount.
+
+| Component | Use |
+|---|---|
+| `Reveal` | Section and image reveals; `stagger` animates direct children in sequence |
+| `StaggerText` | Word-by-word headline entrance |
+| `Parallax` | Subtle image drift (desktop only) |
+| `ScrollStory` | The signature "Powering your project" circuit sequence |
+
+Rules the system follows:
+
+- **Content never depends on JS to be visible.** Animations use `gsap.from()`,
+  so the hidden start state is only ever applied by JavaScript. If GSAP fails
+  to load, everything renders visible. Verified: with JS disabled, all 8
+  homepage sections render with zero collapsed.
+- **Reduced motion is respected** — `prefers-reduced-motion: reduce` disables
+  decorative motion entirely.
+- **Mobile is simplified** — shorter travel and duration; parallax off below
+  768px; the scroll story becomes a plain vertical sequence.
+- **ScrollTrigger refreshes** on `load` and after fonts settle, so late-loading
+  images cannot leave triggers measured against a stale document height.
+- **Lenis smooth scrolling is deliberately not installed.** Native scrolling is
+  the baseline. `motion.smoothScroll` in `theme.config.ts` is the switch if it
+  is ever justified.
+
+CSS handles simple hover and focus states; GSAP is only used for scroll work.
+
+---
 
 ## Local development
 
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run build      # production build (runs the logo download prebuild step)
+npm run build      # production build
 ```
 
-Create a `.env.local` with `RESEND_API_KEY=re_...` to test the application form end-to-end.
+To exercise the careers host rewrite locally:
+
+```bash
+curl -H 'Host: careers.showmeelectrical.com' http://localhost:3000/
+```
+
+---
 
 ## Brand notes
 
-- **Colors** live in one place: the `@theme` block in `app/globals.css`. `--color-lime-500: #c0d634` is sampled directly from the brand logo artwork; the rest of the lime scale is derived from it. Only `lime-700` (`#667512`) meets 4.5:1 contrast for text on white/cream — use `lime-500` on navy and `lime-700` on light backgrounds.
-- **Logo**: `public/logo-white.webp` (700×266, cropped to the artwork bounds from the brand original). The header and footer fall back to a styled text wordmark if it ever fails to load.
-- **Fonts**: Poppins (headings) + Inter (body) via `next/font` — self-hosted at build time, zero layout shift.
+- **Colours** live in the `@theme` block of `app/globals.css`.
+  `--color-lime-500: #c0d634` is sampled from the logo artwork. Only
+  `lime-700` (`#667512`) meets 4.5:1 on white/cream — use `lime-500` on navy
+  and `lime-700` on light backgrounds. The brand board's navy `#04345C` is
+  carried as `navy-700`; see `config/theme.config.ts` for the full
+  reconciliation record.
+- **Logo**: `public/logo-white.webp` (700×266). Falls back to a text wordmark.
+- **Fonts**: Poppins (headings) + Inter (body) via `next/font`. The brand board
+  specifies Spectral SC for headings — unresolved, see `docs/open-questions.md`.
+- **Photography**: `public/photos/` holds nine real job-site photos from the
+  client's media library. Stock images in that library are catalogued in the
+  migration inventory and deliberately unused.
 
-## Architecture
+---
 
-- `app/page.tsx` — fully static home page: hero (animated SVG circuit motif), "Why Show Me Electrical" cards, Apprentice → Journeyman timeline, job cards, and the multi-step application form.
-- `app/jobs/[slug]/page.tsx` — statically generated detail page per role with `JobPosting` JSON-LD structured data (Google Jobs eligible).
-- `app/api/apply/route.ts` — validates the submission (honeypot + per-IP rate limiting + field validation), formats an HTML email, base64-encodes the optional resume (PDF/DOC/DOCX, max 5MB), and sends via the Resend API with `reply_to` set to the applicant.
-- `lib/jobs.ts` — single source of truth for role content, contact info, and structured data.
-- All sections are server-rendered/static; client JS is limited to the header menu, scroll reveals, and the form.
+## Reusing this for another client
 
-## Deploying to Vercel
+1. Rewrite `config/site.config.ts` — identity, contact, service area, nav.
+2. Replace the `@theme` values in `app/globals.css`.
+3. Replace `content/home.ts` and `public/photos/`.
+4. Adjust `config/theme.config.ts` if the motion feel should differ.
 
-1. Import the repo in Vercel; framework preset **Next.js** (no custom config needed — there is intentionally no `vercel.json`).
-2. Add the environment variables above.
-3. Assign the domain `careers.showmeelectrical.com` and add the matching CNAME in DNS.
-4. Point the WordPress site's "Career" nav item at `https://careers.showmeelectrical.com`.
+Components, the motion system, SEO helpers and the section primitives carry
+over unchanged.

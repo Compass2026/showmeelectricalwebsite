@@ -9,7 +9,7 @@ const navLinks = [
   { label: "Home", href: `${WP_URL}/`, external: true },
   { label: "About", href: `${WP_URL}/about/`, external: true },
   { label: "Services", href: `${WP_URL}/services/`, external: true },
-  { label: "Career", href: "/", external: false, active: true },
+  { label: "Career", href: "/careers", external: false, active: true },
   { label: "Contact", href: `${WP_URL}/contact/`, external: true },
 ];
 
@@ -72,7 +72,7 @@ export default function Header() {
               )
             )}
             <a
-              href="/#apply"
+              href="/careers#apply"
               className="rounded-md bg-lime-500 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-lime-400"
             >
               Apply Now
@@ -110,7 +110,7 @@ export default function Header() {
               </a>
             ))}
             <a
-              href="/#apply"
+              href="/careers#apply"
               onClick={() => setOpen(false)}
               className="mt-4 block rounded-md bg-lime-500 px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-navy-950"
             >

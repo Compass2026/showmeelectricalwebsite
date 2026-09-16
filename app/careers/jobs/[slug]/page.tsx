@@ -62,7 +62,7 @@ export default async function JobPage({
         <section className="bg-navy-950 py-16 sm:py-20">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <nav aria-label="Breadcrumb" className="text-sm text-white/60">
-              <Link href="/" className="hover:text-lime-400">
+              <Link href="/careers" className="hover:text-lime-400">
                 Careers
               </Link>
               <span aria-hidden="true" className="mx-2">
@@ -88,7 +88,7 @@ export default async function JobPage({
               {job.overview}
             </p>
             <Link
-              href={`/?role=${job.slug}#apply`}
+              href={`/careers?role=${job.slug}#apply`}
               className="mt-8 inline-block rounded-lg bg-lime-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-navy-950 shadow-lg shadow-lime-500/25 transition hover:bg-lime-400"
             >
               Apply for this role
@@ -145,13 +145,13 @@ export default async function JobPage({
                 respond fast.
               </p>
               <Link
-                href={`/?role=${job.slug}#apply`}
+                href={`/careers?role=${job.slug}#apply`}
                 className="mt-7 inline-block rounded-lg bg-lime-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-lime-400"
               >
                 Apply for this role
               </Link>
               <p className="mt-6 text-sm text-white/50">
-                <Link href="/#open-roles" className="underline hover:text-lime-400">
+                <Link href="/careers#open-roles" className="underline hover:text-lime-400">
                   ← Back to all open roles
                 </Link>
               </p>
