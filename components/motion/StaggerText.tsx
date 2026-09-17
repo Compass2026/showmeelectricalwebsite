@@ -12,6 +12,8 @@ interface StaggerTextProps {
   delay?: number;
   /** Words matching these strings get the accent colour. */
   accentWords?: string[];
+  /** Play on mount rather than on scroll — see Reveal's `immediate`. */
+  immediate?: boolean;
 }
 
 /**
@@ -27,6 +29,7 @@ export default function StaggerText({
   as: Tag = "h2",
   delay = 0,
   accentWords = [],
+  immediate = false,
 }: StaggerTextProps) {
   const scope = useRef<HTMLElement>(null);
   const words = text.split(" ");
@@ -43,11 +46,15 @@ export default function StaggerText({
       ease: motionCfg.ease,
       delay,
       stagger: isMobile ? motionCfg.stagger * 0.6 : motionCfg.stagger,
-      scrollTrigger: {
-        trigger: scope.current,
-        start: motionCfg.start,
-        once: true,
-      },
+      ...(immediate
+        ? {}
+        : {
+            scrollTrigger: {
+              trigger: scope.current,
+              start: motionCfg.start,
+              once: true,
+            },
+          }),
     });
   });
 

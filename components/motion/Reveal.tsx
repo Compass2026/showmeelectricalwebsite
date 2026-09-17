@@ -15,6 +15,12 @@ interface RevealProps {
   from?: "bottom" | "left" | "right" | "none";
   /** Animate direct children in sequence instead of the container as one unit. */
   stagger?: boolean;
+  /**
+   * Play on mount instead of on scroll. For content that is above the fold by
+   * design (the hero), so its entrance never depends on where the reveal
+   * trigger line happens to fall for a given viewport height.
+   */
+  immediate?: boolean;
 }
 
 /**
@@ -36,6 +42,7 @@ export default function Reveal({
   delay = 0,
   from = "bottom",
   stagger = false,
+  immediate = false,
 }: RevealProps) {
   const scope = useRef<HTMLElement>(null);
 
@@ -63,11 +70,15 @@ export default function Reveal({
       ease: motionCfg.ease,
       delay,
       stagger: stagger ? motionCfg.stagger : 0,
-      scrollTrigger: {
-        trigger: scope.current,
-        start: motionCfg.start,
-        once: true,
-      },
+      ...(immediate
+        ? {}
+        : {
+            scrollTrigger: {
+              trigger: scope.current,
+              start: motionCfg.start,
+              once: true,
+            },
+          }),
     });
   });
 
