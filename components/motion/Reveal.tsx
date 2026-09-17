@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, type ElementType, type ReactNode } from "react";
-import { gsap, useGSAP, shouldAnimate, isMobileViewport } from "./gsap";
+import { gsap } from "./gsap";
+import { useResponsiveGSAP } from "./useResponsiveGSAP";
 import { motion as motionCfg } from "@/config/theme.config";
 
 interface RevealProps {
@@ -19,10 +20,14 @@ interface RevealProps {
 /**
  * Scroll-triggered section or image reveal.
  *
- * No-JS / failure behaviour: the element is styled visible by default and GSAP
- * sets the hidden start state inside `useGSAP`, which runs in a layout effect
- * before paint. If GSAP never loads, the content simply renders visible — it
- * is never hidden by CSS waiting for JavaScript to release it.
+ * No-JS / failure behaviour: the element is visible by default and GSAP sets
+ * the hidden start state inside a layout effect before paint. If GSAP never
+ * loads, the content simply renders visible — it is never hidden by CSS
+ * waiting for JavaScript to release it.
+ *
+ * Responsive behaviour is delegated to `useResponsiveGSAP`, so crossing the
+ * mobile breakpoint or toggling reduced motion re-runs this setup and reverts
+ * the previous one.
  */
 export default function Reveal({
   children,
@@ -34,43 +39,37 @@ export default function Reveal({
 }: RevealProps) {
   const scope = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      if (!shouldAnimate()) return;
+  useResponsiveGSAP(scope, ({ isMobile }) => {
+    const targets = stagger
+      ? Array.from(scope.current?.children ?? [])
+      : [scope.current];
+    if (!targets.length || !targets[0]) return;
 
-      const targets = stagger
-        ? Array.from(scope.current?.children ?? [])
-        : [scope.current];
-      if (!targets.length) return;
+    const travel = isMobile ? motionCfg.distance * 0.5 : motionCfg.distance;
 
-      const mobile = isMobileViewport();
-      const travel = mobile ? motionCfg.distance * 0.5 : motionCfg.distance;
+    const offset =
+      from === "none"
+        ? {}
+        : from === "left"
+          ? { x: -travel }
+          : from === "right"
+            ? { x: travel }
+            : { y: travel };
 
-      const offset =
-        from === "none"
-          ? {}
-          : from === "left"
-            ? { x: -travel }
-            : from === "right"
-              ? { x: travel }
-              : { y: travel };
-
-      gsap.from(targets, {
-        autoAlpha: 0,
-        ...offset,
-        duration: mobile ? motionCfg.duration * 0.75 : motionCfg.duration,
-        ease: motionCfg.ease,
-        delay,
-        stagger: stagger ? motionCfg.stagger : 0,
-        scrollTrigger: {
-          trigger: scope.current,
-          start: motionCfg.start,
-          once: true,
-        },
-      });
-    },
-    { scope }
-  );
+    gsap.from(targets, {
+      autoAlpha: 0,
+      ...offset,
+      duration: isMobile ? motionCfg.duration * 0.75 : motionCfg.duration,
+      ease: motionCfg.ease,
+      delay,
+      stagger: stagger ? motionCfg.stagger : 0,
+      scrollTrigger: {
+        trigger: scope.current,
+        start: motionCfg.start,
+        once: true,
+      },
+    });
+  });
 
   return (
     <Tag ref={scope} className={className}>

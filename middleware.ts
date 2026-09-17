@@ -5,37 +5,52 @@ import { NextResponse, type NextRequest } from "next/server";
  *
  * The careers site is LIVE at careers.showmeelectrical.com and serves the
  * careers page at "/" and job detail pages at "/jobs/<slug>". The main site
- * rebuild needs "/" for its homepage, so the careers routes moved to
- * "/careers/*" in the app directory.
+ * needs "/" for its own homepage, so the careers routes live at "/careers/*"
+ * in the app directory. Two rules keep both hostnames correct:
  *
- * This middleware rewrites requests arriving on the careers host back onto
- * those routes, so every existing public careers URL keeps working unchanged:
+ * 1. REWRITE (careers host only) — the live public URLs keep working, with the
+ *    address bar, search results and existing links unchanged:
+ *      careers.showmeelectrical.com/            → /careers
+ *      careers.showmeelectrical.com/jobs/<slug> → /careers/jobs/<slug>
  *
- *   careers.showmeelectrical.com/                    → /careers
- *   careers.showmeelectrical.com/jobs/<slug>         → /careers/jobs/<slug>
+ * 2. REDIRECT (careers host only) — the internal "/careers/*" paths that
+ *    careers components link to are NOT valid public URLs on this host. Left
+ *    alone they would serve the same page at a second address
+ *    (careers.showmeelectrical.com/careers/jobs/x), competing with the
+ *    canonical /jobs/x. A 308 sends every one of them to the canonical form,
+ *    so no duplicate URL is ever reachable or indexable:
+ *      careers.showmeelectrical.com/careers            → /
+ *      careers.showmeelectrical.com/careers/jobs/<slug> → /jobs/<slug>
  *
- * A rewrite (not a redirect) means the URL in the address bar, in search
- * results and in any existing link is preserved exactly.
+ * On the main host "/careers/*" is the real, canonical path and is left alone.
  */
 const CAREERS_HOST_PREFIX = "careers.";
+
+function isCareersHost(host: string) {
+  return host.startsWith(CAREERS_HOST_PREFIX);
+}
 
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const { pathname, search } = request.nextUrl;
 
-  if (!host.startsWith(CAREERS_HOST_PREFIX)) {
+  if (!isCareersHost(host)) {
     return NextResponse.next();
   }
 
-  // Already under /careers — nothing to do.
+  // Rule 2 — collapse the internal /careers prefix to the public URL.
   if (pathname === "/careers" || pathname.startsWith("/careers/")) {
-    return NextResponse.next();
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.slice("/careers".length) || "/";
+    url.search = search;
+    return NextResponse.redirect(url, 308);
   }
 
+  // Rule 1 — serve the careers routes from the public URLs.
   const target =
     pathname === "/"
       ? "/careers"
-      : pathname.startsWith("/jobs")
+      : pathname === "/jobs" || pathname.startsWith("/jobs/")
         ? `/careers${pathname}`
         : null;
 

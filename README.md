@@ -28,6 +28,49 @@ careers.showmeelectrical.com/jobs/<slug>   → /careers/jobs/<slug>
 A **rewrite**, not a redirect — every existing public careers URL is unchanged
 in the address bar, in search results and in any existing link.
 
+Careers components link internally to `/careers/*`, which is the real path on
+the main host but **not** a valid public URL on the careers host. Left alone,
+those links would serve the same page at a second address
+(`careers.showmeelectrical.com/careers/jobs/x`) competing with the canonical
+`/jobs/x`. Middleware therefore also **308-redirects** `/careers/*` → `/*` on
+the careers host, so no duplicate URL is reachable or indexable.
+
+### Verified routing + indexing matrix
+
+Both hostnames were tested in both configurations, by building with the
+production environment set and driving each host via a `Host:` header.
+
+| | Preview (`ALLOW_INDEXING` unset) | Production (`ALLOW_INDEXING=true`) |
+|---|---|---|
+| `showmeelectrical.com/` | `noindex, nofollow` | `index, follow` |
+| `careers.…/` and `/jobs/<slug>` | `noindex, nofollow` | `index, follow` |
+| `robots.txt` (both hosts) | `Disallow: /` | `Allow: /`, own `Sitemap:` + `Host:` |
+| `sitemap.xml` on main host | main URLs only | main URLs only |
+| `sitemap.xml` on careers host | careers URLs only | careers URLs only |
+| `careers.…/jobs/<slug>` | 200 | 200 |
+| `careers.…/careers/jobs/<slug>` | 308 → `/jobs/<slug>` | 308 → `/jobs/<slug>` |
+| Canonical, careers job page | `https://careers.showmeelectrical.com/jobs/<slug>` | same |
+
+`robots.txt` and `sitemap.xml` are rendered **per request** (`force-dynamic`)
+because one file is served on two hostnames and each must advertise only its
+own URLs — a sitemap mixing both domains is ignored for the cross-domain
+entries unless the domains are cross-verified in Search Console.
+
+Reproduce locally:
+
+```bash
+npm run build && npm start                       # preview config
+NEXT_PUBLIC_ALLOW_INDEXING=true \
+  NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com \
+  npm run build && NEXT_PUBLIC_ALLOW_INDEXING=true npm start   # production config
+
+curl -H 'Host: careers.showmeelectrical.com' localhost:3000/robots.txt
+curl -H 'Host: showmeelectrical.com'         localhost:3000/sitemap.xml
+```
+
+`NEXT_PUBLIC_*` values are baked into statically generated metadata at build
+time, so the production check requires a **rebuild**, not just a restart.
+
 ---
 
 ## Environment variables
@@ -86,9 +129,16 @@ docs/
 
 ### Separation of concerns
 
-- **Client content** lives in `config/site.config.ts` and `content/`.
-- **Design tokens** live in the `@theme` block of `app/globals.css`.
+- **Client content** lives in `config/site.config.ts` and `content/`. This
+  includes the schema.org business type, business description, service catalog
+  and logo URL, so `lib/seo.ts` contains no client-specific strings.
+- **Design tokens** live in the `@theme` block of `app/globals.css`. The one
+  exception is `motionColors` in `config/theme.config.ts`: GSAP tweens colour
+  properties directly and cannot resolve a Tailwind class, so the handful of
+  literals it needs live there, mirrored from the same tokens.
 - **Motion settings** live in `config/theme.config.ts`.
+- **Careers constants** (`lib/jobs.ts`) re-export from `site.config.ts` rather
+  than keeping a second copy of the phone, email, address and domains.
 - **Components** read from those and hard-code nothing client-specific.
 
 ---
@@ -115,8 +165,17 @@ Rules the system follows:
   decorative motion entirely.
 - **Mobile is simplified** — shorter travel and duration; parallax off below
   768px; the scroll story becomes a plain vertical sequence.
-- **ScrollTrigger refreshes** on `load` and after fonts settle, so late-loading
-  images cannot leave triggers measured against a stale document height.
+- **Viewport and preference changes are handled at runtime.** All motion runs
+  through `useResponsiveGSAP`, a thin wrapper over `gsap.matchMedia()`. Reading
+  `window.innerWidth` or the reduced-motion query once at mount would freeze
+  the decision; matchMedia re-runs the setup when the breakpoint is crossed or
+  the OS preference changes, and reverts the previous run first — and reverting
+  a `gsap.from()` restores the element to its natural visible state, so a
+  resize can never strand content at `autoAlpha: 0`.
+- **ScrollTrigger refreshes** on `load`, after fonts settle, and after every
+  matchMedia rebuild (coalesced into one refresh per frame), so late-loading
+  images and layout changes cannot leave triggers measured against a stale
+  document height.
 - **Lenis smooth scrolling is deliberately not installed.** Native scrolling is
   the baseline. `motion.smoothScroll` in `theme.config.ts` is the switch if it
   is ever justified.

@@ -34,6 +34,27 @@
  *           unilaterally. One-line change in globals.css if approved.
  * ------------------------------------------------------------------ */
 
+/**
+ * Colours that JavaScript animation needs as literal values.
+ *
+ * Tailwind utilities read the `@theme` tokens in app/globals.css, but GSAP
+ * tweens colour properties directly and cannot resolve a Tailwind class. These
+ * mirror the same tokens — keep them in step when the palette changes. This is
+ * the only place a colour literal belongs outside globals.css.
+ */
+export const motionColors = {
+  /** --color-lime-500 */
+  accent: "#c0d634",
+  /** --color-navy-950 */
+  surfaceDeep: "#06101f",
+  /** Idle circuit-node border before a stage activates. */
+  nodeIdleBorder: "rgba(255,255,255,0.18)",
+  /** Accent wash behind an activated circuit node. */
+  nodeActiveFill: "rgba(192,214,52,0.12)",
+  /** Glow around an activated node. */
+  nodeGlow: "0 0 24px rgba(192,214,52,0.45)",
+} as const;
+
 export const motion = {
   /** Master switch — set false to ship a fully static, no-JS-motion build. */
   enabled: true,

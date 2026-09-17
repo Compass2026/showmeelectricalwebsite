@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import { gsap, useGSAP, shouldAnimate, isMobileViewport } from "./gsap";
+import { gsap } from "./gsap";
+import { useResponsiveGSAP } from "./useResponsiveGSAP";
+import { motionColors } from "@/config/theme.config";
 
 export interface StoryStage {
   /** Short label shown in the node, e.g. "01". */
@@ -31,13 +33,14 @@ export interface StoryStage {
 export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
   const scope = useRef<HTMLOListElement>(null);
 
-  useGSAP(
-    () => {
-      if (!shouldAnimate() || isMobileViewport()) return;
+  useResponsiveGSAP(scope, ({ isMobile }) => {
+    // On phones the story reads as a plain vertical sequence: the circuit
+    // renders fully drawn and static, with no scrubbing.
+    if (isMobile) return;
 
-      const connectors =
+    const connectors =
         scope.current?.querySelectorAll<SVGPathElement>("[data-circuit]");
-      connectors?.forEach((path) => {
+    connectors?.forEach((path) => {
         const len = path.getTotalLength();
         gsap.fromTo(
           path,
@@ -59,10 +62,10 @@ export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
       nodes?.forEach((node) => {
         gsap.fromTo(
           node,
-          { borderColor: "rgba(255,255,255,0.18)", backgroundColor: "rgba(6,16,31,1)" },
+          { borderColor: motionColors.nodeIdleBorder, backgroundColor: motionColors.surfaceDeep },
           {
-            borderColor: "var(--color-lime-500)",
-            backgroundColor: "rgba(192,214,52,0.12)",
+            borderColor: motionColors.accent,
+            backgroundColor: motionColors.nodeActiveFill,
             duration: 0.45,
             scrollTrigger: {
               trigger: node.closest("[data-stage]"),
@@ -71,10 +74,8 @@ export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
             },
           }
         );
-      });
-    },
-    { scope }
-  );
+    });
+  });
 
   return (
     <ol ref={scope} className="relative mx-auto mt-16 max-w-5xl">

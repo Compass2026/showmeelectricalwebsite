@@ -1,20 +1,29 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/config/site.config";
+import { resolveProperty, allowIndexing } from "@/lib/host";
 
 /**
- * Preview builds are fully disallowed. Set NEXT_PUBLIC_ALLOW_INDEXING=true in
- * the production environment only — see README "Preview vs production
- * indexing".
+ * Host-aware robots.txt.
+ *
+ * Served on both hostnames, so it must advertise the sitemap for whichever
+ * property is being requested. Rendered per request rather than at build time
+ * for that reason.
+ *
+ * Preview (NEXT_PUBLIC_ALLOW_INDEXING unset): Disallow: / on both hosts.
+ * Production (NEXT_PUBLIC_ALLOW_INDEXING=true): both hosts allowed, each
+ * pointing at its own sitemap.
  */
-const allowIndexing = process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
+export const dynamic = "force-dynamic";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
   if (!allowIndexing) {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
 
+  const { origin } = await resolveProperty();
+
   return {
     rules: { userAgent: "*", allow: "/", disallow: "/api/" },
-    sitemap: `${site.productionUrl}/sitemap.xml`,
+    sitemap: `${origin}/sitemap.xml`,
+    host: origin,
   };
 }

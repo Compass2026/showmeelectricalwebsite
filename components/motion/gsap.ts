@@ -27,6 +27,33 @@ if (typeof window !== "undefined") {
   }
 }
 
+/**
+ * Coalesced ScrollTrigger refresh.
+ *
+ * When animations are rebuilt — crossing the mobile breakpoint, toggling
+ * reduced motion, or a client-side route change — the new tweens apply their
+ * hidden start state immediately, but ScrollTrigger's cached start/end
+ * positions are still those of the old layout. Until it re-measures, a trigger
+ * whose element is already in or above the viewport does not fire, so that
+ * section sits at `autoAlpha: 0` and the content disappears until the visitor
+ * happens to scroll.
+ *
+ * Refreshing forces a re-measure, after which every already-passed trigger
+ * fires at once. Two rAFs let layout settle first, and the flag collapses the
+ * calls from every animated component on the page into a single refresh.
+ */
+let refreshQueued = false;
+export function scheduleScrollTriggerRefresh(): void {
+  if (typeof window === "undefined" || refreshQueued) return;
+  refreshQueued = true;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      refreshQueued = false;
+      ScrollTrigger.refresh();
+    });
+  });
+}
+
 /** True when the visitor has asked for reduced motion. */
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined") return false;

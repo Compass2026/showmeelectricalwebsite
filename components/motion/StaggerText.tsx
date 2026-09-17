@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, type ElementType } from "react";
-import { gsap, useGSAP, shouldAnimate, isMobileViewport } from "./gsap";
+import { gsap } from "./gsap";
+import { useResponsiveGSAP } from "./useResponsiveGSAP";
 import { motion as motionCfg } from "@/config/theme.config";
 
 interface StaggerTextProps {
@@ -31,30 +32,24 @@ export default function StaggerText({
   const words = text.split(" ");
   const accents = new Set(accentWords.map((w) => w.toLowerCase()));
 
-  useGSAP(
-    () => {
-      if (!shouldAnimate()) return;
-      const targets = scope.current?.querySelectorAll("[data-word]");
-      if (!targets?.length) return;
+  useResponsiveGSAP(scope, ({ isMobile }) => {
+    const targets = scope.current?.querySelectorAll("[data-word]");
+    if (!targets?.length) return;
 
-      const mobile = isMobileViewport();
-
-      gsap.from(targets, {
-        autoAlpha: 0,
-        yPercent: mobile ? 40 : 90,
-        duration: mobile ? 0.5 : 0.7,
-        ease: motionCfg.ease,
-        delay,
-        stagger: mobile ? motionCfg.stagger * 0.6 : motionCfg.stagger,
-        scrollTrigger: {
-          trigger: scope.current,
-          start: motionCfg.start,
-          once: true,
-        },
-      });
-    },
-    { scope }
-  );
+    gsap.from(targets, {
+      autoAlpha: 0,
+      yPercent: isMobile ? 40 : 90,
+      duration: isMobile ? 0.5 : 0.7,
+      ease: motionCfg.ease,
+      delay,
+      stagger: isMobile ? motionCfg.stagger * 0.6 : motionCfg.stagger,
+      scrollTrigger: {
+        trigger: scope.current,
+        start: motionCfg.start,
+        once: true,
+      },
+    });
+  });
 
   return (
     <Tag ref={scope} className={className}>

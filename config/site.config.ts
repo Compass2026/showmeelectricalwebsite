@@ -39,8 +39,18 @@ export const site = {
     zip: "63123",
     country: "US",
   },
-  /** Approximate coords for Affton, MO — refine with the client's GBP pin. */
-  geo: { lat: 38.5501, lng: -90.3312 },
+  /**
+   * MISSING FACT — business coordinates.
+   * Previously held approximate Affton coordinates, which `lib/seo.ts` emitted
+   * as the business's actual location. Approximate coordinates presented as
+   * exact are a false claim and can misplace the business in local results, so
+   * geo is omitted entirely until the real pin is read off the client's Google
+   * Business Profile. Recorded in docs/open-questions.md.
+   *
+   * To restore: set `geo: { lat, lng }` here — lib/seo.ts emits the GeoCoordinates
+   * block only when this is present.
+   */
+  geo: null as { lat: number; lng: number } | null,
 
   /* ---------------- Service area ---------------- */
   /**
@@ -72,6 +82,26 @@ export const site = {
   careersUrl: "https://careers.showmeelectrical.com",
   /** Legacy WordPress origin, still live during the rebuild. */
   wordpressUrl: "https://showmeelectrical.com",
+
+  /* ---------------- Business description & taxonomy ---------------- */
+  /**
+   * Schema.org type for the business. Change per client — e.g. "Plumber",
+   * "HVACBusiness", "RoofingContractor", "GeneralContractor".
+   */
+  schemaType: "Electrician",
+  /** One-line description reused in LocalBusiness structured data. */
+  businessDescription:
+    "Owner-led electrical contractor serving St. Louis City, St. Louis County and the Greater St. Louis area with residential, commercial and industrial electrical work.",
+  /** Top-level service pathways, mirrored in the structured-data offer catalog. */
+  serviceCatalogName: "Electrical services",
+  serviceCatalog: [
+    "Residential electrical services",
+    "Commercial electrical services",
+    "Industrial electrical services",
+  ],
+  /** Logo used for structured data and social cards. */
+  logoUrl:
+    "https://showmeelectrical.com/wp-content/uploads/2024/08/Show-me-electric-white-logo-4.png",
 
   /* ---------------- Calls to action ---------------- */
   primaryCta: { label: "Get a free quote", href: "/contact" },

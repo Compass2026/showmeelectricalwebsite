@@ -102,6 +102,7 @@ SEO. Confirm that split is what you want.
 |---|---|
 | **Correct street address** | The live site says both "5602 **Hegee** Rd" (homepage) and "5602 **Heege** Rd" (elsewhere), and both "St. Louis MO" and "Affton, MO 63123". NAP consistency affects Map Pack ranking directly. Currently using *5602 Heege Rd, Affton, MO 63123*. |
 | **Business hours** | Omitted from LocalBusiness schema rather than guessed. |
+| **Business coordinates (lat/lng)** | `geo` previously held *approximate* Affton coordinates that `lib/seo.ts` emitted as the business's exact location — a false precision that can misplace the business in local results. Now omitted entirely: `site.geo` is `null` and the `GeoCoordinates` block is only emitted when real values are set. **Read the true pin off the client's Google Business Profile** and set `geo: { lat, lng }` in `config/site.config.ts`. |
 | **Licence numbers / bonding details** | The live FAQ claims "fully licensed, insured and bonded". Reproduced as-is, but schema-level credentials need real numbers. |
 | **Photo of Dan** | About section shows a placeholder with a visible amber note. |
 | **Real project case studies** | The live site has a "Previous Projects" heading with no project detail. No fabricated projects were added. Needs 3–4 real ones with permission to publish. |
@@ -111,11 +112,23 @@ SEO. Confirm that split is what you want.
 
 ---
 
-## 7. Scope note
+## 7. Scope note — what exists in the preview
 
-The assignment asked for "2 more job positions" style expansion only in the
-careers context; this milestone is the **homepage prototype and the reusable
-foundation**. Service pages, city pages, projects and blog are explicitly
-deferred to the next assignment, per instruction. The routes the homepage
-links to (`/services`, `/about`, `/contact`, `/service-area`) **do not exist
-yet** and will 404 in the preview — this is expected at this stage.
+This milestone is the **homepage prototype and the reusable foundation**.
+Service pages, city pages, projects and blog are deferred to the next
+assignment.
+
+**Routes that exist and work:** `/` (homepage), `/contact`, `/careers`,
+`/careers/jobs/<slug>`, `/robots.txt`, `/sitemap.xml`.
+
+**No link in the preview 404s.** Nav and footer entries for Services, Our
+Process, About and Service Area point at the matching homepage sections
+(`/#services`, `/#process`, `/#about`, `/#service-area`) until those pages are
+built; swapping them to real routes is a one-line change per entry in
+`config/site.config.ts`. The three service cards are deliberately not links —
+each carries a visible "Detailed page in the next milestone" note instead of
+pointing at a page that does not exist.
+
+`/contact` **is built** and is a real page: working `tel:` and `mailto:` links,
+address, and a visible note that the enquiry form is pending a backend. No form
+is rendered, so nothing can report a false success.

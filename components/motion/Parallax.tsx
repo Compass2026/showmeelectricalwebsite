@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, useGSAP, shouldAnimate, isMobileViewport } from "./gsap";
+import { gsap } from "./gsap";
+import { useResponsiveGSAP } from "./useResponsiveGSAP";
 import { motion as motionCfg } from "@/config/theme.config";
 
 interface ParallaxProps {
@@ -14,9 +15,11 @@ interface ParallaxProps {
 /**
  * Subtle vertical drift on an image as it passes through the viewport.
  *
- * Disabled entirely on mobile and under reduced-motion. The inner wrapper is
- * over-scaled so the drift never exposes an edge, and the parent must clip.
- * Nothing here affects layout, so a failure is invisible.
+ * Desktop only. When the viewport narrows past the breakpoint,
+ * `useResponsiveGSAP` reverts this tween and re-runs the setup, which then
+ * skips it — so a resize genuinely turns parallax off rather than leaving a
+ * stale transform on the element. Nothing here affects layout, so a failure is
+ * invisible.
  */
 export default function Parallax({
   children,
@@ -25,32 +28,30 @@ export default function Parallax({
 }: ParallaxProps) {
   const scope = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      // Parallax is a desktop-only nicety — mobile keeps a static image.
-      if (!shouldAnimate() || isMobileViewport()) return;
-      const inner = scope.current?.firstElementChild;
-      if (!inner) return;
+  useResponsiveGSAP(scope, ({ isMobile }) => {
+    // Parallax is a desktop-only nicety — mobile keeps a static image.
+    if (isMobile) return;
 
-      const travel = motionCfg.parallaxStrength * strength;
+    const inner = scope.current?.firstElementChild;
+    if (!inner) return;
 
-      gsap.fromTo(
-        inner,
-        { yPercent: -travel / 10 },
-        {
-          yPercent: travel / 10,
-          ease: "none",
-          scrollTrigger: {
-            trigger: scope.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
-    },
-    { scope }
-  );
+    const travel = motionCfg.parallaxStrength * strength;
+
+    gsap.fromTo(
+      inner,
+      { yPercent: -travel / 10 },
+      {
+        yPercent: travel / 10,
+        ease: "none",
+        scrollTrigger: {
+          trigger: scope.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      }
+    );
+  });
 
   return (
     <div ref={scope} className={`overflow-hidden ${className}`}>

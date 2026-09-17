@@ -1,3 +1,5 @@
+import { site } from "@/config/site.config";
+
 export type RoleSlug =
   | "apprentice-electrician"
   | "journeyman-electrician"
@@ -24,18 +26,19 @@ export interface Job {
   datePosted: string;
 }
 
-export const SITE_URL = "https://careers.showmeelectrical.com";
-export const WP_URL = "https://showmeelectrical.com";
-export const PHONE = "314-571-9756";
-export const PHONE_HREF = "tel:+13145719756";
-export const EMAIL = "info@showmeelectrical.com";
-export const ADDRESS = {
-  street: "5602 Heege Rd",
-  city: "Affton",
-  state: "MO",
-  zip: "63123",
-};
-export const SERVICE_AREA = "Greater St. Louis area";
+/**
+ * Careers contact details and domains are re-exported from the single client
+ * config rather than duplicated here. These aliases keep the existing careers
+ * component imports working without a second copy of the business facts that
+ * could drift out of sync.
+ */
+export const SITE_URL = site.careersUrl;
+export const WP_URL = site.wordpressUrl;
+export const PHONE = site.phone;
+export const PHONE_HREF = site.phoneHref;
+export const EMAIL = site.email;
+export const ADDRESS = site.address;
+export const SERVICE_AREA = site.serviceArea;
 
 export const jobs: Job[] = [
   {
@@ -297,7 +300,7 @@ export function jobPostingJsonLd(job: Job) {
       "@type": "Organization",
       name: "Show Me Electrical Services",
       sameAs: WP_URL,
-      logo: `${WP_URL}/wp-content/uploads/2024/08/Show-me-electric-white-logo-4.png`,
+      logo: site.logoUrl,
     },
     jobLocation: {
       "@type": "Place",
