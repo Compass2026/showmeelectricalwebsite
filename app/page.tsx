@@ -12,28 +12,29 @@ import ServicePathways from "@/components/home/ServicePathways";
 import AboutSection from "@/components/home/AboutSection";
 import Testimonials from "@/components/home/Testimonials";
 import { site } from "@/config/site.config";
-import { storyStages } from "@/content/home";
+import { storyStages, emergencyCallout } from "@/content/home";
 import { localBusinessJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
 /**
  * Primary keyword from the approved taxonomy: "electrician st louis" (260/mo).
- * Supporting: st louis electrician, electrical contractor st louis.
- * No emergency terms — see content/home.ts for why.
+ * Supporting: st louis electrician, electrical contractor st louis,
+ * emergency electrician st louis (owner-confirmed as offered — decisions
+ * D-001; no availability claim anywhere on the page).
  */
 export const metadata: Metadata = {
   title:
     "Electrician in St. Louis, MO | Show Me Electrical — Residential, Commercial & Industrial",
   description:
-    "Owner-led electrical contractor serving St. Louis City, St. Louis County and the Greater St. Louis area. Panel upgrades, rewiring, lighting, commercial fit-outs and industrial power. Free consultations.",
+    "Owner-led by a Master Electrician, serving St. Louis City, St. Louis County and the Greater St. Louis area. Panel upgrades, rewiring, lighting, commercial fit-outs, industrial power and emergency electrical repairs. Free consultations.",
   alternates: { canonical: site.productionUrl },
   openGraph: {
     type: "website",
     siteName: site.name,
     title: "Electrician in St. Louis, MO | Show Me Electrical",
     description:
-      "Owner-led electrical contractor serving the Greater St. Louis area — residential, commercial and industrial. Free consultations.",
+      "Owner-led by a Master Electrician, serving the Greater St. Louis area — residential, commercial, industrial and emergency electrical repairs. Free consultations.",
     url: site.productionUrl,
   },
 };
@@ -64,6 +65,35 @@ export default function HomePage() {
           intro={`Three pathways, one standard of work. Serving the ${site.serviceArea} from our shop in ${site.address.city}.`}
         >
           <ServicePathways />
+
+          {/*
+            Emergency repairs — owner-confirmed service (docs/decisions.md
+            D-001). States the service only. Hours and response times are
+            unconfirmed, so there is deliberately no 24/7, after-hours or
+            arrival-time wording here.
+          */}
+          {site.offersEmergencyService && (
+            <Reveal delay={0.15} className="mt-12">
+              <div className="rounded-2xl border border-navy-900/10 bg-navy-950 p-8 sm:flex sm:items-center sm:justify-between sm:gap-8">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-white">
+                    {emergencyCallout.heading}
+                  </h3>
+                  <p className="mt-2 max-w-xl leading-relaxed text-white/70">
+                    {emergencyCallout.body}
+                  </p>
+                </div>
+                <div className="mt-6 shrink-0 sm:mt-0">
+                  <Button href={site.phoneHref}>Call {site.phone}</Button>
+                </div>
+              </div>
+              {emergencyCallout.note && (
+                <p className="mt-3 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
+                  {emergencyCallout.note}
+                </p>
+              )}
+            </Reveal>
+          )}
         </Section>
 
         {/* ---------- Signature scroll story ---------- */}

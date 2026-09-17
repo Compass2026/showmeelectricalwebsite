@@ -6,14 +6,16 @@
  * rewrite of one of those. Nothing is invented. Items needing client sign-off
  * are marked with a `note` that renders visibly in the preview.
  *
+ * OWNER-CONFIRMED 2026-09-17 (docs/decisions.md):
+ *  - Emergency electrical service IS offered (D-001). Named below as a service.
+ *    Hours and response times remain unconfirmed, so nothing here claims 24/7,
+ *    after-hours or weekend coverage, or a guaranteed arrival time.
+ *  - Dan MAY be described as a Master Electrician on the main site (D-002),
+ *    restoring the client's own live /about/ wording. The careers site's
+ *    career ladder still omits master and foreman levels — separate thing.
+ *
  * Deliberately ABSENT:
- *  - Any emergency / 24-7 / after-hours claim. The live FAQ states plainly:
- *    "No, we do not offer emergency electrical services." The approved keyword
- *    map lists "emergency electrician st louis" as a money keyword. Conflict
- *    is flagged for Tom and unresolved.
- *  - Any "Master Electrician" credential claim. Live /about/ and the brand
- *    board both use it, but Tom directed its removal from the careers site in
- *    September. Scope of that instruction needs confirming before it returns.
+ *  - Any claim about WHEN emergency service is available. See D-001's limits.
  *  - Review counts, star ratings, project counts, years-in-business figures
  *    beyond the "20+ years" stated on the live About page.
  */
@@ -33,11 +35,14 @@ export const hero = {
   },
 };
 
-/** Source: live /about/ page and live FAQ. No numbers invented. */
+/**
+ * Source: live /about/ page and live FAQ. No numbers invented.
+ * The Master Electrician credential is owner-confirmed — see decisions D-002.
+ */
 export const trustPoints = [
   {
-    label: "Owner-led",
-    detail: "Dan is on the job, not behind a sales desk.",
+    label: "Owner-led by a Master Electrician",
+    detail: "Dan is on the job himself, not behind a sales desk.",
   },
   {
     label: "20+ years",
@@ -109,6 +114,21 @@ export const servicePathways = [
 ];
 
 /**
+ * Emergency electrical repairs.
+ *
+ * Owner-confirmed as a service offered (decisions D-001). Deliberately states
+ * WHAT is offered and nothing about WHEN: hours and response times are
+ * unconfirmed, so there is no 24/7 claim, no after-hours or weekend coverage,
+ * and no guaranteed arrival time. Remove `note` once hours are confirmed and
+ * the availability wording has been signed off.
+ */
+export const emergencyCallout = {
+  heading: "Electrical emergency?",
+  body: "Sparking outlets, a dead panel, burning smells, water near live circuits — call us and we will get an electrician on it.",
+  note: "PENDING CONFIRMATION — business hours and response times are not yet confirmed, so this block deliberately makes no availability or arrival-time promise. Confirm hours before adding any.",
+};
+
+/**
  * Signature scroll story. Stages mirror the three-step process published on
  * the live homepage ("Request a Quote", "Concepts & planning",
  * "Install & Execution"), with the third extended to completed work.
@@ -147,8 +167,8 @@ export const storyStages: StoryStage[] = [
 export const about = {
   heading: "Your local experts. Your trusted team.",
   paragraphs: [
-    "Dan isn't just the owner of Show Me Electrical — he's the hands behind the work and the heart behind the company. Born and raised in Missouri, he built this business from the ground up with a simple mission: honest, reliable electrical work that local families and businesses can count on.",
-    "With over two decades of experience across residential, commercial and industrial systems, Dan leads every project with deep expertise and personal care. He's not a sales guy — he shows up, tools in hand, ready to get the job done right the first time.",
+    "Dan isn't just the owner of Show Me Electrical — he's the Master Electrician behind the name, the hands behind the work and the heart behind the company. Born and raised in Missouri, he built this business from the ground up with a simple mission: honest, reliable electrical work that local families and businesses can count on.",
+    "With over two decades of experience across residential, commercial and industrial systems, Dan leads every project with deep expertise and personal care. He's a licensed Master Electrician, not a sales guy — he shows up, tools in hand, ready to get the job done right the first time.",
     "His reputation is built on word of mouth, earned by showing up on time, solving tough problems and treating every customer like a neighbor — because most of them are.",
   ],
   image: {

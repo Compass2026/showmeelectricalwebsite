@@ -9,8 +9,13 @@ import { site } from "@/config/site.config";
  *
  * RULE: schema must describe content that is actually visible on the page and
  * facts we can verify from client-owned sources. No aggregateRating (we have
- * no verified review data), no openingHours, no priceRange, and no
- * emergency/24-7 availability.
+ * no verified review data), no openingHours and no priceRange.
+ *
+ * Emergency electrical repairs appear in the offer catalog because the owner
+ * confirmed the service (docs/decisions.md D-001) and the homepage names it.
+ * Availability is a separate claim: hours and response times are unconfirmed,
+ * so no `openingHours`, `openingHoursSpecification` or 24-7 property is
+ * emitted.
  */
 
 export function localBusinessJsonLd(baseUrl: string = site.productionUrl) {

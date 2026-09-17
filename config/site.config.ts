@@ -27,6 +27,16 @@ export const site = {
   /** Source: live /about/ page. */
   foundedBy: "Dan",
   yearsExperience: "20+",
+  /**
+   * Owner's trade credential, used on the main site in About and trust copy.
+   * Owner-confirmed 2026-09-17 — see docs/decisions.md D-002. Matches the
+   * client's own live /about/ page and the brand board positioning line.
+   *
+   * SCOPE: main site only. The careers site's career ladder still omits master
+   * and foreman levels per Tom's September instruction; that is a separate
+   * thing (employee progression) and is unchanged.
+   */
+  founderCredential: "Master Electrician",
 
   /* ---------------- Contact ---------------- */
   phone: "314-571-9756",
@@ -91,13 +101,14 @@ export const site = {
   schemaType: "Electrician",
   /** One-line description reused in LocalBusiness structured data. */
   businessDescription:
-    "Owner-led electrical contractor serving St. Louis City, St. Louis County and the Greater St. Louis area with residential, commercial and industrial electrical work.",
+    "Owner-led electrical contractor serving St. Louis City, St. Louis County and the Greater St. Louis area with residential, commercial and industrial electrical work and emergency electrical repairs.",
   /** Top-level service pathways, mirrored in the structured-data offer catalog. */
   serviceCatalogName: "Electrical services",
   serviceCatalog: [
     "Residential electrical services",
     "Commercial electrical services",
     "Industrial electrical services",
+    "Emergency electrical repairs",
   ],
   /** Logo used for structured data and social cards. */
   logoUrl:
@@ -144,12 +155,19 @@ export const site = {
   sameAs: [] as string[],
 
   /**
-   * The live site states plainly that emergency and after-hours service is NOT
-   * offered. The approved keyword map lists "emergency electrician st louis"
-   * as a money keyword. That conflict is unresolved and flagged for Tom, so no
-   * emergency or 24/7 claim appears anywhere in this build.
+   * Owner-confirmed 2026-09-17: emergency electrical service IS offered.
+   * See docs/decisions.md D-001. This resolves the conflict between the
+   * approved keyword map (which targets "emergency electrician st louis") and
+   * the live WordPress FAQ, whose "we do not offer emergency services" answer
+   * is now known to be wrong and is not carried into the rebuild.
+   *
+   * HARD LIMIT — hours and response times are still unconfirmed. Emergency
+   * service may be named as a service offered, with a phone number. Nothing
+   * about WHEN it is available may be claimed: no 24/7, no after-hours or
+   * weekend coverage, no guaranteed arrival or response times. Confirm real
+   * hours before any availability wording ships.
    */
-  offersEmergencyService: false,
+  offersEmergencyService: true,
 } as const;
 
 export type Site = typeof site;

@@ -1,0 +1,74 @@
+# Owner-Confirmed Decisions
+
+Decisions made by the business owner (via Tom) that override earlier
+assumptions in the build. Each entry records what was decided, what changed in
+the code as a result, and any limits that still apply.
+
+Anything **not** listed here is still an assumption — see
+`docs/open-questions.md`.
+
+---
+
+## D-001 · Emergency electrical service is offered
+
+**Confirmed:** 2026-09-17 · Tom, relaying the owner
+**Supersedes:** open question §1 (previously BLOCKING for service pages)
+
+Show Me Electrical **does** offer emergency electrical service. The approved
+keyword map's *Emergency Electrical Service* page and the
+`emergency electrician st louis` money keyword are both **retained**.
+
+The live WordPress FAQ answer — *"No, we do not offer emergency electrical
+services"* — is now known to be wrong and does not carry over to the rebuild.
+
+**Limits that still apply.** Hours and response times are **unconfirmed**, so
+the site must not claim:
+
+- 24/7 or round-the-clock availability
+- after-hours, overnight or weekend coverage
+- guaranteed arrival times, response windows or "we'll be there in X"
+
+Emergency service may be stated as a service offered, with a phone number.
+Nothing about *when* it is available may be stated until hours are confirmed.
+That remains an open item in `docs/open-questions.md` §6.
+
+**Applied in code:**
+
+| Where | Change |
+|---|---|
+| `config/site.config.ts` | `offersEmergencyService: true`, with the no-hours-claim limits recorded alongside it |
+| `content/home.ts` | Emergency repairs named in the services section; no availability claim |
+| `lib/seo.ts` | Emergency service enters the structured-data offer catalog via the config catalog; no `openingHours`, no availability property |
+| `docs/migration-inventory.md` | Emergency Electrical Service added to the service-page plan; the FAQ answer flagged for rewrite, not reuse |
+
+---
+
+## D-002 · Dan may be described as a Master Electrician
+
+**Confirmed:** 2026-09-17 · Tom, relaying the owner
+**Supersedes:** open question §2 (previously BLOCKING for the About page)
+
+Dan's **Master Electrician** credential may be used on the main website — in
+the About content and in trust messaging. This matches what the client already
+publishes on their live `/about/` page and the brand board's positioning line,
+*"Owner-led, licensed Master Electrician."*
+
+**Scope limit — the careers site is unchanged.** Tom's September instruction to
+remove master and foreman levels from the **careers progression** still stands
+in full. That was about the employee career ladder; this decision is about the
+owner's own credential. The two do not interact:
+
+| Property | Master Electrician |
+|---|---|
+| Main site — owner's credential | **Allowed** (this decision) |
+| Careers site — career ladder rungs | **Still removed** (unchanged) |
+
+`lib/jobs.ts` and every careers route are untouched by this decision.
+
+**Applied in code:**
+
+| Where | Change |
+|---|---|
+| `config/site.config.ts` | `founderCredential: "Master Electrician"` |
+| `content/home.ts` | About paragraphs restore the credential; trust bar leads with it |
+| `app/page.tsx` | Meta description carries the credential as a differentiator |

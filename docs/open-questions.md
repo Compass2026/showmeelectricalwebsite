@@ -3,56 +3,58 @@
 Blocking items are marked **BLOCKING**. Everything else has a documented
 assumption in place so work continued.
 
+Decisions the owner has confirmed move to `docs/decisions.md` and are marked
+**RESOLVED** here, with the outcome, so the history of the conflict stays
+readable. **No blocking items remain.**
+
 ---
 
-## 1. Emergency service — **BLOCKING for service pages**
+## 1. Emergency service — **RESOLVED** (owner-confirmed 2026-09-17)
 
-*Flagged in the assignment; confirmed against both sources.*
+*Recorded as decision D-001 in `docs/decisions.md`.*
+
+The conflict was:
 
 - **Approved keyword map v1.1** lists *Emergency Electrical Service* as
   service #2 and `emergency electrician st louis` as **money keyword #4**,
   noted as "$47 CPC — highest-value term on the site".
-- **The live website** answers the question directly:
+- **The live website** answered the opposite:
   > "Do you offer 24/7 emergency electrical services?"
-  > "**No, we do not offer emergency electrical services.** … While we don't
-  > take emergency or after-hours calls, we strive to offer prompt scheduling
-  > during regular business hours."
+  > "**No, we do not offer emergency electrical services.** …"
 
-**Action taken:** every emergency, 24/7 and after-hours claim is excluded from
-this prototype. Verified: zero occurrences in the rendered HTML.
+**Outcome: the service IS offered.** The keyword map is correct and the live
+FAQ answer is wrong. The service page and the money keyword are both retained,
+and that FAQ answer is not carried into the rebuild — it is flagged for rewrite
+in the migration inventory rather than reused as source copy.
 
-**Decision needed:** does Dan want to start offering emergency service (making
-the keyword valid), or should service #2 be struck from the approved taxonomy?
-This blocks the service-page build — it is one of 24 planned pages and one of
-6 money keywords.
+**One limit carries forward.** Hours and response times are still unconfirmed,
+so nothing may claim 24/7 or round-the-clock availability, after-hours,
+overnight or weekend coverage, or a guaranteed arrival or response time. The
+homepage names the service and gives the phone number; it says nothing about
+when. Confirming real hours is tracked in §6.
 
----
+## 2. "Master Electrician" — **RESOLVED** (owner-confirmed 2026-09-17)
 
-## 2. "Master Electrician" — **BLOCKING for About page**
+*Recorded as decision D-002 in `docs/decisions.md`.*
 
-Three sources disagree:
+The ambiguity was whether Tom's September instruction — "remove any language
+about master or foreman" — reached Dan's own credential on the main site, or
+only the employee career ladder on the careers site.
 
-| Source | Position |
+**Outcome: only the career ladder.** Dan **may** be described as a Master
+Electrician on the main website, which is what the client already publishes on
+their live `/about/` page and what the brand board's positioning line says.
+The credential is now used in the About paragraphs, the trust bar and the meta
+description.
+
+**The careers instruction is unchanged and still in force.** Master and
+foreman levels stay out of the careers progression. `lib/jobs.ts` and every
+careers route were not touched by this decision.
+
+| Property | Master Electrician |
 |---|---|
-| Live `/about/` page | "he's the **Master Electrician** behind the name… a **licensed Master Electrician** who shows up, tools in hand" |
-| Brand board (2026-09-01) | Positioning line is "Owner-led, **licensed Master Electrician**". Lists "Master Electrician" under *Words we use*. Instructs: "Emphasize owner-operated Master Electrician". |
-| Tom, Sept 2026 (careers site) | "remove any language about or pointing towards Master Electrician… **remove any language about master or foreman**" |
-
-That instruction was given in a careers context and was about the *employee
-career ladder*. It is genuinely ambiguous whether it also removes **Dan's own
-credential** from the main site — which is a different claim, and one the
-client publishes themselves.
-
-**Action taken:** the credential is **not** used anywhere in this prototype.
-The About section says "owner-led" and "over two decades of experience"
-instead. This is the conservative reading — the brand board also says "never
-invent licenses, certifications".
-
-**Decision needed:** may Dan be described as a Master Electrician on the main
-site? If yes it should return to the About section and the hero, because it is
-the single strongest differentiator in the brand board. One-line change.
-
----
+| Main site — Dan's own credential | **Allowed** |
+| Careers site — career ladder rungs | **Still removed** |
 
 ## 3. Typography — brand board vs live careers site
 
@@ -101,9 +103,9 @@ SEO. Confirm that split is what you want.
 | Item | Why |
 |---|---|
 | **Correct street address** | The live site says both "5602 **Hegee** Rd" (homepage) and "5602 **Heege** Rd" (elsewhere), and both "St. Louis MO" and "Affton, MO 63123". NAP consistency affects Map Pack ranking directly. Currently using *5602 Heege Rd, Affton, MO 63123*. |
-| **Business hours** | Omitted from LocalBusiness schema rather than guessed. |
+| **Business hours + emergency response times** | **Now the highest-priority missing fact.** Emergency service is confirmed as offered (D-001), but every availability claim is blocked until real hours are known — no 24/7, after-hours or arrival-time wording can ship without them. Also still omitted from LocalBusiness schema rather than guessed. |
 | **Business coordinates (lat/lng)** | `geo` previously held *approximate* Affton coordinates that `lib/seo.ts` emitted as the business's exact location — a false precision that can misplace the business in local results. Now omitted entirely: `site.geo` is `null` and the `GeoCoordinates` block is only emitted when real values are set. **Read the true pin off the client's Google Business Profile** and set `geo: { lat, lng }` in `config/site.config.ts`. |
-| **Licence numbers / bonding details** | The live FAQ claims "fully licensed, insured and bonded". Reproduced as-is, but schema-level credentials need real numbers. |
+| **Licence numbers / bonding details** | The live FAQ claims "fully licensed, insured and bonded" and the About copy now says "licensed Master Electrician" per D-002 — both reproduced from the client's own published wording. Schema-level credentials (`hasCredential`) still need the real licence number and issuing jurisdiction before they can be emitted. |
 | **Photo of Dan** | About section shows a placeholder with a visible amber note. |
 | **Real project case studies** | The live site has a "Previous Projects" heading with no project detail. No fabricated projects were added. Needs 3–4 real ones with permission to publish. |
 | **Review data** | Testimonials were reproduced from the live site. No star ratings, review counts or `aggregateRating` schema — we have no verified source. |

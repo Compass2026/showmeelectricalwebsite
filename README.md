@@ -124,7 +124,8 @@ lib/
   jobs.ts            Careers role data
 docs/
   migration-inventory.md   WordPress → Next.js page-by-page plan
-  open-questions.md        Conflicts and decisions needed from Tom
+  open-questions.md        Conflicts and decisions still needed from Tom
+  decisions.md             Owner-confirmed decisions that override assumptions
 ```
 
 ### Separation of concerns
@@ -214,6 +215,21 @@ curl -H 'Host: careers.showmeelectrical.com' http://localhost:3000/
 - **Photography**: `public/photos/` holds nine real job-site photos from the
   client's media library. Stock images in that library are catalogued in the
   migration inventory and deliberately unused.
+
+### Claims the site may and may not make
+
+`docs/decisions.md` is the record. Two owner-confirmed decisions bound the copy:
+
+- **Emergency electrical service is offered** and may be named, with a phone
+  number. **Availability may not be described** — no 24/7, after-hours or
+  weekend coverage, no guaranteed arrival or response time — until real hours
+  are confirmed. `site.offersEmergencyService` gates the homepage block.
+- **Dan may be called a Master Electrician on the main site**
+  (`site.founderCredential`). The **careers** site's career ladder still omits
+  master and foreman levels; that instruction is unchanged and separate.
+
+Nothing else may be claimed without a client-owned source: no review counts,
+star ratings, project totals, guarantees or licence numbers.
 
 ---
 

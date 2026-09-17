@@ -13,9 +13,9 @@ that sitemap plus a fetch of each URL, not from a homepage crawl.
 
 | # | Existing URL | Purpose | Proposed URL | Action | Notes |
 |---|---|---|---|---|---|
-| 1 | `/` | Homepage | `/` | **Improve** | Rebuilt in this milestone. Keeps hero, 3 service pillars, 3-step process, testimonials, FAQ content as source material. |
+| 1 | `/` | Homepage | `/` | **Improve** | Rebuilt in this milestone. Keeps hero, 3 service pillars, 3-step process and testimonials as source material. **FAQ: do not reuse wholesale** — its emergency-service answer is factually wrong (see §9). |
 | 2 | `/about/` | Owner story (Dan) | `/about` | **Improve** | Strong, usable copy. Reused on the homepage About section. Trailing-slash change needs a redirect. |
-| 3 | `/services/` | Services hub | `/services` | **Rebuild** | **Currently near-empty** — renders only header/footer chrome, no service content. Becomes the hub for the 24-service taxonomy. |
+| 3 | `/services/` | Services hub | `/services` | **Rebuild** | **Currently near-empty** — renders only header/footer chrome, no service content. Becomes the hub for the 24-service taxonomy, including Emergency Electrical Service (see §9). |
 | 4 | `/locations/` | Locations index | `/service-area` | **Consolidate + redirect** | Thin. Becomes the service-area page; Tier-3 cities live here per the keyword map. |
 | 5 | `/st-louis/` | St. Louis city page | `/service-area/st-louis` | **Improve + redirect** | H1 is *"Industrial Electrical solutions for St. Louis, Missouri"* — narrower than a city page should be. Tier-1 city in the keyword map. |
 | 6 | `/contact/` | Contact + form | `/contact` | **Improve** | Form backend must be replaced (see §5). |
@@ -31,7 +31,7 @@ that sitemap plus a fetch of each URL, not from a homepage crawl.
 |---|---|---|
 | `/top-5-signs-your-home-needs-electrical-rewiring/` | `/blog/top-5-signs-your-home-needs-electrical-rewiring` | **Retain + redirect** — maps to keyword-map blog topic #1/#2 territory. |
 | `/the-most-common-electrical-hazards-found-in-missouri-homes/` | `/blog/the-most-common-electrical-hazards-found-in-missouri-homes` | **Retain + redirect** |
-| `/top-signs-you-need-to-call-an-electrician-immediately/` | `/blog/top-signs-you-need-to-call-an-electrician-immediately` | **Retain + redirect** — review copy for emergency-service implications before republishing (see §6). |
+| `/top-signs-you-need-to-call-an-electrician-immediately/` | `/blog/top-signs-you-need-to-call-an-electrician-immediately` | **Retain + redirect** — emergency service is now confirmed as offered (§9), so this post can link to the emergency service page. Still check it makes no availability or response-time promise. |
 
 ## 3. Taxonomy
 
@@ -113,3 +113,39 @@ photo with a visible placeholder note.
 | Google Search Console | Keyword map notes GSC was verified late Aug 2026 with ~30 days of data (7 clicks). Needed for a real baseline. |
 | Google Analytics | No analytics tag identified in the page source. |
 | Existing 301s | Any redirects already configured in WordPress. |
+
+---
+
+## 9. Emergency Electrical Service — plan
+
+Owner-confirmed 2026-09-17 that the service **is** offered
+(`docs/decisions.md` D-001), resolving the conflict between the approved
+keyword map and the live FAQ.
+
+**Page:** `/services/emergency-electrical-service` — service #2 in the approved
+taxonomy, built in the service-page milestone alongside the rest.
+
+**Keyword targets — retained, not struck:**
+
+| Keyword | Role |
+|---|---|
+| `emergency electrician st louis` | **Money keyword #4** — "$47 CPC, highest-value term on the site" per keyword map v1.1 |
+| *Emergency Electrical Service* | Service #2 in the 24-service taxonomy; needs matching Google Business Profile service entry for parity |
+
+**Content that must be corrected, not migrated.** The live FAQ answer — *"No,
+we do not offer emergency electrical services… we don't take emergency or
+after-hours calls"* — is wrong and contradicts the service page. It must be
+rewritten or dropped wherever the FAQ is rebuilt. It is **not** used anywhere
+in the current rebuild.
+
+**Copy constraint until hours are confirmed.** Hours and response times are
+unconfirmed, so no page may claim 24/7 availability, after-hours or weekend
+coverage, or a guaranteed arrival or response time. Name the service, give the
+phone number, say nothing about when. Confirming hours is the top item in
+`docs/open-questions.md` §6 and unblocks the availability wording — which
+matters commercially, since the money keyword itself contains no time promise
+but competing pages usually do.
+
+**Homepage today:** an emergency block sits under the three service cards
+naming the service with a call link, carrying a visible preview-only note that
+availability wording is pending confirmed hours.
