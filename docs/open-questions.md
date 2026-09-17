@@ -106,7 +106,7 @@ SEO. Confirm that split is what you want.
 | **Business hours + emergency response times** | **Now the highest-priority missing fact.** Emergency service is confirmed as offered (D-001), but every availability claim is blocked until real hours are known — no 24/7, after-hours or arrival-time wording can ship without them. Also still omitted from LocalBusiness schema rather than guessed. |
 | **Business coordinates (lat/lng)** | `geo` previously held *approximate* Affton coordinates that `lib/seo.ts` emitted as the business's exact location — a false precision that can misplace the business in local results. Now omitted entirely: `site.geo` is `null` and the `GeoCoordinates` block is only emitted when real values are set. **Read the true pin off the client's Google Business Profile** and set `geo: { lat, lng }` in `config/site.config.ts`. |
 | **Licence numbers / bonding details** | The live FAQ claims "fully licensed, insured and bonded" and the About copy now says "licensed Master Electrician" per D-002 — both reproduced from the client's own published wording. Schema-level credentials (`hasCredential`) still need the real licence number and issuing jurisdiction before they can be emitted. |
-| **Photo of Dan** | About section shows a placeholder with a visible amber note. |
+| **Photo of Dan** | About section shows a job-site photo from the client's own library as a stand-in. Recorded in the reviewer notice (not captioned on the page). |
 | **Real project case studies** | The live site has a "Previous Projects" heading with no project detail. No fabricated projects were added. Needs 3–4 real ones with permission to publish. |
 | **Review data** | Testimonials were reproduced from the live site. No star ratings, review counts or `aggregateRating` schema — we have no verified source. |
 | **Social profiles** | Footer links to Facebook and Twitter exist on WordPress but point nowhere useful. `sameAs` is empty. |
@@ -127,10 +127,15 @@ assignment.
 Process, About and Service Area point at the matching homepage sections
 (`/#services`, `/#process`, `/#about`, `/#service-area`) until those pages are
 built; swapping them to real routes is a one-line change per entry in
-`config/site.config.ts`. The three service cards are deliberately not links —
-each carries a visible "Detailed page in the next milestone" note instead of
-pointing at a page that does not exist.
+`config/site.config.ts`. The three service cards are deliberately not links
+rather than pointing at pages that do not exist.
 
-`/contact` **is built** and is a real page: working `tel:` and `mailto:` links,
-address, and a visible note that the enquiry form is pending a backend. No form
-is rendered, so nothing can report a false success.
+`/contact` **is built** and is a real page: working `tel:` and `mailto:` links
+and the address. No form is rendered, so nothing can report a false success.
+
+**Reviewer notes are kept out of customer copy.** Everything provisional —
+the un-linked service cards, the unconfirmed emergency hours, the stand-in
+About photo, the missing contact form, the typeface question — is listed in
+the preview banner's "Reviewer notes" fold (`content/reviewer-notes.ts`), not
+as captions or labels on the page. Delete that file with `PreviewNotice` at
+launch.

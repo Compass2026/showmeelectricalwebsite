@@ -3,9 +3,9 @@ import Reveal from "@/components/motion/Reveal";
 import { servicePathways } from "@/content/home";
 
 /**
- * The three top-level service pathways. These are the hub pages the approved
- * taxonomy hangs its 24 services from, so the cards link to routes that will
- * exist even though those pages are not built in this milestone.
+ * The three top-level service pathways — the hub pages the approved taxonomy
+ * hangs its 24 services from. The cards are not links until those pages exist;
+ * that is recorded in the reviewer notice, not on the card.
  */
 export default function ServicePathways() {
   return (
@@ -46,9 +46,6 @@ export default function ServicePathways() {
                 ))}
               </ul>
 
-              <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-charcoal/45">
-                Detailed page in the next milestone
-              </p>
             </div>
           </article>
         </Reveal>

@@ -40,7 +40,7 @@ export default function Section({
   return (
     <section
       id={id}
-      className={`${tones[tone]} scroll-mt-24 py-20 sm:py-28 ${className}`}
+      className={`${tones[tone]} py-20 sm:py-28 ${className}`}
       aria-labelledby={headingId}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">

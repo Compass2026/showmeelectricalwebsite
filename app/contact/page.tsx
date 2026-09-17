@@ -21,6 +21,7 @@ export const metadata: Metadata = {
  * form that cannot submit must never show a success message. Until the route
  * handler is built (mirroring the careers /api/apply Resend integration),
  * every action here is a real `tel:` or `mailto:` link that works today.
+ * That status is recorded in the reviewer notice, not on the page.
  */
 export default function ContactPage() {
   return (
@@ -87,18 +88,6 @@ export default function ContactPage() {
               </p>
             </Reveal>
 
-            <Reveal
-              delay={0.2}
-              className="rounded-md border border-amber-300 bg-amber-50 p-4 md:col-span-2"
-            >
-              <p className="text-xs leading-relaxed text-amber-900">
-                <strong>Prototype note:</strong> the enquiry form is not built
-                yet — there is no submission backend, so no form is shown rather
-                than one that silently fails. The integration will mirror the
-                careers application route (Next.js route handler → Resend). The
-                links above are live and working.
-              </p>
-            </Reveal>
           </div>
         </section>
       </main>

@@ -24,11 +24,16 @@ import type { StoryStage } from "@/components/motion/ScrollStory";
 
 export const hero = {
   eyebrow: "Residential · Commercial · Industrial",
-  /** Source: live homepage hero headline. */
-  headline: "Powering Missouri homes and businesses",
-  headlineAccent: "with care and craftsmanship",
-  /** Source: live homepage subhead. */
-  body: "Show Me Electrical is an owner-led electrical contractor serving St. Louis City, St. Louis County and the Greater St. Louis area. Code-compliant wiring, panel upgrades, lighting and industrial power — done right the first time.",
+  /**
+   * Source: live homepage hero headline ("Powering Missouri homes and
+   * businesses"), shortened and localised to St. Louis so the H1 carries the
+   * primary keyword's location. The accent line is the client's own phrase
+   * from the live /about/ page.
+   */
+  headline: "Powering St. Louis homes and businesses",
+  headlineAccent: "done right the first time.",
+  /** Source: live homepage subhead, condensed to two lines. */
+  body: "Owner-led electrical contractor for residential, commercial and industrial work across the Greater St. Louis area. Free consultations, straight answers, code-compliant work.",
   image: {
     src: "/photos/commercial-panels.webp",
     alt: "Electrical panels installed on a brick wall at a commercial job site",
@@ -41,8 +46,8 @@ export const hero = {
  */
 export const trustPoints = [
   {
-    label: "Owner-led by a Master Electrician",
-    detail: "Dan is on the job himself, not behind a sales desk.",
+    label: "Master Electrician",
+    detail: "Owner-led by Dan — on the job himself, not behind a sales desk.",
   },
   {
     label: "20+ years",
@@ -119,13 +124,12 @@ export const servicePathways = [
  * Owner-confirmed as a service offered (decisions D-001). Deliberately states
  * WHAT is offered and nothing about WHEN: hours and response times are
  * unconfirmed, so there is no 24/7 claim, no after-hours or weekend coverage,
- * and no guaranteed arrival time. Remove `note` once hours are confirmed and
- * the availability wording has been signed off.
+ * and no guaranteed arrival time. Wording confirmed by Tom 2026-09-17. The
+ * reviewer note about unconfirmed hours lives in content/reviewer-notes.ts.
  */
 export const emergencyCallout = {
-  heading: "Electrical emergency?",
-  body: "Sparking outlets, a dead panel, burning smells, water near live circuits — call us and we will get an electrician on it.",
-  note: "PENDING CONFIRMATION — business hours and response times are not yet confirmed, so this block deliberately makes no availability or arrival-time promise. Confirm hours before adding any.",
+  heading: "Need emergency electrical repairs?",
+  body: "Call to discuss the problem and current availability.",
 };
 
 /**
@@ -163,28 +167,51 @@ export const storyStages: StoryStage[] = [
   },
 ];
 
-/** Source: live /about/ page, condensed. */
+/**
+ * Source: live /about/ page, condensed. The Master Electrician credential is
+ * stated once (paragraph 1), per Tom's review; it is not expanded into any
+ * individual licensing claim.
+ */
 export const about = {
   heading: "Your local experts. Your trusted team.",
   paragraphs: [
     "Dan isn't just the owner of Show Me Electrical — he's the Master Electrician behind the name, the hands behind the work and the heart behind the company. Born and raised in Missouri, he built this business from the ground up with a simple mission: honest, reliable electrical work that local families and businesses can count on.",
-    "With over two decades of experience across residential, commercial and industrial systems, Dan leads every project with deep expertise and personal care. He's a licensed Master Electrician, not a sales guy — he shows up, tools in hand, ready to get the job done right the first time.",
+    "With over two decades of experience across residential, commercial and industrial systems, Dan leads every project with deep expertise and personal care. He's not a sales guy — he shows up, tools in hand, ready to get the job done right the first time.",
     "His reputation is built on word of mouth, earned by showing up on time, solving tough problems and treating every customer like a neighbor — because most of them are.",
   ],
+  /**
+   * Stand-in until a portrait of Dan is supplied — a job-site image from the
+   * client's own library, so nothing here is stock. Recorded in
+   * content/reviewer-notes.ts rather than captioned on the page.
+   */
   image: {
     src: "/photos/service-entrance.webp",
     alt: "Exterior electrical service equipment and conduit installed on a commercial building",
   },
-  imageNote:
-    "PLACEHOLDER — a portrait of Dan is needed here. The photo shown is a job-site image from the existing media library.",
 };
 
 /**
- * Source: testimonials published on the client's live homepage.
- * Reproduced verbatim; the third is unattributed on the live site and is
- * therefore shown without a name rather than given one.
+ * Source: the three testimonials on the client's live homepage
+ * (showmeelectrical.com, Elementor testimonial widgets), re-checked against
+ * the raw HTML on 2026-09-17.
+ *
+ *  - Adam (1):  exact, complete quotation.
+ *  - Caroline:  EXCERPT — the live review is nine sentences; four are omitted
+ *               at the marked ellipses. Every sentence shown is verbatim,
+ *               including the reviewer's own "ShowMe Electric" spelling and
+ *               curly quotes. Marked as an excerpt on the page.
+ *  - Adam (2):  exact, complete quotation. The live site attributes this
+ *               review to a second "Adam"; an earlier draft here showed it
+ *               unattributed, which was wrong. Reproduced as published.
+ *
+ * No star ratings, review counts or "verified" labels — no verification
+ * process is documented, so none is claimed.
  */
-export const testimonials = [
+export const testimonials: {
+  quote: string;
+  name: string;
+  excerpt?: boolean;
+}[] = [
   {
     quote:
       "Ryan and Patrick were awesome. They worked with us every step of the way to make sure we got exactly what we were looking for. We will definitely be using Show Me Electrical Services again.",
@@ -192,12 +219,13 @@ export const testimonials = [
   },
   {
     quote:
-      "I've used Show Me Electric for two houses I've owned — light fixtures, dimmers, outlets and TV mounts. I love how practical they are. They worked around my schedule, were thorough, and professional. Zero call back means a job well done. I've also recommended them to many friends.",
+      "I\u2019ve used ShowMe Electric for two houses I\u2019ve owned. \u2026 I love how practical they are. \u2026 They worked around my schedule, were thorough, and professional. Zero call back means a job well done. I\u2019ve also recommended them to many friends.",
     name: "Caroline",
+    excerpt: true,
   },
   {
     quote:
-      "Show Me did a fantastic job updating the lighting throughout my house, which involved wiring new for new custom fans and lights. They were very knowledgeable to advise on options to manage cost and appearance. Professional outfit from quote through efficient installation.",
-    name: null,
+      "Show me did a fantastic job updating the lighting throughout my house, which involved wiring new for new custom fans and lights. They were very knowledgeable to advise on options to manage cost and appearance. Professional outfit from quote through efficient installation.",
+    name: "Adam",
   },
 ];

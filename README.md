@@ -117,6 +117,8 @@ content/
 components/
   motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
   site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice
+content/
+  reviewer-notes.ts  Provisional-content notes shown only in the preview banner
   home/              Hero, TrustBar, ServicePathways, AboutSection, Testimonials
   (root)             Careers components — Header, Footer, JobCard, ApplicationForm
 lib/
@@ -164,8 +166,14 @@ Rules the system follows:
   homepage sections render with zero collapsed.
 - **Reduced motion is respected** — `prefers-reduced-motion: reduce` disables
   decorative motion entirely.
+- **In-page anchors clear the sticky header.** `html { scroll-padding-top }`
+  in `globals.css` is set from `--header-h` (96px, 132px from `sm`), so every
+  section link — nav, footer, skip link — lands with the heading fully visible
+  below the header, without per-section scroll margins.
 - **Mobile is simplified** — shorter travel and duration; parallax off below
-  768px; the scroll story becomes a plain vertical sequence.
+  768px; the scroll story becomes a plain left-rail timeline. On desktop it is
+  three rows on a central circuit rail, copy on one side and photograph on the
+  other, alternating, with the line between nodes drawn in by scroll.
 - **Viewport and preference changes are handled at runtime.** All motion runs
   through `useResponsiveGSAP`, a thin wrapper over `gsap.matchMedia()`. Reading
   `window.innerWidth` or the reduced-motion query once at mount would freeze

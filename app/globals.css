@@ -29,6 +29,21 @@ html {
   scroll-behavior: smooth;
   /* Pairs with body's clip — see the note there. */
   overflow-x: clip;
+  /*
+   * Anchor targets land below the sticky header. --header-h mirrors the
+   * measured height of SiteHeader (utility bar + nav): 96px on phones, 132px
+   * from the `sm` breakpoint where the logo grows to h-20. Set once here so
+   * every in-page link — nav, footer, skip link — clears the header with room
+   * to spare, rather than each section carrying its own scroll-margin.
+   */
+  --header-h: 96px;
+  scroll-padding-top: calc(var(--header-h) + 1.5rem);
+}
+
+@media (min-width: 640px) {
+  html {
+    --header-h: 132px;
+  }
 }
 
 body {

@@ -44,11 +44,6 @@ export default function AboutSection() {
               />
             </div>
           </Parallax>
-          {about.imageNote && (
-            <figcaption className="mt-3 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
-              {about.imageNote}
-            </figcaption>
-          )}
         </figure>
       </Reveal>
     </div>

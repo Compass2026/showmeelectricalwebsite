@@ -68,30 +68,30 @@ export default function HomePage() {
 
           {/*
             Emergency repairs — owner-confirmed service (docs/decisions.md
-            D-001). States the service only. Hours and response times are
+            D-001), kept visually secondary to the three pathways: a quiet
+            cream strip, not a banner. Hours and response times are
             unconfirmed, so there is deliberately no 24/7, after-hours or
             arrival-time wording here.
           */}
           {site.offersEmergencyService && (
-            <Reveal delay={0.15} className="mt-12">
-              <div className="rounded-2xl border border-navy-900/10 bg-navy-950 p-8 sm:flex sm:items-center sm:justify-between sm:gap-8">
+            <Reveal delay={0.15} className="mt-8">
+              <div className="flex flex-col gap-4 rounded-xl border border-navy-900/10 bg-cream px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 className="text-2xl font-extrabold text-white">
+                  <h3 className="text-base font-bold text-navy-900">
                     {emergencyCallout.heading}
                   </h3>
-                  <p className="mt-2 max-w-xl leading-relaxed text-white/70">
+                  <p className="mt-1 text-sm text-charcoal/70">
                     {emergencyCallout.body}
                   </p>
                 </div>
-                <div className="mt-6 shrink-0 sm:mt-0">
-                  <Button href={site.phoneHref}>Call {site.phone}</Button>
-                </div>
+                <Button
+                  href={site.phoneHref}
+                  variant="ghost"
+                  className="shrink-0 self-start sm:self-auto"
+                >
+                  Call {site.phone}
+                </Button>
               </div>
-              {emergencyCallout.note && (
-                <p className="mt-3 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
-                  {emergencyCallout.note}
-                </p>
-              )}
             </Reveal>
           )}
         </Section>
@@ -99,7 +99,7 @@ export default function HomePage() {
         {/* ---------- Signature scroll story ---------- */}
         <section
           id="process"
-          className="relative overflow-hidden bg-navy-950 py-20 sm:py-28"
+          className="relative overflow-hidden bg-navy-950 py-16 sm:py-20"
           aria-labelledby="process-heading"
         >
           <div

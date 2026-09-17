@@ -2,8 +2,11 @@ import Reveal from "@/components/motion/Reveal";
 import { testimonials } from "@/content/home";
 
 /**
- * Testimonials reproduced from the client's live homepage. No star ratings or
- * review counts are shown — we have no verified review data to support them.
+ * Testimonials reproduced from the client's live homepage — see the source
+ * notes on `testimonials` in content/home.ts. Every entry is attributed
+ * exactly as the client publishes it; there is no fallback label, because no
+ * verification process is documented and none may be implied. Excerpts are
+ * marked as such.
  */
 export default function Testimonials() {
   return (
@@ -22,8 +25,11 @@ export default function Testimonials() {
             <blockquote className="mt-5 flex-1 text-sm leading-relaxed text-white/80">
               {t.quote}
             </blockquote>
-            <figcaption className="mt-6 border-t border-white/10 pt-4 text-sm font-bold text-lime-500">
-              {t.name ?? "Verified customer"}
+            <figcaption className="mt-6 flex items-baseline justify-between gap-3 border-t border-white/10 pt-4 text-sm">
+              <span className="font-bold text-lime-500">{t.name}</span>
+              {t.excerpt && (
+                <span className="text-xs text-white/50">Excerpt</span>
+              )}
             </figcaption>
           </figure>
         </Reveal>
