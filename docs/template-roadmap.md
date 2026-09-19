@@ -381,6 +381,38 @@ registries. No runtime dependency added.
 needs one; its rendering and accessibility remain **unverified** until a
 fixture demonstrates them (scheduled for the fictional branch fixture in
 Batch B and re-checked in the Batch C second-brand fixture). Actual AI-agent
-trials remain outstanding (Batch C). City,
+trials remain outstanding (Batch C).
+
+### Template completion — Batch B (2026-09-19)
+
+Finding G2 and the library's §4–§7. One representative page per type,
+built from approved facts; the client's 22-service / 20-city expansion
+stays a separate plan (docs/page-plan.md §3–§4).
+
+| Template | What changed | Where |
+|---|---|---|
+| §4 Individual service page | `ServicePageContent.parent`; `serviceDetailPages` registry beside the hubs (`allServicePages`, `findServicePage`); `/services/residential/electrical-panel-upgrades` built from the residential hub's own approved copy (panel, breaker, EV and remodel items and FAQ) — no prices, timings, permit or amperage claims; hub item `href` set, so hub, directory catalog and two articles link it. | `content/services/{types,index,electrical-panel-upgrades}.ts`, `app/services/residential/electrical-panel-upgrades/`, `content/blog/*` (panel passages now link the page) |
+| §6 Served-city page | `CityPageContent` model, `CityPage` renderer, `cityPages` registry, `/service-area/[city]` route (only registered slugs build). Sample: **Edwardsville, IL** — chosen because its local facts are distinctive and sourced (one of exactly two Illinois communities, D-003; served from the Affton shop, D-005; no office). Leads with a `<dl>` fact list, links only published service pages, typed-block local context, FAQ. Schema: the real business node with `areaServed`, WebPage, breadcrumbs, FAQPage. | `content/cities/*`, `components/site/CityPage.tsx`, `components/site/FactList.tsx`, `app/service-area/[city]/` |
+| §5 Publication-aware coverage | `Community` may carry a city-page slug; `CoverageGroups` renders it as a link only when `cityPages` has it. Edwardsville links; every other community stays text. | `content/service-area.ts`, `components/site/CoverageGroups.tsx` |
+| §7 Physical location page | `BranchLocationContent` model (address, visitability, confirmed hours, services-by-location, team without faked portraits), `LocationPage` renderer (hours and services rendered through the shared semantic `table` block), `locationPages` registry, `/locations/[slug]`. Proven with a **clearly fictional fixture** (`content/demo/harbor-lane-westfield.ts`: fictional brand, `.example` domain, 555-01xx phone, "Exampleton") that is imported only when `COMPASS_DEMO=true` is set at build time, renders a non-dismissible notice, is `noindex`, and is never a published route (sitemap/manifest). Schema: `Plumber` with `parentOrganization` = the fictional org; the client's business node is not on the page. | `content/locations/*`, `content/demo/*`, `components/site/{LocationPage,DemoNotice}.tsx`, `lib/seo.ts` (`locationJsonLd`), `app/locations/[slug]/` |
+| Registry / QA | `lib/routes.ts` kinds `service-detail`, `city`, `location`; manifest checks city and detail links; crawl passes on 16 routes. | `lib/routes.ts`, `scripts/qa/route-manifest.ts`, `docs/template-inventory.md` |
+
+**Table rendering and accessibility — now demonstrated** on the fixture:
+three tables (`Regular opening hours`, `Services at this branch`, `Which
+branch covers which area`) with `<caption>`, `th scope="col"` and
+`th scope="row"`, in a wrapper that scrolls horizontally at 390px while the
+page itself does not overflow (mobile screenshot and DOM probe in the Batch
+B review package).
+
+**Deliberately not done:** no second Show Me branch or office; no
+Edwardsville project examples, landmarks, permit or utility claims (unsourced);
+no `/locations` index page (only needed for a real multi-location client);
+no service × city pages. The Vercel preview for this branch carries
+`COMPASS_DEMO=true` scoped to `claude/template-completion` only (preview
+target) so reviewers can open the fixture; production has no such variable.
+
+**Still outstanding for template sign-off:** neutral branding, optional
+careers, starter, second brand, mocked action tests and an actual AI-agent
+trial (Batch C); GBP parity record (G7). City,
 branch and individual-service templates (G2) are Batch B; neutral branding,
 optional careers, starter and agent trials (G3, G8 remainder, G9) are Batch C.

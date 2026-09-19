@@ -79,10 +79,17 @@ export interface RelatedLink {
 export interface ServicePageContent {
   /** ISO date of the last substantive content revision, when known. */
   modifiedAt?: string;
-  /** Route segment, e.g. "residential". */
+  /** Route segment, e.g. "residential" or "electrical-panel-upgrades". */
   slug: string;
   /** Path from the site root, e.g. "/services/residential". */
   path: string;
+  /**
+   * For an individual service page: the path of the hub it belongs to
+   * (e.g. "/services/residential"). Absent on a hub. The route registry
+   * records it as the page's parent and the hub is expected to link the
+   * page from its `services.items[].href`.
+   */
+  parent?: string;
 
   seo: {
     /** ≤ 60 characters, primary term forward. */

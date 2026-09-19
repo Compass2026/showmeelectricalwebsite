@@ -1,5 +1,7 @@
 import { site } from "@/config/site.config";
-import { servicePages } from "@/content/services";
+import { servicePages, serviceDetailPages } from "@/content/services";
+import { cityPages } from "@/content/cities";
+import { locationPages } from "@/content/locations";
 import { articles } from "@/content/blog";
 import { legalDocuments } from "@/content/legal";
 import { corePages } from "@/content/pages";
@@ -9,23 +11,30 @@ import { corePages } from "@/content/pages";
  * manifest and the link checker read.
  *
  * A route is here only if it is implemented and public. Every entry comes
- * from a content registry (core pages, services, articles, legal documents),
- * so adding a page means registering its content, never editing this file.
+ * from a content registry (core pages, service hubs and detail pages,
+ * served cities, physical locations, articles, legal documents), so adding
+ * a page means registering its content, never editing this file.
+ *
+ * Fictional or noindex locations are NOT published routes: they render
+ * (behind the demo flag) but never reach the sitemap or the manifest.
  *
  * `lastModified` is the date of a significant content change when it is
  * known (an article's `modifiedAt` or `publishedAt`, a policy's
- * `lastUpdated`, a core page's recorded `modifiedAt`). It is never derived
- * from the build, so an ordinary deploy changes no date.
+ * `lastUpdated`, a page's recorded `modifiedAt`). It is never derived from
+ * the build, so an ordinary deploy changes no date.
  */
 export interface PublishedRoute {
   path: string;
-  kind: "core" | "service" | "article" | "legal";
+  kind: "core" | "service" | "service-detail" | "city" | "location" | "article" | "legal";
   title: string;
   /** ISO date of the last significant content change, when known. */
   lastModified?: string;
   /** Registry-declared relationships, for the route manifest. */
   links?: { parent?: string; related?: string[] };
-  /** Where the page is linked from, for the orphan check. */
+  /**
+   * Registry-declared incoming link sources, for the manifest only. The
+   * crawl ignores these and counts rendered anchors from other pages.
+   */
   incoming: string[];
 }
 
@@ -46,10 +55,48 @@ export function publishedRoutes(): PublishedRoute[] {
     ...(page.modifiedAt ? { lastModified: page.modifiedAt } : {}),
     links: {
       parent: "/services",
-      related: (page.related?.links ?? []).map((l) => l.href).filter(isInternal),
+      related: [
+        ...(page.related?.links ?? []).map((l) => l.href).filter(isInternal),
+        ...page.services.items.flatMap((i) => (i.href ? [i.href] : [])),
+      ],
     },
     incoming: ["/", "/services", "/service-area", "/about"],
   }));
+
+  const details: PublishedRoute[] = serviceDetailPages.map((page) => ({
+    path: page.path,
+    kind: "service-detail",
+    title: page.seo.title,
+    ...(page.modifiedAt ? { lastModified: page.modifiedAt } : {}),
+    links: {
+      parent: page.parent,
+      related: (page.related?.links ?? []).map((l) => l.href).filter(isInternal),
+    },
+    incoming: [...(page.parent ? [page.parent] : []), "/services", ...articles.filter((a) => a.relatedServices?.includes(page.path)).map((a) => a.path)],
+  }));
+
+  const cities: PublishedRoute[] = cityPages.map((c) => ({
+    path: c.path,
+    kind: "city",
+    title: c.seo.title,
+    ...(c.modifiedAt ? { lastModified: c.modifiedAt } : {}),
+    links: {
+      parent: "/service-area",
+      related: [...c.services.paths, ...(c.related?.links ?? []).map((l) => l.href).filter(isInternal)],
+    },
+    incoming: ["/service-area"],
+  }));
+
+  const locations: PublishedRoute[] = locationPages
+    .filter((l) => !l.fictional && !l.noindex)
+    .map((l) => ({
+      path: l.path,
+      kind: "location",
+      title: l.seo.title,
+      ...(l.modifiedAt ? { lastModified: l.modifiedAt } : {}),
+      links: { parent: "/", related: (l.related?.links ?? []).map((x) => x.href).filter(isInternal) },
+      incoming: [],
+    }));
 
   const posts: PublishedRoute[] = articles.map((a) => ({
     path: a.path,
@@ -72,7 +119,7 @@ export function publishedRoutes(): PublishedRoute[] {
     incoming: ["footer"],
   }));
 
-  return [...core, ...services, ...posts, ...legal];
+  return [...core, ...services, ...details, ...cities, ...locations, ...posts, ...legal];
 }
 
 export function publishedPaths(): Set<string> {

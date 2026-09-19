@@ -6,7 +6,7 @@ import PreviewNotice from "@/components/site/PreviewNotice";
 import ArticleLayout from "@/components/site/ArticleLayout";
 import { site } from "@/config/site.config";
 import { articles, blog, findArticle } from "@/content/blog";
-import { servicePages } from "@/content/services";
+import { findServicePage } from "@/content/services";
 import type { RelatedLink } from "@/content/services/types";
 import { pageMetadata } from "@/lib/metadata";
 import {
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  */
 function relatedServiceLinks(paths: string[] = []): RelatedLink[] {
   return paths.flatMap((path) => {
-    const page = servicePages.find((p) => p.path === path);
+    const page = findServicePage(path);
     return page
       ? [{ label: page.directory?.title ?? page.schema.name, href: page.path, description: page.directory?.summary ?? page.seo.description }]
       : [];

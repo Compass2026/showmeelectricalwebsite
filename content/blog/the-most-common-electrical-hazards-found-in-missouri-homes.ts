@@ -27,7 +27,7 @@ export const post: Article = {
   author: "Tom Dombrowski",
   /** Substantive owner-approved edits applied 2026-09-19 (docs/launch-review.md). */
   modifiedAt: "2026-09-19",
-  relatedServices: ["/services/residential"],
+  relatedServices: ["/services/residential", "/services/residential/electrical-panel-upgrades"],
   relatedArticles: ["top-signs-you-need-to-call-an-electrician-immediately", "top-5-signs-your-home-needs-electrical-rewiring"],
   excerpt: "Missouri homes often face hidden electrical hazards caused by outdated wiring, overloaded circuits, damaged outlets, missing GFCI protection, improper DIY repairs and aging electrical panels. Here is what homeowners should watch for.",
   body: [
@@ -69,7 +69,7 @@ export const post: Article = {
     ] },
     { type: "h2", text: "Aging or Undersized Electrical Panels" },
     { type: "p", text: "Your electrical panel is the heart of your system. As homes add more appliances and upgrades, older panels often can’t handle the load. Older panels may have worn components or outdated breakers that fail to trip when overloaded." },
-    { type: "p", text: ["This is one of the most dangerous electrical hazards because a failed panel can allow wires to overheat without warning. ", { type: "link", text: "Panel upgrades and replacement", href: "/services/residential#services" }, " are a core residential service."] },
+    { type: "p", text: ["This is one of the most dangerous electrical hazards because a failed panel can allow wires to overheat without warning. ", { type: "link", text: "Panel upgrades and replacement", href: "/services/residential/electrical-panel-upgrades" }, " are a core residential service."] },
     { type: "h2", text: "Damaged or Improperly Installed Outlets and Switches" },
     { type: "p", text: "Worn outlets may feel warm, loosen over time, or stop holding plugs securely. Internal arcing can create sparks or heat that builds inside the wall. Cracked faceplates or loose switches are also signs that something is failing behind the surface." },
     { type: "p", text: "Never ignore discoloration or a burning smell near an outlet or switch." },

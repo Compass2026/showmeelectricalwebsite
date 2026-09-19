@@ -71,13 +71,18 @@ same call returned the map's 260/mo, confirming the location).
 Numbers are the taxonomy's. Volumes are the map's. None exist on the live
 site, so there are no existing URLs and no redirects.
 
+Status: **1 of 22 child pages built** (#3, as the template's representative
+individual-service page). The other 21 remain planned client work, separate
+from template acceptance; each needs its own sourced content file before it
+is registered in `content/services/index.ts` `serviceDetailPages`.
+
 ### Residential (13) — under `/services/residential/`
 
 | # | Service | Primary keyword | Vol/mo | Proposed URL |
 |---|---|---|---|---|
 | 1 | Electrical Repair & Troubleshooting | electrical repair st louis | low | `/services/residential/electrical-repair` |
 | 2 | Emergency Electrical Service | emergency electrician st louis | 20 · **money kw #4** | `/services/residential/emergency-electrical-service` |
-| 3 | Electrical Panel Upgrades & Replacement | electrical panel upgrade st louis | <10 · **money kw #5** | `/services/residential/electrical-panel-upgrades` |
+| 3 | Electrical Panel Upgrades & Replacement | electrical panel upgrade st louis | <10 · **money kw #5** | `/services/residential/electrical-panel-upgrades` ✅ Built (template Batch B — the representative child page; content from the hub's approved copy only) |
 | 4 | Circuit Breaker Repair & Replacement | circuit breaker replacement st louis | low | `/services/residential/circuit-breaker-replacement` |
 | 5 | Home Rewiring | home rewiring st louis | 10 | `/services/residential/home-rewiring` |
 | 6 | New Construction Wiring | new construction electrical st louis | low | `/services/residential/new-construction-wiring` |
@@ -136,8 +141,17 @@ BreadcrumbList; unique content per city, never templated swaps (checklist
 | 1 | Florissant | electrician florissant mo | — | `/service-area/florissant` |
 | 1 | Wentzville | electrician wentzville mo | — | `/service-area/wentzville` |
 | 1 | Webster Groves | electrician webster groves | — | `/service-area/webster-groves` |
-| 2 | Ballwin · Ellisville · Manchester · Creve Coeur · Clayton · University City · Maplewood · Fenton · Arnold · St. Peters · Edwardsville IL · Belleville IL | electrician \<city\> | — | `/service-area/<city-slug>` (12) |
+| 2 | Ballwin · Ellisville · Manchester · Creve Coeur · Clayton · University City · Maplewood · Fenton · Arnold · St. Peters · Belleville IL | electrician \<city\> | — | `/service-area/<city-slug>` (11 remaining) |
+| 2 | Edwardsville, IL | electrician edwardsville il | — | `/service-area/edwardsville-il` ✅ Built (template Batch B — the representative served-city page; out-of-state slugs carry the state code) |
 | 3 | ~50 remaining communities | — | — | listed on `/service-area`, no page |
+
+Status: **1 of 20 city pages built** (Edwardsville, IL). A city becomes a
+route only when registered in `content/cities/index.ts`, which requires
+owner-confirmed coverage and sourced local facts (the Build Standard's city
+gate). The service-area hub links a community only once its page is
+registered; until then the name is plain text. Slug convention: Missouri
+cities use the bare name (`/service-area/kirkwood`); out-of-state cities
+carry the state code (`/service-area/edwardsville-il`).
 
 The live `/st-louis/` page is titled *"Industrial Electrical solutions for
 St. Louis"* — a narrow industrial page wearing a city URL. Its content maps

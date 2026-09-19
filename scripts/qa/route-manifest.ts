@@ -11,6 +11,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { publishedRoutes, isPublishedHref, siteOrigin } from "../../lib/routes";
 import { articles } from "../../content/blog";
 import { legalDocuments } from "../../content/legal";
+import { cityPages } from "../../content/cities";
+import { serviceDetailPages } from "../../content/services";
 import { blockHrefs, isInternalHref } from "../../content/blocks";
 
 const routes = publishedRoutes();
@@ -20,6 +22,15 @@ for (const d of legalDocuments) for (const href of blockHrefs(d.body)) contentLi
 for (const a of articles) {
   for (const href of a.relatedServices ?? []) contentLinks.push({ from: a.path, href, ok: isPublishedHref(href) });
   for (const slug of a.relatedArticles ?? []) contentLinks.push({ from: a.path, href: `/blog/${slug}`, ok: isPublishedHref(`/blog/${slug}`) });
+}
+for (const c of cityPages) {
+  for (const href of c.services.paths) contentLinks.push({ from: c.path, href, ok: isPublishedHref(href) });
+  for (const href of blockHrefs(c.context?.body ?? [])) contentLinks.push({ from: c.path, href, ok: isPublishedHref(href) });
+  for (const l of c.related?.links ?? []) contentLinks.push({ from: c.path, href: l.href, ok: isPublishedHref(l.href) });
+}
+for (const d of serviceDetailPages) {
+  if (d.parent) contentLinks.push({ from: d.path, href: d.parent, ok: isPublishedHref(d.parent) });
+  for (const l of d.related?.links ?? []) contentLinks.push({ from: d.path, href: l.href, ok: isPublishedHref(l.href) });
 }
 const badInternal = contentLinks.filter((l) => isInternalHref(l.href) && !l.ok);
 const badExternal = contentLinks.filter((l) => !isInternalHref(l.href) && !/^https:\/\//.test(l.href));
@@ -41,7 +52,7 @@ const lines: string[] = [
       `| \`${r.path}\` | ${r.kind} | ${md(r.title)} | ${r.links?.parent ? `\`${r.links.parent}\`` : "—"} | ${(r.links?.related ?? []).map((x) => `\`${x}\``).join(", ") || "—"} | ${r.incoming.map((x) => (x.startsWith("/") ? `\`${x}\`` : x)).join(", ")} | ${r.lastModified ?? "unknown (omitted)"} |`
   ),
   "",
-  "## Content links (articles and legal documents)",
+  "## Content links (articles, legal documents, city and service-detail pages)",
   "",
   "| From | Href | Resolves |",
   "|---|---|---|",

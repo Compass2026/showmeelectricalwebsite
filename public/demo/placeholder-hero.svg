@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Placeholder graphic for a fictional demo fixture">
+  <rect width="1200" height="900" fill="#ced1d6"/>
+  <rect x="8" y="8" width="1184" height="884" fill="none" stroke="#787c82" stroke-width="8"/>
+  <text x="600" y="420" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="700" fill="#3a3d42">Placeholder — fictional demo fixture</text>
+  <text x="600" y="490" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#3a3d42">No photograph exists for this location</text>
+</svg>

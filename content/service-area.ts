@@ -11,9 +11,17 @@ export interface CoverageGroup {
   name: string;
   /** Short qualifier shown under the name, e.g. "Home of our shop in Affton." */
   note?: string;
-  /** Named communities. May be empty when only the county is verified. */
-  communities: string[];
+  /**
+   * Named communities. May be empty when only the county is verified.
+   * A community may reference its served-city page by slug; the hub links
+   * it ONLY when that slug is registered in content/cities (publication-
+   * aware), otherwise the name stays plain text. Unbuilt cities are never
+   * links.
+   */
+  communities: Community[];
 }
+
+export type Community = string | { name: string; page: string };
 
 /**
  * SERVICE AREA — /service-area
@@ -116,7 +124,7 @@ export const serviceArea = {
       {
         name: "Illinois / Metro East",
         note: "Across the river — these two communities.",
-        communities: ["Edwardsville", "Belleville"],
+        communities: [{ name: "Edwardsville", page: "edwardsville-il" }, "Belleville"],
       },
     ] as CoverageGroup[],
     /** Shown after the groups. Verified wording from the live homepage. */

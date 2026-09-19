@@ -1,5 +1,6 @@
 import { site } from "@/config/site.config";
 import type { Crumb, Faq, ServicePageContent } from "@/content/services/types";
+import type { BranchLocationContent } from "@/content/locations/types";
 
 /**
  * Structured data helpers — client-agnostic.
@@ -291,5 +292,62 @@ export function blogJsonLd(
       url: `${baseUrl}${p.path}`,
       ...(p.publishedAt ? { datePublished: p.publishedAt } : {}),
     })),
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * Physical locations
+ * ------------------------------------------------------------------ */
+
+/**
+ * A LocalBusiness subtype for ONE real place of business, linked to its
+ * parent organization. Everything comes from the location's own content:
+ * the type, the parent, the address, the phone, and opening hours only
+ * when the content records confirmed hours. Nothing is read from the
+ * reference client's config, so a demonstration fixture can describe a
+ * fictional parent without ever touching the client's business node.
+ */
+export function locationJsonLd(
+  location: BranchLocationContent,
+  baseUrl: string = site.productionUrl
+) {
+  const url = `${baseUrl}${location.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": location.schemaType,
+    "@id": `${url}#location`,
+    name: location.name,
+    url,
+    telephone: location.phone,
+    ...(location.email ? { email: location.email } : {}),
+    address: {
+      "@type": "PostalAddress",
+      ...(location.address.street ? { streetAddress: location.address.street } : {}),
+      addressLocality: location.address.city,
+      addressRegion: location.address.region,
+      postalCode: location.address.postalCode,
+      addressCountry: location.address.country,
+    },
+    parentOrganization: {
+      "@type": "Organization",
+      name: location.parent.name,
+      url: location.parent.url,
+    },
+    ...(location.header.image ? { image: `${baseUrl}${location.header.image.src}` } : {}),
+    ...(location.areaServed?.length
+      ? { areaServed: location.areaServed.map((name) => ({ "@type": "Place", name })) }
+      : {}),
+    ...(location.hours
+      ? {
+          openingHoursSpecification: location.hours.rules
+            .filter((r) => r.opens && r.closes)
+            .map((r) => ({
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: r.days,
+              opens: r.opens,
+              closes: r.closes,
+            })),
+        }
+      : {}),
   };
 }

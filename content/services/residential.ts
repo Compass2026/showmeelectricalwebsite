@@ -8,7 +8,8 @@ import { trustPoints, processSteps } from "@/content/shared";
  * from the same DataForSEO source and location as the approved keyword map
  * (20/mo, HIGH competition). The 13 services are the approved taxonomy's
  * residential entries, numbered as in the map; each becomes its own page in a
- * later milestone and gets an `href` then.
+ * later milestone and gets an `href` then (panel upgrades has one — the
+ * representative individual-service page, template Batch B).
  *
  * PROVENANCE:
  *  - Service names: approved taxonomy v1.1 (client-approved 2026-09-02).
@@ -96,6 +97,7 @@ export const residential: ServicePageContent = {
           "Breakers trip when the microwave and a space heater run together, the panel is an older model, or the house still has a fuse box.",
         solution:
           "We replace undersized or worn panels with modern breaker panels sized for today's loads — HVAC, kitchen, home office, EV charging — so the house stops fighting itself.",
+        href: "/services/residential/electrical-panel-upgrades",
       },
       {
         name: "Circuit Breaker Repair & Replacement",

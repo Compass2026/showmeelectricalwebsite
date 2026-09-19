@@ -336,6 +336,24 @@ Run the manifest before the crawl; the crawl reads `.qa/routes.json`.
 the main site. Browser-level checks (hydration, form behaviour, tap targets,
 screenshots) are separate probes, not part of this crawl.
 
+### Demonstration fixtures (`COMPASS_DEMO`)
+
+Templates the reference client does not need — today the physical
+branch/location page — are proven with **fictional** fixtures under
+`content/demo/`. They are imported only when `COMPASS_DEMO=true` is set at
+build time:
+
+```bash
+COMPASS_DEMO=true npm run build && COMPASS_DEMO=true npm start   # /locations/westfield-demo renders
+npm run build && npm start                                       # same URL is a real 404
+```
+
+A fixture is `fictional: true`, which renders a non-dismissible notice,
+forces `noindex`, and keeps it out of `publishedRoutes()` — so out of the
+sitemap, the manifest and the crawl's expectations — even in a demo build.
+Never set `COMPASS_DEMO` in a client's production environment. See
+`content/demo/README.md` and `docs/template-inventory.md`.
+
 ## Local development
 
 ```bash
