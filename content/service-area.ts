@@ -28,11 +28,11 @@ export interface CoverageGroup {
  *    each sits in is public geography, not a client claim.
  *  - "and surrounding communities": the client's own live footer wording.
  *
+ *  - Edwardsville and Belleville, Illinois: confirmed by Tom 2026-09-19
+ *    (decision D-003) — these two cities only. No county, no wider Illinois
+ *    coverage, no office, hours or response claims are inferred from that.
+ *
  * DELIBERATELY ABSENT — not invented:
- *  - Edwardsville and Belleville, Illinois. The keyword map lists them as
- *    Tier-2 targets, but every coverage statement the client publishes is
- *    Missouri-only. Flagged in docs/open-questions.md; omitted until Tom
- *    confirms Metro East coverage.
  *  - Any second office, project example, travel charge, response time or
  *    hard boundary. Counties without named communities show the county only.
  *  - A map embed, until the street address is confirmed.
@@ -43,7 +43,7 @@ export const serviceArea = {
   seo: {
     title: "Service Area | Show Me Electrical — Greater St. Louis, MO",
     description:
-      "Show Me Electrical serves St. Louis City and County, St. Charles, Jefferson, Franklin, Warren and Lincoln Counties from Affton. Not sure? Call us.",
+      "Show Me Electrical serves St. Louis City and County, St. Charles, Jefferson, Franklin, Warren and Lincoln Counties, plus Edwardsville and Belleville, IL. Not sure? Call us.",
     image: "/photos/service-entrance.webp",
   },
 
@@ -53,7 +53,7 @@ export const serviceArea = {
     eyebrow: "Where we work",
     headline: `Serving the ${site.serviceArea}`,
     intro:
-      `Based in ${site.address.city} and working across the metro — St. Louis City and County, out through St. Charles, Jefferson, Franklin, Warren and Lincoln Counties. Homes, businesses and industrial facilities alike.`,
+      `Based in ${site.address.city} and working across the metro — St. Louis City and County, out through St. Charles, Jefferson, Franklin, Warren and Lincoln Counties, and across the river to Edwardsville and Belleville, Illinois. Homes, businesses and industrial facilities alike.`,
     image: {
       src: "/photos/service-entrance.webp",
       alt: "New electrical service on the exterior of a block building: four conduit risers feeding a stainless-steel cabinet and a meter",
@@ -64,7 +64,7 @@ export const serviceArea = {
     eyebrow: "Counties and communities",
     heading: "Are we in your area?",
     intro:
-      "Find your county below. If your community isn't named, that doesn't mean no — the list names the places we're asked about most, and we work across each county and its surrounding communities.",
+      "Find your county below. If your community isn't named, that doesn't mean no — the list names communities within our service area, and we work across each county and its surrounding communities.",
     groups: [
       {
         name: "St. Louis City",
@@ -113,6 +113,11 @@ export const serviceArea = {
         note: "The county and its communities.",
         communities: [],
       },
+      {
+        name: "Illinois / Metro East",
+        note: "Across the river — these two communities.",
+        communities: ["Edwardsville", "Belleville"],
+      },
     ] as CoverageGroup[],
     /** Shown after the groups. Verified wording from the live homepage. */
     fallback: {
@@ -154,11 +159,11 @@ export const serviceArea = {
     items: [
       {
         q: "Which counties do you serve?",
-        a: "St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties — the Greater St. Louis area.",
+        a: "St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties — the Greater St. Louis area — and Edwardsville and Belleville in Illinois.",
       },
       {
         q: "My town isn't on the list. Do you still come out?",
-        a: "Very possibly. The list names the communities we're asked about most, not a boundary. Call and we'll tell you straight.",
+        a: "Very possibly. The list names communities within our service area, not a boundary. Call and we'll tell you straight.",
       },
       {
         q: "Where is your shop?",
@@ -166,7 +171,7 @@ export const serviceArea = {
       },
       {
         q: "Do you take residential, commercial and industrial work everywhere in the area?",
-        a: "Yes. Homes, businesses and industrial facilities across all seven counties, and the same owner leads the work on every one.",
+        a: "Yes. Homes, businesses and industrial facilities across our listed service area, and the same owner leads the work on every one.",
       },
     ] as Faq[],
   },

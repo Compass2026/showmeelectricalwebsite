@@ -158,7 +158,7 @@ export const industrial: ServicePageContent = {
       },
       {
         q: "Which areas do you serve?",
-        a: "Industrial facilities across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties.",
+        a: "Industrial facilities across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties — and Edwardsville and Belleville in Illinois.",
       },
     ],
   },

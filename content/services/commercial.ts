@@ -195,7 +195,7 @@ export const commercial: ServicePageContent = {
       },
       {
         q: "Which areas do you serve?",
-        a: "Businesses across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties.",
+        a: "Businesses across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties — and Edwardsville and Belleville in Illinois.",
       },
     ],
   },

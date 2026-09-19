@@ -6,6 +6,15 @@
  * placeholders or "coming soon" labels. Delete this file with PreviewNotice
  * at launch.
  */
+import { articles } from "./blog";
+import { legalDocuments } from "./legal";
+
+const flagged = (items: { title: string; flags?: string[] }[]) =>
+  items
+    .filter((i) => i.flags?.length)
+    .map((i) => `${i.title}: ${i.flags!.join(" ")}`)
+    .join(" | ");
+
 export const reviewerNotes: { where: string; note: string }[] = [
   {
     where: "Services",
@@ -13,7 +22,7 @@ export const reviewerNotes: { where: string; note: string }[] = [
   },
   {
     where: "Service area",
-    note: "Counties come from the brand board and the live site; named communities are the approved keyword map's Missouri Tier-1 and Tier-2 cities. Edwardsville and Belleville, Illinois are in that map but every published coverage statement is Missouri-only — omitted until Tom confirms. No map embed until the street address is confirmed.",
+    note: "Counties come from the brand board and the live site; named communities are the approved keyword map's Tier-1 and Tier-2 cities. Edwardsville and Belleville, Illinois were confirmed by Tom (decision D-003) — those two cities only, no wider Illinois coverage inferred. No map embed until the street address is confirmed.",
   },
   {
     where: "Services directory",
@@ -34,6 +43,18 @@ export const reviewerNotes: { where: string; note: string }[] = [
   {
     where: "Testimonials",
     note: "Reproduced from the live homepage. Caroline's is a marked excerpt; the other two are complete. The third is attributed to \"Adam\" on the live site, as shown.",
+  },
+  {
+    where: "Blog",
+    note: `The three WordPress posts are reproduced word for word with their published dates and byline; the stock featured images were not carried over. Claims to decide on — ${flagged(articles)}`,
+  },
+  {
+    where: "Legal pages",
+    note: `Privacy policy and terms carry over verbatim ("Last Updated: November 10, 2025"); no wording was replaced. References that may be outdated after the move — ${flagged(legalDocuments)}`,
+  },
+  {
+    where: "Careers link",
+    note: "Nav, footer and About now link straight to careers.showmeelectrical.com, and showmeelectrical.com/careers redirects there, so the careers pages exist at one address. On this preview the Careers link therefore leaves the preview for the live careers site.",
   },
   {
     where: "Contact",

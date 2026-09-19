@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { jobs } from "@/lib/jobs";
 import { resolveProperty } from "@/lib/host";
 import { servicePages } from "@/content/services";
+import { articles, blog } from "@/content/blog";
+import { legalDocuments } from "@/content/legal";
 
 /**
  * Host-aware sitemap.
@@ -42,6 +44,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${origin}${page.path}`,
       changeFrequency: "monthly" as const,
       priority: 0.9,
+    })),
+    // Blog index + every registered post (content/blog/index.ts).
+    { url: `${origin}${blog.path}`, changeFrequency: "weekly", priority: 0.6 },
+    ...articles.map((post) => ({
+      url: `${origin}${post.path}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+      ...(post.publishedAt ? { lastModified: post.publishedAt } : {}),
+    })),
+    // Legal documents (content/legal/index.ts).
+    ...legalDocuments.map((doc) => ({
+      url: `${origin}${doc.path}`,
+      changeFrequency: "yearly" as const,
+      priority: 0.2,
+      ...(doc.lastUpdated ? { lastModified: doc.lastUpdated } : {}),
     })),
     // The careers site has its own hostname and its own sitemap, so its URLs
     // are deliberately not listed here.

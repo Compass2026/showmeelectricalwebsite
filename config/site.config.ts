@@ -81,6 +81,12 @@ export const site = {
     "Warren County",
     "Lincoln County",
   ],
+  /**
+   * Individual communities confirmed as served outside the county list.
+   * Owner-confirmed 2026-09-19 (decision D-003): these two Illinois cities
+   * only — not their counties, not the wider Metro East.
+   */
+  confirmedCities: ["Edwardsville, IL", "Belleville, IL"],
 
   /* ---------------- Domains ---------------- */
   /**
@@ -89,6 +95,11 @@ export const site = {
    * structured data. See README "Preview vs production indexing".
    */
   productionUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://showmeelectrical.com",
+  /**
+   * The careers property's own hostname. Nav, footer and About link here
+   * directly, and `middleware.ts` sends main-host /careers and /career
+   * requests here, so the careers pages exist at one address only.
+   */
   careersUrl: "https://careers.showmeelectrical.com",
   /** Legacy WordPress origin, still live during the rebuild. */
   wordpressUrl: "https://showmeelectrical.com",
@@ -130,7 +141,8 @@ export const site = {
     { label: "Our Process", href: "/#process" },
     { label: "About", href: "/about" },
     { label: "Service Area", href: "/service-area" },
-    { label: "Careers", href: "/careers" },
+    { label: "Blog", href: "/blog" },
+    { label: "Careers", href: "https://careers.showmeelectrical.com", external: true },
     { label: "Contact", href: "/contact" },
   ] as NavItem[],
 
@@ -139,12 +151,19 @@ export const site = {
     { label: "Our Process", href: "/#process" },
     { label: "About", href: "/about" },
     { label: "Service Area", href: "/service-area" },
-    { label: "Careers", href: "/careers" },
+    { label: "Blog", href: "/blog" },
+    { label: "Careers", href: "https://careers.showmeelectrical.com", external: true },
     { label: "Contact", href: "/contact" },
   ] as NavItem[],
 
-  /** Carried over from WordPress at launch; not rebuilt in this milestone. */
-  legalLinks: [] as NavItem[],
+  /**
+   * Legal documents carried over from WordPress verbatim (content/legal/).
+   * Rendered in the footer's bottom bar.
+   */
+  legalLinks: [
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms of Service", href: "/terms-of-service" },
+  ] as NavItem[],
 
   /* ---------------- Business facts for structured data ---------------- */
   /**

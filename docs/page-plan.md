@@ -5,7 +5,9 @@
 *Compass Master SEO Audit Checklist v1.0* · *Compass SOP SEO-AEO-GEO v3.1*.
 
 **Status:** proposed. Home, the services directory, the three hubs, About,
-Service Area and Contact are built (marked ✅). Everything else is planned and not yet routed —
+Service Area, Contact, the blog index with its three migrated posts, and the
+two legal pages are built (marked ✅). Launch redirects are implemented (§6).
+Everything else is planned and not yet routed —
 nothing in this document is a promise that a URL resolves today. §8 splits
 the plan into launch essentials and later SEO expansion.
 
@@ -145,38 +147,34 @@ Tier-1 St. Louis city page and its industrial content moves to
 
 | Existing URL | Proposed URL | Note |
 |---|---|---|
-| `/top-5-signs-your-home-needs-electrical-rewiring/` | `/blog/top-5-signs-your-home-needs-electrical-rewiring` | Retain; link to home-rewiring page |
-| `/the-most-common-electrical-hazards-found-in-missouri-homes/` | `/blog/the-most-common-electrical-hazards-found-in-missouri-homes` | Retain; link to repair + panel pages |
-| `/top-signs-you-need-to-call-an-electrician-immediately/` | `/blog/top-signs-you-need-to-call-an-electrician-immediately` | Retain; link to emergency page; check for availability promises |
+| `/top-5-signs-your-home-needs-electrical-rewiring/` | `/blog/top-5-signs-your-home-needs-electrical-rewiring` ✅ | Migrated verbatim; internal links to the future rewiring page can be added once it exists |
+| `/the-most-common-electrical-hazards-found-in-missouri-homes/` | `/blog/the-most-common-electrical-hazards-found-in-missouri-homes` ✅ | Migrated verbatim |
+| `/top-signs-you-need-to-call-an-electrician-immediately/` | `/blog/top-signs-you-need-to-call-an-electrician-immediately` ✅ | Migrated verbatim; no availability promise found, "fast" wording flagged |
+| `/category/blog/` | `/blog` ✅ | Index, registry-driven (`content/blog/index.ts`) |
 | — | `/blog/<slug>` ×6 | Map's first six topics, one per month |
 
 ---
 
-## 6. Redirects required at launch
+## 6. Redirects required at launch — implemented ✅
 
-301 unless noted. Implement in `next.config.ts` `redirects()`; verify each
-with `curl -I` before DNS moves.
+Data in `config/redirects.ts`, read by `next.config.ts`; careers paths in
+`middleware.ts` rule 4; `/global-styles` is a 410 route handler.
+`trailingSlash: false` is settled. Every row verified with `curl -I` against
+the production build (2026-09-19) — the full table with hop counts is in
+`docs/migration-inventory.md` §4.
 
 | From (live WordPress) | To | Why |
 |---|---|---|
-| `/about/` | `/about` | trailing slash |
-| `/services/` | `/services` | trailing slash |
-| `/contact/` | `/contact` | trailing slash |
+| `/about/`, `/services/`, `/contact/`, `/privacy-policy/`, `/terms-of-service/` | same path without the slash | Next's own slash-strip; no rule needed |
 | `/locations/` | `/service-area` | renamed |
-| `/st-louis/` | `/service-area/st-louis` | moved under hub |
-| `/careers/` | `https://careers.showmeelectrical.com/` | separate host |
-| `/career/` | `https://careers.showmeelectrical.com/` | duplicate page, separate host |
-| `/privacy-policy/` | `/privacy-policy` | trailing slash |
-| `/terms-of-service/` | `/terms-of-service` | trailing slash |
-| `/top-5-signs-your-home-needs-electrical-rewiring/` | `/blog/top-5-signs-your-home-needs-electrical-rewiring` | moved under `/blog` |
-| `/the-most-common-electrical-hazards-found-in-missouri-homes/` | `/blog/the-most-common-electrical-hazards-found-in-missouri-homes` | moved under `/blog` |
-| `/top-signs-you-need-to-call-an-electrician-immediately/` | `/blog/top-signs-you-need-to-call-an-electrician-immediately` | moved under `/blog` |
+| `/st-louis/` | `/services/industrial` | the old page was an industrial pitch, not a city page (inventory §1 #5); re-point if a St. Louis city page is built |
+| `/careers/`, `/career/` | `https://careers.showmeelectrical.com/` | separate host; duplicate page |
+| `/<post-slug>/` ×3 | `/blog/<post-slug>` | moved under `/blog` |
 | `/category/blog/` | `/blog` | consolidated |
 | `/global-styles/` | — | **410 Gone.** Elementor artifact, never content |
-| `/wp-sitemap*.xml` | `/sitemap.xml` | sitemap moved |
+| `/wp-sitemap.xml` + 4 sub-sitemaps | `/sitemap.xml` | sitemap moved |
 
-Settle `trailingSlash` in `next.config.ts` once, before launch, so every rule
-above behaves consistently.
+No rule points at a page that is not built.
 
 ---
 

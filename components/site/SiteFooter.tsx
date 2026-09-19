@@ -22,12 +22,21 @@ export default function SiteFooter() {
           <ul className="mt-4 space-y-2.5">
             {site.footerLinks.map((item) => (
               <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-lime-400"
-                >
-                  {item.label}
-                </Link>
+                {item.external ? (
+                  <a
+                    href={item.href}
+                    className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-lime-400"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-lime-400"
+                  >
+                    {item.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>

@@ -53,15 +53,25 @@ export default function SiteHeader() {
           </Link>
 
           <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
-            {site.nav.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-lime-400"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {site.nav.map((item) =>
+              item.external ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-lime-400"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-lime-400"
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
             <a
               href={site.primaryCta.href}
               className="rounded-md bg-lime-500 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-lime-400"
@@ -100,16 +110,26 @@ export default function SiteHeader() {
             aria-label="Mobile"
             className="border-t border-navy-800 bg-navy-900 px-4 pb-6 pt-2 lg:hidden"
           >
-            {site.nav.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="block border-b border-navy-800 py-3 text-sm font-semibold uppercase tracking-wide text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {site.nav.map((item) =>
+              item.external ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="block border-b border-navy-800 py-3 text-sm font-semibold uppercase tracking-wide text-white"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-navy-800 py-3 text-sm font-semibold uppercase tracking-wide text-white"
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
             <a
               href={site.primaryCta.href}
               onClick={() => setOpen(false)}

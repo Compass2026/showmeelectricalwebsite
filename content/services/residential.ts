@@ -266,7 +266,7 @@ export const residential: ServicePageContent = {
       },
       {
         q: "Which areas do you serve?",
-        a: "Homes across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties. Not sure you're in range? Call and we'll tell you straight.",
+        a: "Homes across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties, and Edwardsville and Belleville in Illinois. Not sure you're in range? Call and we'll tell you straight.",
       },
     ],
   },

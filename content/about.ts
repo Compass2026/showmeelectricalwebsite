@@ -1,3 +1,4 @@
+import { site } from "@/config/site.config";
 import type { Crumb, Faq, Photo, RelatedLink } from "./services/types";
 
 /**
@@ -117,7 +118,7 @@ export const about = {
       },
       {
         label: "Careers",
-        href: "/careers",
+        href: site.careersUrl,
         description: "Open roles for electricians and office staff.",
       },
     ] as RelatedLink[],
@@ -141,7 +142,7 @@ export const about = {
       },
       {
         q: "Where are you based, and where do you work?",
-        a: "Our shop is at 5602 Heege Rd in Affton, MO. We work across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties.",
+        a: "Our shop is at 5602 Heege Rd in Affton, MO. We work across the Greater St. Louis area — St. Louis City and St. Louis County, plus St. Charles, Jefferson, Franklin, Warren and Lincoln Counties — and Edwardsville and Belleville in Illinois.",
       },
       {
         q: "Do you take on residential, commercial and industrial work?",

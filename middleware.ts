@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { site } from "@/config/site.config";
 
 /**
  * Host-based routing for the two properties in this codebase.
@@ -27,7 +28,15 @@ import { NextResponse, type NextRequest } from "next/server";
  *    would exist at two hostnames as duplicate content. They are rewritten to
  *    a path that has no route, so Next returns its 404 page with a 404 status.
  *
- * On the main host "/careers/*" is the real, canonical path and is left alone.
+ * 4. REDIRECT (main host only) — "/careers/*" is where the careers routes live
+ *    in the app directory, but the careers property's public address is its
+ *    own hostname. Serving the same pages at showmeelectrical.com/careers
+ *    would be duplicate content, so the main host sends them (and the old
+ *    WordPress "/career" path) to the careers host with the path preserved:
+ *      showmeelectrical.com/careers            → careers.showmeelectrical.com/
+ *      showmeelectrical.com/careers/jobs/<slug> → careers.showmeelectrical.com/jobs/<slug>
+ *      showmeelectrical.com/career             → careers.showmeelectrical.com/
+ *    Rules 1–3 for the careers host are unchanged by this.
  */
 const CAREERS_HOST_PREFIX = "careers.";
 
@@ -35,11 +44,34 @@ function isCareersHost(host: string) {
   return host.startsWith(CAREERS_HOST_PREFIX);
 }
 
+/**
+ * For a main-host path that belongs to the careers property, the path on the
+ * careers host; otherwise null. "/careers/jobs/x" → "/jobs/x"; "/career" (the
+ * old WordPress duplicate) → "/".
+ */
+function mainHostCareersPath(pathname: string): string | null {
+  for (const prefix of ["/careers", "/career"]) {
+    if (pathname === prefix) return "/";
+    if (pathname.startsWith(`${prefix}/`)) {
+      return pathname.slice(prefix.length) || "/";
+    }
+  }
+  return null;
+}
+
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const { pathname, search } = request.nextUrl;
 
   if (!isCareersHost(host)) {
+    // Rule 4 — careers pages are not served on the main host.
+    const careersPath = mainHostCareersPath(pathname);
+    if (careersPath !== null) {
+      return NextResponse.redirect(
+        `${site.careersUrl}${careersPath}${search}`,
+        308
+      );
+    }
     return NextResponse.next();
   }
 

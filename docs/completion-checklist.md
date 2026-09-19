@@ -4,7 +4,7 @@ Three lists, kept separate on purpose. The first is the gate for replacing
 WordPress. The second is the gate for the Compass starter. The third is
 never a gate for anything — it is built on demand, measured page by page.
 
-Status as of the service-area + services-directory milestone.
+Status as of the content-preservation milestone (blog, legal, redirects).
 
 ---
 
@@ -16,12 +16,12 @@ Status as of the service-area + services-directory milestone.
 | A2 | `/services` directory | ✅ | Registry-driven cards and catalog |
 | A3 | `/services/residential`, `/commercial`, `/industrial` | ✅ | |
 | A4 | `/about` | ✅ | Portrait of Dan still needed |
-| A5 | `/service-area` | ✅ | Missouri counties + approved communities; Illinois pending Tom |
+| A5 | `/service-area` | ✅ | Missouri counties + approved communities + Edwardsville and Belleville, IL (D-003) |
 | A6 | `/contact` | ✅ page · ⬜ form | Route handler mirroring `/api/apply` (Resend, honeypot, rate limit). Never a false success message. |
-| A7 | Retained blog content | ⬜ | `/blog` index + the 3 existing posts at `/blog/<slug>`, copy reproduced, the "call immediately" post checked for availability promises |
-| A8 | Legal pages | ⬜ | `/privacy-policy`, `/terms-of-service` — copy carries over as-is |
-| A9 | Launch redirects | ⬜ | The 15 in `docs/page-plan.md` §6 as data in `next.config.ts`; settle `trailingSlash` once; verify each with `curl -I` |
-| A10 | Final content confirmation | ⬜ | Street address (Hegee/Heege), business hours and emergency response times, Dan's surname, founding year, Illinois coverage, photo of Dan — `docs/open-questions.md` §6 |
+| A7 | Retained blog content | ✅ page · ⬜ decisions | `/blog` + the 3 posts, verbatim with dates and byline. The "call immediately" post makes no availability promise. Owner decisions on the flagged claims and the byline are open (`docs/open-questions.md` §8) |
+| A8 | Legal pages | ✅ page · ⬜ decisions | `/privacy-policy`, `/terms-of-service` verbatim; outdated references (www host, no street address, no industrial in terms §2) flagged for the owner |
+| A9 | Launch redirects | ✅ | `config/redirects.ts` + middleware rule 4 + `/global-styles` 410; `trailingSlash: false` settled; every legacy URL verified with `curl -I` (`docs/migration-inventory.md` §4). Re-verify on the real domain as part of A11 |
+| A10 | Final content confirmation | ⬜ | Street address (Hegee/Heege), business hours and emergency response times, Dan's surname, founding year, photo of Dan, blog/legal flags — `docs/open-questions.md` §6 and §8 |
 | A11 | Deployment checks | ⬜ | Production env (`NEXT_PUBLIC_ALLOW_INDEXING=true`, `NEXT_PUBLIC_SITE_URL`), robots/sitemap on the real domain, canonical host redirect, careers host regression (routing matrix in README), Search Console submission, GBP parity per SOP §3.4 |
 
 **Not required for launch:** any individual service page, any city page,
@@ -34,9 +34,9 @@ new blog posts. The live site has none of these today.
 | B1 | Semantic colour tokens | ⬜ | `navy-*`/`lime-*` in component classes → `surface`, `accent`, `ink`, `paper`; done once against the finished page set |
 | B2 | Remaining homepage content separation | ⬜ | `Hero` still imports `content/home.ts`; `AboutSection`, `Testimonials`, `ServicePathways`, `TrustBar` already take props |
 | B3 | Optional careers support | ⬜ | Middleware, host resolution, sitemap and config assume a careers host — make its absence a config omission (roadmap §5.3) |
-| B4 | Sitemap fully from registries | ⬜ | Core pages are still literals in `app/sitemap.ts` |
+| B4 | Sitemap fully from registries | ⬜ | Services, blog and legal come from registries; the five core pages are still literals in `app/sitemap.ts` |
 | B5 | Enquiry-form route in the starter | ⬜ | Generalised from A6 |
-| B6 | Redirects as per-client data | ⬜ | Generalised from A9 |
+| B6 | Redirects as per-client data | ✅ shape · ⬜ starter | `config/redirects.ts` is the per-client map already; the starter ships it empty |
 | B7 | Starter scaffolding | ⬜ | Empty typed `site.config.ts`, placeholder tokens, `content/` skeleton, the `docs/` templates, the §3 change list as a checklist |
 | B8 | Validation gate script | ⬜ | The curl + browser checks used here, runnable on any client build |
 | B9 | **Check with a different brand** | ⬜ | Swap `site.config.ts`, `@theme` values, fonts, `decoration: "none"/"line"`, one service content file — and confirm nothing electrical, navy, lime or Show Me leaks through. The proof the starter is a starter. |

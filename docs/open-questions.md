@@ -107,8 +107,9 @@ SEO. Confirm that split is what you want.
 | **Business coordinates (lat/lng)** | `geo` previously held *approximate* Affton coordinates that `lib/seo.ts` emitted as the business's exact location — a false precision that can misplace the business in local results. Now omitted entirely: `site.geo` is `null` and the `GeoCoordinates` block is only emitted when real values are set. **Read the true pin off the client's Google Business Profile** and set `geo: { lat, lng }` in `config/site.config.ts`. |
 | **Licence numbers / bonding details** | The live FAQ claims "fully licensed, insured and bonded" and the About copy now says "licensed Master Electrician" per D-002 — both reproduced from the client's own published wording. Schema-level credentials (`hasCredential`) still need the real licence number and issuing jurisdiction before they can be emitted. |
 | **Photo of Dan** | The homepage About section and the /about page show job-site photos from the client's own library as stand-ins. Recorded in the reviewer notice (not captioned on the page). |
+| **Blog byline** | All three WordPress posts are bylined "Tom Dombrowski" — the WordPress author account (Compass Marketing), not the business. Preserved as published and emitted as `author` in BlogPosting schema. Decide: keep, byline to the business, or byline to Dan. See §8. |
 | **Dan's full name** | The live site only ever says "Dan". A `Person` schema node (founder, jobTitle Master Electrician) would strengthen the About page and the business entity, but not with a first name alone. Supply the surname and it is a two-line addition. |
-| **Illinois coverage** | The approved keyword map lists Edwardsville and Belleville, IL as Tier-2 city targets. The brand board, the live site and the homepage all describe a Missouri-only service area. `/service-area` lists Missouri only. Does Show Me Electrical work in the Metro East? If yes, both cities join the coverage list and `site.counties` gains their counties. |
+| ~~**Illinois coverage**~~ | **RESOLVED 2026-09-19 (D-003).** Edwardsville and Belleville, IL are served — those two cities only. Added to `/service-area`, the area FAQs, schema `areaServed` and the homepage chips. Counties unchanged; no wider Illinois coverage inferred. |
 | **Years in business** | The live About page gives Dan's experience ("over two decades") but never the company's founding year. Not stated anywhere in the rebuild; `foundingDate` omitted from schema. |
 | **Real project case studies** | The live site has a "Previous Projects" heading with no project detail. No fabricated projects were added. Needs 3–4 real ones with permission to publish. |
 | **Review data** | Testimonials were reproduced from the live site. No star ratings, review counts or `aggregateRating` schema — we have no verified source. |
@@ -116,6 +117,28 @@ SEO. Confirm that split is what you want.
 | **Google Analytics / GTM** | No tag found on the current site. |
 
 ---
+
+## 8. Raised by the content-preservation milestone (2026-09-19)
+
+Nothing below was rewritten; each item is preserved as published and shown in
+the preview's reviewer notice. Owner decisions needed:
+
+| Item | Where | Question |
+|---|---|---|
+| "throughout Missouri" / "across Missouri" | rewiring + call-immediately posts | Wider than the listed service area. Narrow to the listed area, or keep? |
+| "Faulty wiring is one of the leading causes of residential electrical fires in the U.S." | rewiring post | Unsourced statistic — cite or remove? |
+| "Increase property value" | rewiring post | Outcome claim — keep or remove? |
+| "Missouri electrical code requires [GFCI]…" | hazards post | Code claim; Missouri adopts the NEC by jurisdiction — confirm wording. |
+| "home electrical inspection" / "safety inspection" | rewiring + hazards posts | Not in the residential taxonomy (inspections are listed under commercial). Confirm the offer or reword. |
+| "Need Help Fast?" / "fast, trusted electrical help" | call-immediately post | Stops short of a D-001 breach; soften to "prompt" or keep? |
+| Closing sign-off lines ("📞 Call us today…", "Where Safety Meets Service", `www.` address) | rewiring post | The page's own CTA band now follows the article — drop these lines? |
+| Blog byline | all three posts | See §6. |
+| Privacy §11 address | privacy policy | "St. Louis, MO" only — add the street address once Hegee/Heege is settled? |
+| `https://www.showmeelectrical.com` | privacy + terms | Canonical host on the rebuild has no `www`. Confirm the host and update both documents at launch. |
+| Cookies / analytics / ad platforms | privacy §2, §7 | The rebuild sets no analytics or ad cookies today. Keep the wording only if tags are added before launch. |
+| Terms §2 services list | terms of service | Residential and commercial only — add industrial? |
+| Terms §14 contact | terms of service | Bare `www.` address, no phone or email — add them as the privacy policy does? |
+| `/st-louis/` destination | redirects | Now `/services/industrial` (old page was an industrial pitch). Re-point to a St. Louis city page if one is built. Agree? |
 
 ## 7. Scope note — what exists in the preview
 

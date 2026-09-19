@@ -52,10 +52,10 @@ export function localBusinessJsonLd(baseUrl: string = site.productionUrl) {
           },
         }
       : {}),
-    areaServed: site.counties.map((name) => ({
-      "@type": "AdministrativeArea",
-      name,
-    })),
+    areaServed: [
+      ...site.counties.map((name) => ({ "@type": "AdministrativeArea", name })),
+      ...site.confirmedCities.map((name) => ({ "@type": "City", name })),
+    ],
     ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
     hasOfferCatalog: {
       "@type": "OfferCatalog",
@@ -102,10 +102,10 @@ export function serviceJsonLd(
     description: content.seo.description,
     url,
     provider: { "@id": `${baseUrl}/#business` },
-    areaServed: site.counties.map((name) => ({
-      "@type": "AdministrativeArea",
-      name,
-    })),
+    areaServed: [
+      ...site.counties.map((name) => ({ "@type": "AdministrativeArea", name })),
+      ...site.confirmedCities.map((name) => ({ "@type": "City", name })),
+    ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: content.services.heading,
@@ -221,5 +221,71 @@ export function collectionPageJsonLd(
         item: { "@type": "Service", name: item.name, url: item.url },
       })),
     },
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * Articles and legal documents
+ * ------------------------------------------------------------------ */
+
+/**
+ * schema.org BlogPosting. `datePublished` and `author` are emitted only when
+ * the article carries them — never a placeholder date or a guessed author.
+ * The publisher is the business node, so the page must also emit
+ * `localBusinessJsonLd()`.
+ */
+export function blogPostingJsonLd(
+  article: {
+    path: string;
+    title: string;
+    seo: { description: string };
+    publishedAt?: string;
+    author?: string;
+    image?: { src: string };
+  },
+  baseUrl: string = site.productionUrl
+) {
+  const url = `${baseUrl}${article.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    mainEntityOfPage: url,
+    url,
+    headline: article.title,
+    description: article.seo.description,
+    ...(article.publishedAt ? { datePublished: article.publishedAt } : {}),
+    ...(article.author
+      ? { author: { "@type": "Person", name: article.author } }
+      : {}),
+    ...(article.image ? { image: `${baseUrl}${article.image.src}` } : {}),
+    publisher: { "@id": `${baseUrl}/#business` },
+    isPartOf: { "@id": `${baseUrl}/#website` },
+  };
+}
+
+/** schema.org Blog node for the index, listing the published posts. */
+export function blogJsonLd(
+  path: string,
+  name: string,
+  description: string,
+  posts: { path: string; title: string; publishedAt?: string }[],
+  baseUrl: string = site.productionUrl
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${baseUrl}${path}#blog`,
+    url: `${baseUrl}${path}`,
+    name,
+    description,
+    publisher: { "@id": `${baseUrl}/#business` },
+    isPartOf: { "@id": `${baseUrl}/#website` },
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      url: `${baseUrl}${p.path}`,
+      ...(p.publishedAt ? { datePublished: p.publishedAt } : {}),
+    })),
   };
 }

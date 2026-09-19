@@ -27,6 +27,12 @@ Nothing here is built speculatively for hypothetical clients or frameworks.
 | Trust strip | `components/home/TrustBar` | Takes `points` as a prop; carries no facts of its own. |
 | Inner-page hero + breadcrumbs | `components/site/PageHero`, `components/site/Breadcrumbs` | Used by every service page and About. Content and crumbs are props; backdrop from the decoration registry. |
 | Story, testimonials, values, pathways, coverage | `components/home/AboutSection`, `components/home/Testimonials`, `components/site/ValueGrid`, `components/home/ServicePathways`, `components/site/CoverageGroups` | All prop-driven; no copy or geography of their own. |
+| Long-form content | `content/blocks.ts` (`Block` union), `components/site/Blocks` | Headings, paragraphs, lists, quote, line-block. Typography only; client content never carries markup. |
+| Article + legal layouts | `components/site/ArticleLayout`, `components/site/LegalLayout` | Render an `Article` / `LegalDocument`. Date and byline only when present — never a placeholder. |
+| Content models + registries | `content/blog/types.ts`, `content/legal/types.ts`; `content/blog/index.ts`, `content/legal/index.ts` | Registries drive the index page, static params, the sitemap and the reviewer notice. |
+| Article / blog schema | `lib/seo.ts` — `blogPostingJsonLd`, `blogJsonLd` | `datePublished` and `author` emitted only when the content carries them. |
+| Launch redirects as data | `config/redirects.ts` → `next.config.ts` | Per-client map; the mechanism is client-agnostic. |
+| Nav items may be external | `NavItem.external`; `SiteHeader`, `SiteFooter` | Renders a plain anchor for off-site links (used for the careers host here). |
 
 ## 2. Still specific to Show Me Electrical
 
@@ -38,7 +44,10 @@ Everything that is a **fact about the client** or a **choice made for them**:
 | Homepage copy, testimonials, emergency callout, About text | `content/home.ts` | Every string traces to the client's live site or an owner decision. |
 | Trust points and process steps | `content/shared.ts` | Verified facts. Must never become defaults. |
 | Residential hub content | `content/services/residential.ts` | Client services, client photos, client FAQs. |
-| Reviewer notes | `content/reviewer-notes.ts` | This engagement's open items. |
+| Reviewer notes | `content/reviewer-notes.ts` | This engagement's open items. Now also pulls the `flags` off every article and legal document. |
+| Migrated posts and legal documents | `content/blog/*.ts`, `content/legal/*.ts` | Verbatim client content with provenance headers and `flags`. |
+| Redirect map | `config/redirects.ts` | This client's WordPress URLs. |
+| Careers redirect on the main host | `middleware.ts` rule 4 | Reads `site.careersUrl`; part of the careers coupling (§5.3). |
 | Photography | `public/photos/` | Client's own job-site images. |
 | Logo | `public/logo-white.webp` | |
 | Palette values | `app/globals.css` | Navy/lime/cream are the client's brand; the *token names* are reusable, the *values* are not. |
@@ -76,6 +85,8 @@ In order, with the file each step touches:
 8. **`public/photos/`, `public/logo-*.webp`** — the client's images, verified
    real, with the stock-photo check from the migration inventory repeated.
 9. **`content/reviewer-notes.ts`** — this engagement's open items.
+9a. **`content/blog/<slug>.ts` + `content/blog/index.ts`**, **`content/legal/<slug>.ts` + `content/legal/index.ts`** — the client's articles and legal documents as `Block[]`, registered. The routes (`app/blog/…`, `app/privacy-policy`, `app/terms-of-service`) need no edit beyond the legal slugs.
+9b. **`config/redirects.ts`** — the client's legacy URL map, or an empty array.
 10. **Careers — coordinated change, not a deletion.** If the client has no
     careers property: remove `app/careers/` and `/api/apply`; remove middleware
     rules 1–3 and the `careers.` host test in `lib/host.ts`; remove the
@@ -142,12 +153,12 @@ complete and validated on real pages.
 5. **Contact form route.** The Resend pattern exists in `/api/apply`; a
    generic enquiry handler with the same honeypot and rate limiting belongs in
    the starter.
-6. **Sitemap from registries throughout.** Service pages already come from
-   `content/services/index.ts`. `/` and `/contact` are still literal entries
-   in `app/sitemap.ts`, and future page types (locations, blog) should each
-   register the same way so the sitemap is entirely data-driven.
-7. **Redirect config.** `next.config.ts` `redirects()` driven by a per-client
-   map (see `docs/page-plan.md` §6), so launch redirects are data.
+6. **Sitemap from registries throughout.** Service pages, blog posts and
+   legal documents come from their registries. The five core pages are still
+   literal entries in `app/sitemap.ts`; a core-page registry would finish
+   this.
+7. **Redirect config.** ✅ Done — `config/redirects.ts` is the per-client
+   map, read by `next.config.ts`. The starter ships it empty.
 8. **Starter scaffolding.** Empty `site.config.ts` with every field typed and
    commented, placeholder tokens, a `content/` skeleton, the four `docs/`
    templates, and a checklist that mirrors §3 above. No dashboard, no
@@ -252,3 +263,43 @@ generic `CoverageGroups`; the directory's cards and catalog are derived from
 the three hub content files — all content. Nav and footer now point at
 `/services` and `/service-area` (config). No client fact or geography entered
 a shared component.
+
+### Milestone: content preservation — blog, legal, redirects (2026-09-19)
+
+Two new page renderers, both generic: `ArticleLayout` (header, optional lead
+image, body, closing CTA) and `LegalLayout` (compact header, document,
+contact line). Both render a `Block[]` through the new `Blocks` component, so
+long-form client content is data with no markup. Three posts and two legal
+documents were migrated verbatim into content files with provenance headers
+and `flags`; two registries drive the index, static params, sitemap and the
+reviewer notice. Redirects became per-client data.
+
+**Shared components that required changes**, and why:
+
+| Component | Change | Reason |
+|---|---|---|
+| `content/blocks.ts`, `components/site/Blocks` | **New** | Long-form content as data |
+| `components/site/ArticleLayout`, `LegalLayout` | **New** | Article and legal renderers; date/byline conditional |
+| `lib/seo.ts` | `blogPostingJsonLd`, `blogJsonLd` | Conditional `datePublished` / `author` |
+| `app/sitemap.ts` | Blog and legal entries from registries | Same rule as services: only implemented pages |
+| `config/redirects.ts` + `next.config.ts` | **New** — `redirects()` reads the data file; `trailingSlash: false` settled | Roadmap 5.7 |
+| `components/site/SiteHeader`, `SiteFooter` | Honour `NavItem.external` | The careers property lives on its own host |
+| `middleware.ts` | Rule 4 — main-host `/careers*` and `/career*` → careers host | Duplicate content across hosts; reads `site.careersUrl` |
+| `content/reviewer-notes.ts` | Reads `flags` from the blog and legal registries | One place for migration flags |
+
+**New hardcoded client dependencies:**
+
+| Dependency | Where | Intentional? |
+|---|---|---|
+| Post and legal content, dates, byline, flags | `content/blog/*.ts`, `content/legal/*.ts` | **Yes** — content files with provenance |
+| Blog index copy, hero photo, CTA | `content/blog/index.ts` | **Yes** — content |
+| Legal contact line | `content/legal/index.ts` | **Yes** — content |
+| Redirect map | `config/redirects.ts` | **Yes** — per-client data by design |
+| Careers URL in nav/footer/About and middleware rule 4 | `config/site.config.ts`, `middleware.ts` | **Yes** — config-driven, but it deepens the careers coupling listed in §5.3: rule 4 must go with the rest when careers is made optional |
+| `/global-styles` 410 route | `app/global-styles/route.ts` | **Yes, client-specific** — an Elementor artifact of this WordPress site; delete for a client without one |
+| Blog nav/footer entries, legal footer links | `config/site.config.ts` | **Yes** — config |
+
+No client string entered `components/`, `lib/` or `content/blocks.ts`. The
+"Last updated" label, the "By" byline prefix and the "Blog" eyebrow default in
+`ArticleLayout` are English UI strings, not client facts — the same class as
+"Skip to content".

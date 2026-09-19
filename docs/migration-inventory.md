@@ -1,7 +1,8 @@
 # WordPress → Next.js Migration Inventory
 
 **Source:** `https://showmeelectrical.com` · crawled 2026-09-16 from `wp-sitemap.xml`
-**Status:** complete for pages, posts and categories. Media inventoried separately below.
+**Status:** complete — every URL below has an implemented destination or a
+deliberate 410, verified with `curl` on 2026-09-19 (§4).
 
 The WordPress install publishes `wp-sitemap.xml` (the core sitemap — there is no
 Yoast/RankMath `sitemap_index.xml`; that URL 404s). Everything below came from
@@ -17,50 +18,66 @@ that sitemap plus a fetch of each URL, not from a homepage crawl.
 | 2 | `/about/` | Owner story (Dan) | `/about` | **Improve** | Strong, usable copy. Reused on the homepage About section. Trailing-slash change needs a redirect. |
 | 3 | `/services/` | Services hub | `/services` | **Rebuilt ✅ — 301 at launch** | The live page is empty chrome; the rebuilt directory lists the three pathways and all 22 services from the registry of built pages. `/services/` → `/services` (trailing slash only). |
 | 4 | `/locations/` | Locations index | `/service-area` | **Consolidated ✅ — 301 at launch** | The live page is thin. Rebuilt as the service-area page: seven counties, approved communities, no city pages yet. `/locations/` → `/service-area`. |
-| 5 | `/st-louis/` | St. Louis city page | `/service-area/st-louis` | **Improve + redirect** | H1 is *"Industrial Electrical solutions for St. Louis, Missouri"* — narrower than a city page should be. Tier-1 city in the keyword map. |
+| 5 | `/st-louis/` | St. Louis "city" page | `/services/industrial` | **Redirected ✅ — 301 at launch** | Inspected 2026-09-19: the page is an industrial pitch, not a city page — H1 *"Industrial Electrical solutions for St. Louis, Missouri"*, sub-head *"Powering St. Charles, Lincoln & Warren Counties with Expert Industrial power"*, and a six-county "Areas we serve" list. Nothing else. The nearest built page by topic is the industrial hub; the county list lives at `/service-area`. A St. Louis city page is later SEO expansion (`docs/page-plan.md` §4); if one is built, re-point this rule then. Not retained: the old copy is thinner than the hub and would be a second, weaker industrial page. |
 | 6 | `/contact/` | Contact + form | `/contact` | **Improve** | Form backend must be replaced (see §5). |
-| 7 | `/careers/` | Careers | `https://careers.showmeelectrical.com/` | **Redirect** | Superseded by the live careers site. |
-| 8 | `/career/` | Careers (duplicate) | `https://careers.showmeelectrical.com/` | **Redirect** | **Duplicate of #7.** Two URLs for one purpose — a live duplicate-content issue. The main nav links to `/career/`. |
-| 9 | `/global-styles/` | Elementor artifact | — | **Delete, do not migrate** | 248KB Elementor styles page, publicly reachable and in the sitemap. Should be `noindex` today. |
-| 10 | `/terms-of-service/` | Legal | `/terms-of-service` | **Retain** | Copy carries over as-is. |
-| 11 | `/privacy-policy/` | Legal | `/privacy-policy` | **Retain** | Copy carries over as-is. |
+| 7 | `/careers/` | Careers | `https://careers.showmeelectrical.com/` | **Redirected ✅** | `middleware.ts` rule 4 sends main-host `/careers*` to the careers host (path preserved, so `/careers/jobs/x` → `/jobs/x`). |
+| 8 | `/career/` | Careers (duplicate) | `https://careers.showmeelectrical.com/` | **Redirected ✅** | **Duplicate of #7.** Same middleware rule. |
+| 9 | `/global-styles/` | Elementor artifact | — | **410 Gone ✅** | `app/global-styles/route.ts`. Never content; not redirected anywhere. |
+| 10 | `/terms-of-service/` | Legal | `/terms-of-service` | **Migrated ✅** | Verbatim in `content/legal/terms-of-service.ts`; outdated references flagged in the reviewer notice (§10). |
+| 11 | `/privacy-policy/` | Legal | `/privacy-policy` | **Migrated ✅** | Verbatim in `content/legal/privacy-policy.ts`; flags in §10. |
 
 ## 2. Posts (3)
 
 | Existing URL | Proposed URL | Action |
 |---|---|---|
-| `/top-5-signs-your-home-needs-electrical-rewiring/` | `/blog/top-5-signs-your-home-needs-electrical-rewiring` | **Retain + redirect** — maps to keyword-map blog topic #1/#2 territory. |
-| `/the-most-common-electrical-hazards-found-in-missouri-homes/` | `/blog/the-most-common-electrical-hazards-found-in-missouri-homes` | **Retain + redirect** |
-| `/top-signs-you-need-to-call-an-electrician-immediately/` | `/blog/top-signs-you-need-to-call-an-electrician-immediately` | **Retain + redirect** — emergency service is now confirmed as offered (§9), so this post can link to the emergency service page. Still check it makes no availability or response-time promise. |
+| `/top-5-signs-your-home-needs-electrical-rewiring/` | `/blog/top-5-signs-your-home-needs-electrical-rewiring` | **Migrated ✅ + 301** — published June 14, 2025, byline Tom Dombrowski, reproduced word for word. |
+| `/the-most-common-electrical-hazards-found-in-missouri-homes/` | `/blog/the-most-common-electrical-hazards-found-in-missouri-homes` | **Migrated ✅ + 301** — January 22, 2026, same byline. |
+| `/top-signs-you-need-to-call-an-electrician-immediately/` | `/blog/top-signs-you-need-to-call-an-electrician-immediately` | **Migrated ✅ + 301** — January 22, 2026, same byline. Checked against D-001: it says "Need Help Fast?" and "fast, trusted electrical help" but makes no 24/7, after-hours or arrival-time promise. Flagged, not rewritten. |
 
 ## 3. Taxonomy
 
 | Existing URL | Proposed URL | Action |
 |---|---|---|
-| `/category/blog/` | `/blog` | **Consolidate** — single category, so a flat `/blog` index is enough. |
-| `/wp-sitemap-users-1.xml` | — | **Drop** — author archives add nothing here. |
+| `/category/blog/` | `/blog` | **Consolidated ✅ + 301** — single category, flat index. |
+| `/wp-sitemap.xml` and its four sub-sitemaps (`-posts-post-1`, `-posts-page-1`, `-taxonomies-category-1`, `-users-1`) | `/sitemap.xml` | **301 ✅** — the author sitemap included, so no legacy sitemap URL 404s. |
+| `/wp-content/uploads/…` (32 images) | — | **Not redirected.** The nine real job-site photos are re-encoded under `/public/photos/` with new names; the stock files are dropped on purpose. Image URLs are not linked from anywhere the rebuild controls, so they are left to 404 after the move. |
 
-## 4. Redirect map
+## 4. Redirect map — implemented, verified
 
-Posts and pages move from trailing-slash WordPress URLs to non-slash Next.js
-routes, so every retained URL needs a 301. Recommended `next.config.ts`
-redirects at launch:
+`config/redirects.ts` (data) → `next.config.ts` `redirects()`; `middleware.ts`
+rule 4 for the careers paths; `app/global-styles/route.ts` for the 410.
+`trailingSlash: false` is settled. Verified with `curl -I` against the
+production build on 2026-09-19; every row lands on a page that exists.
 
-| From | To | Code |
-|---|---|---|
-| `/about/` | `/about` | 301 |
-| `/services/` | `/services` | 301 |
-| `/locations/` | `/service-area` | 301 |
-| `/st-louis/` | `/service-area/st-louis` | 301 |
-| `/contact/` | `/contact` | 301 |
-| `/careers/` | `https://careers.showmeelectrical.com/` | 301 |
-| `/career/` | `https://careers.showmeelectrical.com/` | 301 |
-| `/global-styles/` | `/` | 410 or 301 |
-| `/<post-slug>/` | `/blog/<post-slug>` | 301 (×3) |
-| `/category/blog/` | `/blog` | 301 |
+| From (live WordPress) | Lands on | How | Hops |
+|---|---|---|---|
+| `/about/` | `/about` | Next's own slash-strip 308 | 1 |
+| `/services/` | `/services` | same | 1 |
+| `/contact/` | `/contact` | same | 1 |
+| `/privacy-policy/` | `/privacy-policy` | same | 1 |
+| `/terms-of-service/` | `/terms-of-service` | same | 1 |
+| `/locations/` | `/service-area` | slash-strip, then `redirects.ts` | 2 |
+| `/st-louis/` | `/services/industrial` | same | 2 |
+| `/top-5-signs-…-rewiring/` | `/blog/top-5-signs-…-rewiring` | same | 2 |
+| `/the-most-common-…-missouri-homes/` | `/blog/the-most-common-…-missouri-homes` | same | 2 |
+| `/top-signs-…-immediately/` | `/blog/top-signs-…-immediately` | same | 2 |
+| `/category/blog/` | `/blog` | same | 2 |
+| `/careers/`, `/career/` | `https://careers.showmeelectrical.com/` | slash-strip, then middleware | 2 |
+| `/careers/jobs/<slug>` | `https://careers.showmeelectrical.com/jobs/<slug>` | middleware | 1 |
+| `/wp-sitemap.xml` + 4 sub-sitemaps | `/sitemap.xml` | `redirects.ts` | 1 |
+| `/global-styles/` | **410 Gone** | slash-strip, then route handler | 1 + 410 |
 
-Next.js `trailingSlash` behaviour should be settled before launch so the whole
-set is consistent rather than handled case by case.
+The two-hop chains are Next.js behaviour: with `trailingSlash: false` it
+strips the slash before `redirects()` runs, and a `/st-louis/` source entry
+has no effect (tried and verified). Two permanent redirects consolidate fine;
+the alternative — `skipTrailingSlashRedirect` plus hand-rolled slash handling
+in middleware — would touch the live careers host's routing for no SEO gain.
+All redirects are 308 (Next.js's permanent code), equivalent to 301 for
+indexing.
+
+**Careers host regression:** unchanged — `/` and `/jobs/<slug>` 200,
+`/careers/*` 308 to the public form, every other path 404 (routing matrix in
+the README re-run after this change).
 
 ## 5. Forms and integrations
 
@@ -101,8 +118,8 @@ this prototype.
 `interior-of-a-lobby-hotel…`, `living-room…`. The brand board independently
 confirms two of these as stock. **None are used in this prototype.**
 
-**Missing:** a portrait of Dan. The About section currently shows a job-site
-photo with a visible placeholder note.
+**Missing:** a portrait of Dan. The About page shows a job-site photo as a
+stand-in; recorded in the reviewer notice, not captioned on the page.
 
 ## 8. Not yet inventoried / needs access
 
@@ -149,3 +166,25 @@ but competing pages usually do.
 **Homepage today:** an emergency block sits under the three service cards
 naming the service with a call link, carrying a visible preview-only note that
 availability wording is pending confirmed hours.
+
+---
+
+## 10. Migrated content — what was preserved and what is flagged
+
+Posts and legal pages are reproduced **word for word** as data
+(`content/blog/*.ts`, `content/legal/*.ts`) and rendered by the shared
+`ArticleLayout` / `LegalLayout`. Nothing was rewritten or replaced with
+generic text. Each file carries a `flags` array, shown only in the preview
+reviewer notice, listing every claim or reference that needs an owner
+decision. Stripped from every page: WordPress nav/footer chrome, the
+"Related Posts" block, the county list and the "Show Me Electrical 2025"
+footer line. The featured images were stock downloads and were not carried
+over (no image is shown rather than a stock one).
+
+| Page | Preserved | Flagged for decision |
+|---|---|---|
+| Rewiring post (2025-06-14, Tom Dombrowski) | Full body, date, byline | "serve homeowners throughout Missouri" (wider than listed area); unsourced fire statistic; "Increase property value"; closing lines with "home electrical inspection", `www.` address and "Where Safety Meets Service"; the byline is the WordPress author account (Compass), not the business |
+| Hazards post (2026-01-22, Tom Dombrowski) | Full body incl. "TLDR" section, date, byline | "Missouri electrical code requires [GFCI]…" (code claim to confirm); "safety inspection" wording not in the taxonomy; byline |
+| Call-immediately post (2026-01-22, Tom Dombrowski) | Full body, date, byline | "Need Help Fast?" / "fast" (response-time adjacent, no 24/7 or arrival promise); "across Missouri"; "request service online" (no form yet); byline |
+| Privacy policy (Last Updated 2025-11-10) | All 11 sections verbatim | "St. Louis, MO" with no street address; `https://www.showmeelectrical.com` (www); cookies/analytics claim vs. no tags on the rebuild; Google Ads/Facebook/Instagram named; SMS opt-in applies once a form exists |
+| Terms of service (Last Updated 2025-11-10) | All 14 sections verbatim | §2 lists residential and commercial only — no industrial; `www.` host; §14 contact is the bare `www.` address only; §5 SMS program preserved; §12 Missouri law vs. Illinois cities served |

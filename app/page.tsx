@@ -170,10 +170,10 @@ export default function HomePage() {
           eyebrow="Where we work"
           headingId="area-heading"
           heading={`Serving the ${site.serviceArea}`}
-          intro="Based in Affton and working across the metro — from St. Louis City and County out through St. Charles, Jefferson and the surrounding communities."
+          intro="Based in Affton and working across the metro — from St. Louis City and County out through St. Charles, Jefferson and the surrounding communities, and across the river to Edwardsville and Belleville."
         >
           <Reveal stagger className="mt-10 flex flex-wrap gap-3">
-            {site.counties.map((county) => (
+            {[...site.counties, ...site.confirmedCities].map((county) => (
               <span
                 key={county}
                 className="rounded-full border border-navy-900/15 bg-cream px-4 py-2 text-sm font-semibold text-navy-900"
@@ -230,7 +230,7 @@ export default function HomePage() {
               <p className="mt-10 text-sm text-white/60">
                 Looking to join the team instead?{" "}
                 <a
-                  href="/careers"
+                  href={site.careersUrl}
                   className="-my-1 inline-block py-1 font-semibold text-lime-400 underline underline-offset-2"
                 >
                   See our open roles

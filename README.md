@@ -6,7 +6,7 @@ codebase:
 | Property | Routes | Status |
 |---|---|---|
 | **Careers site** | `/careers`, `/careers/jobs/[slug]`, `/api/apply` | **LIVE** at `careers.showmeelectrical.com` |
-| **Main site** | `/`, `/about`, `/contact`, `/services`, `/services/{residential,commercial,industrial}`, `/service-area` | **Prototype** — under review |
+| **Main site** | `/`, `/about`, `/contact`, `/services`, `/services/{residential,commercial,industrial}`, `/service-area`, `/blog`, `/blog/[slug]`, `/privacy-policy`, `/terms-of-service` | **Prototype** — under review |
 
 This repo is also the first implementation of the reusable **Compass
 Marketing website system**. See "Reusing this for another client" below and
@@ -35,6 +35,24 @@ those links would serve the same page at a second address
 (`careers.showmeelectrical.com/careers/jobs/x`) competing with the canonical
 `/jobs/x`. Middleware therefore also **308-redirects** `/careers/*` → `/*` on
 the careers host, so no duplicate URL is reachable or indexable.
+
+On the **main host** the same pages would be duplicate content at
+`showmeelectrical.com/careers`, so middleware rule 4 308-redirects
+`/careers*` (and the old WordPress `/career*`) to the careers host with the
+path preserved. Nav, footer and About link to `site.careersUrl` directly.
+
+### Legacy WordPress URLs
+
+`config/redirects.ts` is the per-client redirect map, read by
+`next.config.ts` (`trailingSlash: false` is settled). `/global-styles` is a
+410 route handler. Every legacy URL and where it lands, with hop counts, is in
+`docs/migration-inventory.md` §4; verify on the real domain before DNS moves:
+
+```bash
+for u in /locations/ /st-louis/ /career/ /category/blog/ /wp-sitemap.xml /global-styles; do
+  curl -sI -o /dev/null -L -w "$u → %{url_effective} %{http_code}\n" https://showmeelectrical.com$u
+done
+```
 
 ### Verified routing + indexing matrix
 
@@ -113,7 +131,11 @@ raw-HTML rule. Leave the variable unset on every preview environment.
 config/
   site.config.ts     Client identity: name, contact, service area, nav, CTAs
   theme.config.ts    Motion settings + the brand reconciliation record
+  redirects.ts       Legacy URL map → next.config.ts redirects()
 content/
+  blocks.ts          Block union — long-form content as data
+  blog/              Article type, registry (index.ts) and the migrated posts
+  legal/             LegalDocument type, registry and the migrated documents
   home.ts            Homepage copy, with provenance notes per block
   about.ts           About page copy — the live About page's three paragraphs
   service-area.ts    Coverage as data: counties + communities (CoverageGroup[])
@@ -128,7 +150,8 @@ content/
 components/
   motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
   site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice,
-                     PageHero, Breadcrumbs, ValueGrid, CoverageGroups
+                     PageHero, Breadcrumbs, ValueGrid, CoverageGroups,
+                     Blocks, ArticleLayout, LegalLayout
 content/
   reviewer-notes.ts  Provisional-content notes shown only in the preview banner
   decor/             Decoration registry (HeroBackdrop, storyRailPath) + the
@@ -280,6 +303,8 @@ star ratings, project totals, guarantees or licence numbers.
 2. Replace the `@theme` values in `app/globals.css`.
 3. Replace `content/home.ts` and `public/photos/`.
 4. Adjust `config/theme.config.ts` if the motion feel should differ.
+5. Replace `content/blog/`, `content/legal/` and `config/redirects.ts` with
+   the client's own (or empty registries and an empty map).
 
 Components, the motion system, SEO helpers and the section primitives carry
 over unchanged.

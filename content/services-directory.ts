@@ -47,7 +47,7 @@ export const servicesDirectory = {
     eyebrow: "The full list",
     heading: "Every service, by pathway",
     intro:
-      "Twenty-two services across the three pathways. Each is described on its pathway page; the individual service pages come next.",
+      "Twenty-two services across the three pathways, each described on its pathway page.",
   },
 
   process: {

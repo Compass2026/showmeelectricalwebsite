@@ -72,3 +72,29 @@ owner's own credential. The two do not interact:
 | `config/site.config.ts` | `founderCredential: "Master Electrician"` |
 | `content/home.ts` | About paragraphs restore the credential; trust bar leads with it |
 | `app/page.tsx` | Meta description carries the credential as a differentiator |
+
+---
+
+## D-003 · Edwardsville and Belleville, Illinois are served
+
+**Confirmed:** 2026-09-19 · Tom, relaying the owner
+**Supersedes:** open question "Illinois coverage"
+
+Show Me Electrical serves **Edwardsville and Belleville, Illinois**. The
+approved keyword map had listed both as Tier-2 targets while every published
+coverage statement was Missouri-only; the map was right.
+
+**Limits.** This confirms **those two cities only**. Nothing is inferred about
+their counties, the wider Metro East, or Illinois generally. No Illinois
+office, hours or response claims exist. Dedicated city pages for either stay
+in the later SEO expansion plan.
+
+**Applied in code:**
+
+| Where | Change |
+|---|---|
+| `config/site.config.ts` | `confirmedCities: ["Edwardsville, IL", "Belleville, IL"]` — the county list is unchanged |
+| `lib/seo.ts` | `areaServed` gains two `City` entries alongside the seven `AdministrativeArea`s |
+| `content/service-area.ts` | New "Illinois / Metro East" group with the two cities; hero, FAQ and description mention them |
+| `app/page.tsx` | Service-area chips and intro include both cities |
+| `content/services/*.ts`, `content/about.ts` | "Which areas do you serve?" answers include both cities |
