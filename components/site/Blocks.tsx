@@ -171,10 +171,12 @@ function Run({ run }: { run: Inline }) {
   }
 }
 
-// Prose links stay inline so they wrap with the sentence; the paragraph's
-// line height (≥ 27px) already gives them a 24px+ target on touch screens.
+// Prose links stay inline so they wrap with the sentence. Vertical padding on
+// an inline element does not change line layout but does extend its hit
+// area, so each link is at least 28px tall on touch screens (WCAG 2.2 target
+// size) without breaking the sentence.
 const anchorClass =
-  "font-semibold text-lime-700 underline decoration-lime-700/40 underline-offset-[3px] hover:decoration-lime-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500";
+  "py-1 font-semibold text-lime-700 underline decoration-lime-700/40 underline-offset-[3px] hover:decoration-lime-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500";
 
 function Anchor({ href, title, children }: { href: string; title?: string; children: React.ReactNode }) {
   if (isInternalHref(href)) {
