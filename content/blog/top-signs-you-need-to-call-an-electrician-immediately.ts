@@ -8,10 +8,11 @@ import type { Article } from "./types";
  * author account (Tom Dombrowski, Compass Marketing), not the business owner;
  * it is preserved as published and flagged for a decision.
  *
- * Wording is reproduced as published. Nothing was rewritten; claims that
- * conflict with confirmed business facts are listed in `flags` for review
- * (shown in the reviewer notice, never on the page). The WordPress featured
- * image is a stock download and is not carried over.
+ * Wording is reproduced as published except for the owner-approved edits of
+ * 2026-09-19 (docs/launch-review.md A1, A2): "fast" removed from the closing
+ * heading and line (no response-time implication, D-001); service area
+ * narrowed to the confirmed area. Byline and date preserved. The WordPress
+ * featured image is a stock download and is not carried over.
  */
 export const post: Article = {
   slug: "top-signs-you-need-to-call-an-electrician-immediately",
@@ -43,13 +44,9 @@ export const post: Article = {
     { type: "p", text: "GFCI outlets are designed to protect you from shock. If one keeps tripping, it’s telling you something isn’t right. The problem may be moisture, wiring issues, or a faulty device. Repeated tripping is a sign you need an electrician to assess what’s happening behind the scenes." },
     { type: "h2", text: "Why Acting Quickly Matters" },
     { type: "p", text: "Electrical issues rarely fix themselves. What starts as a small warning can grow into a major safety hazard. Calling a licensed electrician protects your home from fire risks, prevents expensive damage, and keeps your family safe." },
-    { type: "h2", text: "Need Help Fast? Contact Show Me Electrical" },
-    { type: "p", text: "When something feels off with your electrical system, don’t wait. The team at Show Me Electrical is licensed, bonded, insured, and ready to help homeowners across Missouri with safe and reliable electrical repair." },
-    { type: "p", text: "Call now or request service online to get fast, trusted electrical help for your home." },
+    { type: "h2", text: "Need Help? Contact Show Me Electrical" },
+    { type: "p", text: "When something feels off with your electrical system, don’t wait. The team at Show Me Electrical is licensed, bonded, insured, and ready to help homeowners across the Greater St. Louis area with safe and reliable electrical repair." },
+    { type: "p", text: "Call now or send us the details online to get trusted electrical help for your home." },
   ],
-  flags: [
-    "\"Need Help Fast?\" and \"get fast, trusted electrical help\" — response-time adjacent wording. It stops short of a 24/7, after-hours or arrival-time promise (decision D-001), so it is preserved; recommend softening to \"prompt\" or removing \"fast\" until hours are confirmed.",
-    "\"ready to help homeowners across Missouri\" — broader than the listed service area. Preserved as published; recommend narrowing to the listed area.",
-    "Byline \"Tom Dombrowski\" is the WordPress author account (Compass Marketing), not the business owner. Preserved as published; decide whether posts should be bylined to the business instead.",
-  ],
+  flags: [],
 };

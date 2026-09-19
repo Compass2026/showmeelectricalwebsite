@@ -40,7 +40,7 @@ that sitemap plus a fetch of each URL, not from a homepage crawl.
 |---|---|---|
 | `/category/blog/` | `/blog` | **Consolidated ✅ + 301** — single category, flat index. |
 | `/wp-sitemap.xml` and its four sub-sitemaps (`-posts-post-1`, `-posts-page-1`, `-taxonomies-category-1`, `-users-1`) | `/sitemap.xml` | **301 ✅** — the author sitemap included, so no legacy sitemap URL 404s. |
-| `/wp-content/uploads/…` (32 images) | — | **Not redirected.** The nine real job-site photos are re-encoded under `/public/photos/` with new names; the stock files are dropped on purpose. Image URLs are not linked from anywhere the rebuild controls, so they are left to 404 after the move. |
+| `/wp-content/uploads/…` (32 images) | `/photos/<name>.webp` for the 9 retained photos | **9 redirected ✅, rest 404 by design.** The retained job-site photos redirect from their original upload URL to the re-encoded file (§7a); stock, unused and duplicate uploads are not redirected (§7b). |
 
 ## 4. Redirect map — implemented, verified
 
@@ -99,7 +99,7 @@ Verified by `curl` against raw HTML, not a browser.
 | **Duplicate careers pages** | Medium | `/careers/` and `/career/` both live and indexable. |
 | **Elementor page in sitemap** | Medium | `/global-styles/` is public and indexable. |
 | **Page weight** | Medium | 147KB–248KB of HTML per page before assets. |
-| **Address inconsistency** | Low | Homepage says *"5602 Hegee Rd"*; other pages say *"5602 Heege Rd"*. Footer says *"St. Louis MO"*, About says *"Affton, MO"*. **Confirm the correct address** — it feeds NAP consistency and LocalBusiness schema. |
+| **Address inconsistency** | Low | Homepage said *"5602 Hegee Rd"*; other pages *"5602 Heege Rd"*; footer *"St. Louis MO"*, About *"Affton, MO"*. **Resolved (D-005):** 5602 Heege Rd, Affton, MO 63123 everywhere. |
 | **Stale copyright** | Low | Footer reads "Show Me Electrical 2025". |
 
 ## 7. Media — retained photos mapped, retired assets listed
@@ -126,6 +126,10 @@ up to 1600px wide (`public/photos/`). Old paths are relative to
 | `2025/10/IMG_2411-1.jpg` | `/photos/roughin-wall.webp` | Commercial wall rough-in | Home, `/services/commercial` |
 | `2025/10/IMG_7032-1.jpg` | `/photos/roughin-framing.webp` | Rough-in in new framing | `/services/residential` |
 | `2025/10/PHOTO-2025-04-15-22-41-56.jpg` | `/photos/service-entrance.webp` | Exterior service entrance, conduit risers | Home, `/about`, `/service-area`, `/services/commercial` |
+
+Each of the nine old URLs above 301-redirects to its new file
+(`config/redirects.ts`), so an inbound link or image-search result still
+resolves. Scaled variants (`-1024x768` etc.) are not redirected.
 
 Brand asset: `2024/08/Show-me-electric-white-logo-4.png` → `/logo-white.webp`
 (cropped to the artwork). `2024/08/Show-me-electric-white-logo-2.png` is a

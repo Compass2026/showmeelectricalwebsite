@@ -113,3 +113,29 @@ domain is verified; Reply-To is the visitor's email when given.
 **Not decided by this:** whether the careers application recipients change
 (they do not — `/api/apply` is untouched), and the verified client sending
 domain.
+
+## D-005 — Business address confirmed (2026-09-19)
+
+**Decision (Tom):** the correct address is **5602 Heege Rd, Affton, MO
+63123**. The WordPress homepage's "Hegee" and the footer's "St. Louis MO"
+were errors.
+
+**Applied:** already the value in `config/site.config.ts` (NAP, footer,
+contact page, LocalBusiness schema); now also in the privacy policy §11 and
+terms §14 contact blocks. The open question is closed.
+
+## D-006 — Analytics: none at launch (2026-09-19)
+
+**Decision (Tom):** there is no existing GA4 property. Analytics stay
+disabled for the review and the launch build; no placeholder tracking ID.
+GA4 setup is a separate follow-up after launch. Privacy wording must
+describe the site as it is (no analytics or advertising cookies set by the
+site) without assuming anything about the business's off-site marketing.
+
+## D-007 — Inbox receipt of the form test is recorded as unverified (2026-09-19)
+
+**Decision (Tom):** Tom cannot check the receiving inbox. The preview test
+inquiry stands as: **provider (Resend) reports delivered; human inbox
+receipt unverified.** No further test messages are sent. The project
+proceeds; a receipt check by whoever reads info@showmeelectrical.com is a
+post-launch item.

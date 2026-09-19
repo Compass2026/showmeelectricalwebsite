@@ -102,7 +102,7 @@ SEO. Confirm that split is what you want.
 
 | Item | Why |
 |---|---|
-| **Correct street address** | The live site says both "5602 **Hegee** Rd" (homepage) and "5602 **Heege** Rd" (elsewhere), and both "St. Louis MO" and "Affton, MO 63123". NAP consistency affects Map Pack ranking directly. Currently using *5602 Heege Rd, Affton, MO 63123*. |
+| ~~**Correct street address**~~ | **RESOLVED 2026-09-19 (D-005).** 5602 Heege Rd, Affton, MO 63123 — as the site already used. Applied to the legal contact blocks. |
 | **Business hours + emergency response times** | **Now the highest-priority missing fact.** Emergency service is confirmed as offered (D-001), but every availability claim is blocked until real hours are known — no 24/7, after-hours or arrival-time wording can ship without them. Also still omitted from LocalBusiness schema rather than guessed. |
 | **Business coordinates (lat/lng)** | `geo` previously held *approximate* Affton coordinates that `lib/seo.ts` emitted as the business's exact location — a false precision that can misplace the business in local results. Now omitted entirely: `site.geo` is `null` and the `GeoCoordinates` block is only emitted when real values are set. **Read the true pin off the client's Google Business Profile** and set `geo: { lat, lng }` in `config/site.config.ts`. |
 | **Licence numbers / bonding details** | The live FAQ claims "fully licensed, insured and bonded" and the About copy now says "licensed Master Electrician" per D-002 — both reproduced from the client's own published wording. Schema-level credentials (`hasCredential`) still need the real licence number and issuing jurisdiction before they can be emitted. |
@@ -114,7 +114,7 @@ SEO. Confirm that split is what you want.
 | **Real project case studies** | The live site has a "Previous Projects" heading with no project detail. No fabricated projects were added. Needs 3–4 real ones with permission to publish. |
 | **Review data** | Testimonials were reproduced from the live site. No star ratings, review counts or `aggregateRating` schema — we have no verified source. |
 | **Social profiles** | Footer links to Facebook and Twitter exist on WordPress but point nowhere useful. `sameAs` is empty. |
-| **Google Analytics / GTM** | No tag found on the current site. |
+| ~~**Google Analytics / GTM**~~ | **RESOLVED 2026-09-19 (D-006).** No GA4 exists; analytics disabled at launch; GA4 is a separate follow-up. |
 
 ---
 
@@ -125,15 +125,7 @@ the preview's reviewer notice. Owner decisions needed:
 
 | Item | Where | Question |
 |---|---|---|
-| "throughout Missouri" / "across Missouri" | rewiring + call-immediately posts | Wider than the listed service area. Narrow to the listed area, or keep? |
-| "Faulty wiring is one of the leading causes of residential electrical fires in the U.S." | rewiring post | Unsourced statistic — cite or remove? |
-| "Increase property value" | rewiring post | Outcome claim — keep or remove? |
-| "Missouri electrical code requires [GFCI]…" | hazards post | Code claim; Missouri adopts the NEC by jurisdiction — confirm wording. |
-| "home electrical inspection" / "safety inspection" | rewiring + hazards posts | Not in the residential taxonomy (inspections are listed under commercial). Confirm the offer or reword. |
-| "Need Help Fast?" / "fast, trusted electrical help" | call-immediately post | Stops short of a D-001 breach; soften to "prompt" or keep? |
-| Closing sign-off lines ("📞 Call us today…", "Where Safety Meets Service", `www.` address) | rewiring post | The page's own CTA band now follows the article — drop these lines? |
-| Blog byline | all three posts | See §6. |
-| Privacy §11 address | privacy policy | "St. Louis, MO" only — add the street address once Hegee/Heege is settled? |
+| ~~Blog wording~~ | all three posts | **RESOLVED 2026-09-19** — owner-approved edits applied (docs/launch-review.md A1–A5, B1–B5). Bylines and dates preserved (A0). |
 | `https://www.showmeelectrical.com` | privacy + terms | Canonical host on the rebuild has no `www`. Confirm the host and update both documents at launch. |
 | Cookies / analytics / ad platforms | privacy §2, §7 | The rebuild sets no analytics or ad cookies today. Keep the wording only if tags are added before launch. |
 | SMS / text-messaging opt-in | privacy §5, terms §5 | The contact form collects a phone number only so the business can reply; it presents and records no SMS or marketing opt-in. Narrow the wording, or keep it for a programme run outside the website? |

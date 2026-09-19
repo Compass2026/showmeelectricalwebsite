@@ -22,7 +22,7 @@ export const reviewerNotes: { where: string; note: string }[] = [
   },
   {
     where: "Service area",
-    note: "Counties come from the brand board and the live site; named communities are the approved keyword map's Tier-1 and Tier-2 cities. Edwardsville and Belleville, Illinois were confirmed by Tom (decision D-003) — those two cities only, no wider Illinois coverage inferred. No map embed until the street address is confirmed.",
+    note: "Counties come from the brand board and the live site; named communities are the approved keyword map's Tier-1 and Tier-2 cities. Edwardsville and Belleville, Illinois were confirmed by Tom (decision D-003) — those two cities only, no wider Illinois coverage inferred. Address confirmed (D-005); a map embed is a later addition, not a launch item.",
   },
   {
     where: "Services directory",
@@ -46,11 +46,11 @@ export const reviewerNotes: { where: string; note: string }[] = [
   },
   {
     where: "Blog",
-    note: `The three WordPress posts are reproduced word for word with their published dates and byline; the stock featured images were not carried over. Claims to decide on — ${flagged(articles)}`,
+    note: `The three WordPress posts keep their published dates and byline; the owner-approved wording edits of 2026-09-19 are applied (see docs/launch-review.md). ${flagged(articles) ? `Open: ${flagged(articles)}` : "No open flags."}`,
   },
   {
     where: "Legal pages",
-    note: `Privacy policy and terms carry over verbatim ("Last Updated: November 10, 2025"); no wording was replaced. References that may be outdated after the move — ${flagged(legalDocuments)}`,
+    note: `Privacy policy and terms carry over from WordPress with two applied edits (confirmed address; terms §14 contact block), dated 2026-09-19. Proposed edits awaiting the owner (docs/policy-revision-proposal.md) — ${flagged(legalDocuments)}`,
   },
   {
     where: "Careers link",

@@ -8,10 +8,13 @@ import type { Article } from "./types";
  * author account (Tom Dombrowski, Compass Marketing), not the business owner;
  * it is preserved as published and flagged for a decision.
  *
- * Wording is reproduced as published. Nothing was rewritten; claims that
- * conflict with confirmed business facts are listed in `flags` for review
- * (shown in the reviewer notice, never on the page). The WordPress featured
- * image is a stock download and is not carried over.
+ * Wording is reproduced as published except for the owner-approved edits of
+ * 2026-09-19 (docs/launch-review.md A5, B3, B4, B5): the jurisdiction-wide
+ * code claim about GFCI outlets replaced with neutral "commonly installed"
+ * wording; the panel-age threshold replaced with "older panels"; the
+ * inspection offer taken out of the closing call to action; "TLDR" → "In
+ * short"; the unsupported "one of the leading causes" ranking removed. Byline and date preserved. The WordPress featured image is a stock
+ * download and is not carried over.
  */
 export const post: Article = {
   slug: "the-most-common-electrical-hazards-found-in-missouri-homes",
@@ -24,12 +27,12 @@ export const post: Article = {
   author: "Tom Dombrowski",
   excerpt: "Missouri homes often face hidden electrical hazards caused by outdated wiring, overloaded circuits, damaged outlets, missing GFCI protection, improper DIY repairs and aging electrical panels. Here is what homeowners should watch for.",
   body: [
-    { type: "h2", text: "TLDR" },
+    { type: "h2", text: "In short" },
     { type: "p", text: "Missouri homes often face hidden electrical hazards caused by outdated wiring, overloaded circuits, damaged outlets, missing GFCI protection, improper DIY repairs, and aging electrical panels. These issues increase the risk of shocks, outages, and electrical fires. Understanding what to look for helps homeowners stay safe and avoid costly damage. When in doubt, always have a licensed electrician inspect your system." },
     { type: "p", text: "Electrical hazards don’t always look dangerous at first glance. Many Missouri homes, especially older ones, contain wiring, outlets, or panels that have aged over time or were never upgraded to meet modern electrical demands. Knowing the most common hazards can protect your family and prevent electrical fires, equipment damage, or unexpected power loss." },
     { type: "p", text: "Below are the top problems homeowners should watch for." },
     { type: "h2", text: "Outdated or Damaged Wiring" },
-    { type: "p", text: "Homes built decades ago often still rely on wiring that wasn’t designed for today’s appliances, HVAC systems, and electronics. Over time, insulation can crack, connections can loosen, and wires can overheat. This is especially true if your home still has aluminum wiring or two-prong outlets. Outdated wiring is one of the leading causes of electrical fires." },
+    { type: "p", text: "Homes built decades ago often still rely on wiring that wasn’t designed for today’s appliances, HVAC systems, and electronics. Over time, insulation can crack, connections can loosen, and wires can overheat. This is especially true if your home still has aluminum wiring or two-prong outlets. Outdated wiring can cause electrical fires." },
     { type: "h3", text: "Warning signs include:" },
     { type: "ul", items: [
       "Frequent tripped breakers",
@@ -52,7 +55,7 @@ export const post: Article = {
     { type: "p", text: "DIY videos make electrical work look simple, but even small mistakes can create serious hazards behind your walls. Loose connections, improper wire sizes, and unprotected splices are a recipe for fire risk. Many Missouri homes have hidden DIY wiring from past owners that homeowners never realize is unsafe." },
     { type: "p", text: "If you didn’t personally hire a licensed electrician for past electrical work, it’s always smart to have the system inspected." },
     { type: "h2", text: "Missing or Faulty GFCI Protection" },
-    { type: "p", text: "GFCI outlets reduce shock risk by shutting off power instantly when a ground fault occurs. Missouri electrical code requires them in kitchens, bathrooms, basements, garages, outdoor areas, and anywhere water is present." },
+    { type: "p", text: "GFCI outlets reduce shock risk by shutting off power instantly when a ground fault occurs. They are commonly installed in kitchens, bathrooms, basements, garages, outdoor areas, and anywhere water is present." },
     { type: "p", text: "Without GFCI protection, everyday situations can become dangerous, especially in older homes." },
     { type: "h3", text: "Signs of a problem include:" },
     { type: "ul", items: [
@@ -61,7 +64,7 @@ export const post: Article = {
       "Wet areas still using standard outlets",
     ] },
     { type: "h2", text: "Aging or Undersized Electrical Panels" },
-    { type: "p", text: "Your electrical panel is the heart of your system. As homes add more appliances and upgrades, older panels often can’t handle the load. Panels older than 25–30 years may have worn components or outdated breakers that fail to trip when overloaded." },
+    { type: "p", text: "Your electrical panel is the heart of your system. As homes add more appliances and upgrades, older panels often can’t handle the load. Older panels may have worn components or outdated breakers that fail to trip when overloaded." },
     { type: "p", text: "This is one of the most dangerous electrical hazards because a failed panel can allow wires to overheat without warning." },
     { type: "h2", text: "Damaged or Improperly Installed Outlets and Switches" },
     { type: "p", text: "Worn outlets may feel warm, loosen over time, or stop holding plugs securely. Internal arcing can create sparks or heat that builds inside the wall. Cracked faceplates or loose switches are also signs that something is failing behind the surface." },
@@ -71,15 +74,9 @@ export const post: Article = {
     { type: "p", text: "A licensed electrician can install permanent outlets or circuits safely and affordably." },
     { type: "h2", text: "Stay Ahead of Electrical Hazards" },
     { type: "p", text: "Electrical hazards often remain unseen until something goes wrong. A routine inspection can identify problems early, protect your home, and ensure your system can handle everyday use." },
-    { type: "h2", text: "Call Show Me Electrical for a Safety Inspection" },
+    { type: "h2", text: "Call Show Me Electrical" },
     { type: "p", text: "If you think your home may have outdated wiring, overloaded circuits, or other electrical hazards, don’t wait. The licensed, bonded, and insured team at Show Me Electrical is here to keep your home safe." },
-    { type: "p", text: "Schedule your electrical safety inspection today and protect your home from hidden risks." },
+    { type: "p", text: "Get in touch today and protect your home from hidden risks." },
   ],
-  flags: [
-    "\"Missouri electrical code requires [GFCI outlets] in kitchens, bathrooms, basements, garages, outdoor areas, and anywhere water is present\" — a code claim. Missouri adopts the NEC by local jurisdiction, so wording should be confirmed by the owner before it stays.",
-    "\"Panels older than 25–30 years may have worn components\" — a general industry rule of thumb, not a business claim. Preserved; acceptable if the owner agrees.",
-    "\"Schedule your electrical safety inspection\" / \"Call Show Me Electrical for a Safety Inspection\" — inspection wording is not in the approved service taxonomy (electrical inspections appear only under the commercial hub). Preserved; confirm the residential offer or reword.",
-    "The post is framed around \"Missouri homes\" — consistent with a Missouri-based business, but the listed service area also includes two Illinois cities. No change needed unless the owner wants the framing widened.",
-    "Byline \"Tom Dombrowski\" is the WordPress author account (Compass Marketing), not the business owner. Preserved as published; decide whether posts should be bylined to the business instead.",
-  ],
+  flags: [],
 };

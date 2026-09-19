@@ -43,7 +43,7 @@ export const serviceArea = {
   seo: {
     title: "Service Area | Show Me Electrical — Greater St. Louis, MO",
     description:
-      "Show Me Electrical serves St. Louis City and County, St. Charles, Jefferson, Franklin, Warren and Lincoln Counties, plus Edwardsville and Belleville, IL. Not sure? Call us.",
+      "Show Me Electrical serves St. Louis City and County, St. Charles, Jefferson, Franklin, Warren and Lincoln Counties, and Edwardsville and Belleville, IL.",
     image: "/photos/service-entrance.webp",
   },
 

@@ -1,13 +1,18 @@
 import { site } from "@/config/site.config";
 import { reviewerNotes } from "@/content/reviewer-notes";
+import { allowIndexing } from "@/lib/host";
 
 /**
  * Review-stage banner. One slim line so it costs the hero as little viewport
  * as possible, with the reviewer notes folded underneath rather than scattered
- * through the page as captions. Remove this component (and the noindex in
- * app/layout.tsx) at launch.
+ * through the page as captions. Rendered only while indexing is off; the
+ * launch build hides it automatically (see below).
  */
 export default function PreviewNotice() {
+  // The launch build (NEXT_PUBLIC_ALLOW_INDEXING=true) never shows this:
+  // the same switch that turns indexing on turns the review banner off, so
+  // going live is a configuration change, not a code edit.
+  if (allowIndexing) return null;
   return (
     <div className="border-b-2 border-amber-400 bg-amber-50 text-amber-950">
       <details className="mx-auto max-w-7xl px-4 text-xs sm:px-6">

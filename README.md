@@ -101,6 +101,9 @@ production environment set and driving each host via a `Host:` header.
 | `sitemap.xml` on careers host | careers URLs only | careers URLs only |
 | `careers.…/jobs/<slug>` | 200 | 200 |
 | `careers.…/careers/jobs/<slug>` | 308 → `/jobs/<slug>` | 308 → `/jobs/<slug>` |
+| `showmeelectrical.com/careers`, `/careers/jobs/<slug>`, `/career` | 308 → careers host (rule 4) | same |
+| `careers.…/about`, `/blog`, any main-site path | 404 | 404 |
+| Review banner (`PreviewNotice`) | shown | hidden |
 | Canonical, careers job page | `https://careers.showmeelectrical.com/jobs/<slug>` | same |
 
 `robots.txt` and `sitemap.xml` are rendered **per request** (`force-dynamic`)

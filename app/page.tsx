@@ -32,9 +32,9 @@ export const dynamic = "force-static";
  */
 export const metadata: Metadata = {
   title:
-    "Electrician in St. Louis, MO | Show Me Electrical — Residential, Commercial & Industrial",
+    "Electrician in St. Louis, MO | Show Me Electrical",
   description:
-    "Owner-led by a Master Electrician, serving St. Louis City, St. Louis County and the Greater St. Louis area. Panel upgrades, rewiring, lighting, commercial fit-outs, industrial power and emergency electrical repairs. Free consultations.",
+    "Owner-led by a Master Electrician serving the Greater St. Louis area: residential, commercial, industrial and emergency electrical work. Free consultation.",
   alternates: { canonical: site.productionUrl },
   openGraph: {
     type: "website",

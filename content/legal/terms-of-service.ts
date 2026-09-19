@@ -4,7 +4,10 @@ import type { LegalDocument } from "./types";
  * MIGRATED FROM WORDPRESS — terms-of-service
  *
  * Source: https://showmeelectrical.com/terms-of-service/ (fetched 2026-09-19).
- * "Last Updated: November 10, 2025" as stated at the source.
+ * "Last Updated: November 10, 2025" at the source. Revised 2026-09-19: §14
+ * contact block completed with the confirmed address, phone and email
+ * (owner-approved edit A4; address D-005). No other wording changed; the
+ * remaining proposed edits are in docs/policy-revision-proposal.md.
  *
  * Wording is reproduced verbatim for review — nothing has been replaced with
  * generic legal text. Section headings were h3 under an h2 page title at the
@@ -19,7 +22,7 @@ export const doc: LegalDocument = {
   seo: {
     description: "The terms that govern use of the Show Me Electrical website and services, including communications, pricing, liability and governing law.",
   },
-  lastUpdated: "2025-11-10",
+  lastUpdated: "2026-09-19",
   body: [
     { type: "p", text: "Welcome to Show Me Electrical. By accessing or using our services, you agree to comply with and be bound by these Terms of Service (“Terms”). If you do not agree with these Terms, please do not use our Website or services." },
     { type: "h2", text: "1. Agreement to Terms" },
@@ -72,14 +75,12 @@ export const doc: LegalDocument = {
     { type: "p", text: "We reserve the right to modify or update these Terms at any time. Any changes will be posted on this page with a revised “Last Updated” date. By continuing to use our Website or services, you agree to be bound by the updated Terms." },
     { type: "h2", text: "14. Contact Us" },
     { type: "p", text: "If you have any questions or concerns about these Terms of Service, please contact us:" },
-    { type: "p", text: "www.showmeelectrical.com" },
+    { type: "lines", lines: ["Show Me Electrical", "5602 Heege Rd, Affton, MO 63123", "Phone: 314-571-9756", "Email: info@showmeelectrical.com", "Website: showmeelectrical.com"] },
   ],
   flags: [
-    "§2 \"Services Provided\" lists residential and commercial work only — industrial electrical is not mentioned, although it is a core service on the rebuilt site. Owner to decide whether to add it.",
-    "§2 names generator installations, EV charger installations and smart home solutions; these match the residential taxonomy. Fine as is.",
-    "§1 cites https://www.showmeelectrical.com (www); §14 gives only \"www.showmeelectrical.com\" as contact — no phone or email. Confirm the canonical host and consider adding the phone number and email as the privacy policy does.",
-    "§5 text-messaging program (approximately one message per month, STOP to opt out) is preserved verbatim. The rebuilt contact form asks for a phone number only as a way to reply; it does not enrol anyone in a text-messaging program. Owner to decide whether §5 stays as-is for a programme run outside the website.",
-    "§7 states all website content, including images, is the property of Show Me Electrical. The old site used some stock imagery; the rebuild uses only the client's own photography, so this is now accurate.",
-    "§12 governing law: State of Missouri. The listed service area now includes two Illinois cities; this does not change which law governs the website terms, but the owner may want counsel to confirm.",
+    "§2 \"Services Provided\" lists residential and commercial work only — industrial electrical is a core service on the site. Proposed edit in docs/policy-revision-proposal.md.",
+    "§1 cites https://www.showmeelectrical.com (www); the rebuild's canonical host has no www. Proposed edit in docs/policy-revision-proposal.md.",
+    "§5 text-messaging programme is preserved verbatim. The website contact form does not enrol anyone in it; a one-sentence clarification is proposed in docs/policy-revision-proposal.md.",
+    "§12 governing law: State of Missouri. Two Illinois cities are served; not a website decision — left as-is unless counsel says otherwise.",
   ],
 };

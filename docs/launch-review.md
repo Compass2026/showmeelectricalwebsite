@@ -1,6 +1,12 @@
 # Final content and launch review
 
 Prepared 2026-09-19 against commit on `claude/main-site-foundation-v1`.
+**Update, same day:** Tom approved A1–A6 and decided B1–B6 and B8; those
+edits are applied (bylines and dates preserved). What remains for Tom is
+the policy revision in `docs/policy-revision-proposal.md` (B7, B9, B10) and
+the launch go/no-go. Sections below are kept as the record of what was
+proposed; each row's status is marked.
+
 One document, four parts:
 
 - **A. Editorial corrections** — wording changes that follow from decisions
@@ -21,7 +27,7 @@ and `content/legal/*.ts`, listed verbatim in `docs/final-content-review.md`.
 
 ---
 
-## A. Editorial corrections (before → after)
+## A. Editorial corrections (before → after) — **all applied 2026-09-19**
 
 ### A0. Attribution — no change proposed
 
@@ -83,6 +89,8 @@ line resolves it for this post.
 
 ## B. Business facts Tom (or Dan) must confirm
 
+Status: B1 removed ✅ · B2 removed ✅ · B3 replaced with neutral wording (no code claim) ✅ · B4 inspection wording taken out of every call to action ✅ · B5 "older panels" ✅ · B6 address confirmed (D-005) ✅ · B7 **open** (in the policy proposal) · B8 decided: no analytics at launch (D-006), wording in the policy proposal · B9 **open** (policy proposal) · B10 **open** (policy proposal) · B11 unchanged.
+
 | # | Fact to confirm | Where it appears | Proposed edit once confirmed |
 |---|---|---|---|
 | B1 | **Fire statistic.** "Faulty wiring is one of the leading causes of residential electrical fires in the U.S." has no source. | Rewiring post, first paragraph | If a source is supplied (e.g. a published NFPA/ESFI figure), keep the sentence and cite it. If not: "Outdated or damaged electrical wiring isn't just an inconvenience — it can be a serious safety hazard." and drop the statistic. |
@@ -109,13 +117,13 @@ or DNS until Tom says go.
 
 | # | Blocker | Status | What "done" looks like |
 |---|---|---|---|
-| C1 | **Production email configuration** | 🟡 | `RESEND_API_KEY` already exists for the production target (used by the careers form). Decide the sender: keep `inquiries@send.compassmarketing.ai` (works today) or verify a `showmeelectrical.com` sending domain in Resend and set `INQUIRY_FROM`. `INQUIRY_RECIPIENT` is optional (defaults to info@showmeelectrical.com). Then **one labelled test through the production deployment's own URL before DNS moves**, with inbox receipt confirmed. The preview test's inbox receipt is still awaiting Tom's confirmation. |
-| C2 | **Indexing switch-over** | ⬜ | Production env: `NEXT_PUBLIC_ALLOW_INDEXING=true`, `NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com`. Remove `PreviewNotice` and `content/reviewer-notes.ts` from every page. Rebuild. Verify with curl on the production domain: `robots` meta = `index, follow`, `/robots.txt` allows and names the sitemap, `/sitemap.xml` lists only main-site URLs. Submit the sitemap in Search Console. |
+| C1 | **Production email configuration** | 🟡 | `RESEND_API_KEY` already exists for the production target (used by the careers form). Sender stays `inquiries@send.compassmarketing.ai` unless a `showmeelectrical.com` sending domain is verified first. `INQUIRY_RECIPIENT` optional (defaults to info@showmeelectrical.com). Then **one labelled test through the production deployment's own URL before DNS moves**, receipt checked by whoever reads info@. Preview test: provider reports delivered; human inbox receipt unverified (D-007) — no further tests until launch. |
+| C2 | **Indexing switch-over** | 🟡 | Production env: `NEXT_PUBLIC_ALLOW_INDEXING=true`, `NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com` — **set before promotion** (the live careers site would otherwise go noindex; see `docs/deployment-plan.md` §1). The review banner now hides itself on that switch; no code edit at launch. Verify with curl on both hosts; submit the sitemap in Search Console (domain already carries a verification TXT). |
 | C3 | **Redirects on the real domain** | 🟡 | Rules are built and verified on the preview. Remaining: add `showmeelectrical.com` and `www.showmeelectrical.com` to the Vercel project with www redirecting to the apex; re-run the legacy URL table (`docs/migration-inventory.md` §4) with curl on the real domain; confirm `/global-styles` answers 410; check the WordPress admin for any redirect plugin rules not in the sitemap crawl. |
-| C4 | **Analytics decision** | ⬜ | None is configured and none was found on WordPress. Decide: GA4 (and/or GTM) or nothing. The decision sets B8's wording. If a tag is added, it must load only after the indexing switch and must not add a consent banner requirement the site does not meet. |
+| C4 | **Analytics decision** | ✅ decided (D-006) | No GA4 exists; analytics disabled at launch, no placeholder ID. GA4 setup is a separate post-launch follow-up (D). Privacy §7 wording in the policy proposal reflects this. |
 | C5 | **Careers regression on real hostnames** | ⬜ | After DNS: run the routing matrix (README) against `https://careers.showmeelectrical.com` and `https://showmeelectrical.com`: careers `/` and `/jobs/<slug>` 200 and indexable, `/careers/*` 308 to the public form, main-site paths 404 on the careers host, per-host robots and sitemap, canonicals; submit one careers application and confirm receipt. The careers routing code is unchanged by the rebuild, but this is the first time both hosts serve from one production deployment. |
-| C6 | **Content decisions** | ⬜ | Approve A1–A6 (editorial) and answer B1–B11 (facts). Apply, regenerate `docs/final-content-review.md`, re-run the claim sweeps. |
-| C7 | **Business facts still missing** | ⬜ | Address spelling (B6) is the only one that blocks launch (NAP + schema). Business hours block only the emergency-availability wording, which is deliberately absent; they do not block launch. |
+| C6 | **Content decisions** | 🟡 | A1–A6 and B1–B6, B8 done. Remaining: approve the policy revision (`docs/policy-revision-proposal.md`, 7 edits) — then apply, bump the policy dates, regenerate `docs/final-content-review.md`. |
+| C7 | **Business facts still missing** | ✅ | Address confirmed (D-005). Business hours block only the emergency-availability wording, which is deliberately absent; not a launch blocker. |
 | C8 | **Deployment hygiene** | ⬜ | Revoke or keep the preview-only Resend key (send-only, agency domain) — it has no production role. Confirm production has no `INQUIRY_DELIVERY` variable. Confirm `APPLICATION_RECIPIENT` for careers is still what Tom wants. |
 | C9 | **Google Business Profile parity** | ⬜ | Per the SOP: the 22 site services and the GBP service list must match; needs GBP access. Listed in checklist A11. |
 

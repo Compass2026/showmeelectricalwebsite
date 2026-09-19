@@ -4,7 +4,10 @@ import type { LegalDocument } from "./types";
  * MIGRATED FROM WORDPRESS — privacy-policy
  *
  * Source: https://showmeelectrical.com/privacy-policy/ (fetched 2026-09-19).
- * "Last Updated: November 10, 2025" as stated at the source.
+ * "Last Updated: November 10, 2025" at the source. Revised 2026-09-19: the
+ * confirmed street address added to §11 (owner-confirmed, D-005). No other
+ * wording changed; the remaining proposed edits are in
+ * docs/policy-revision-proposal.md and wait for the owner.
  *
  * Wording is reproduced verbatim for review — nothing has been replaced with
  * generic legal text. Section headings were h3 under an h2 page title at the
@@ -19,7 +22,7 @@ export const doc: LegalDocument = {
   seo: {
     description: "How Show Me Electrical collects, uses, shares and protects the personal information you provide through our website, phone, email and SMS.",
   },
-  lastUpdated: "2025-11-10",
+  lastUpdated: "2026-09-19",
   body: [
     { type: "p", text: "Show Me Electrical (“Company,” “we,” “our,” or “us”) respects your privacy and is committed to protecting it through this Privacy Policy. This policy describes the types of information we may collect from you or that you may provide when you visit our website https://www.showmeelectrical.com (the “Website”), and our practices for collecting, using, maintaining, protecting, and disclosing that information." },
     { type: "h2", text: "1. Information We Collect" },
@@ -74,14 +77,11 @@ export const doc: LegalDocument = {
     { type: "p", text: "We may update this Privacy Policy periodically. Any changes will be posted on this page with a revised “Last Updated” date. By continuing to use our Website after changes are posted, you agree to the updated policy." },
     { type: "h2", text: "11. Contact Us" },
     { type: "p", text: "If you have any questions about this Privacy Policy, please contact us:" },
-    { type: "lines", lines: ["Show Me Electrical", "St. Louis, MO", "📞 Phone: 314-571-9756", "✉️ Email: info@showmeelectrical.com", "🌐 Website: https://www.showmeelectrical.com"] },
+    { type: "lines", lines: ["Show Me Electrical", "5602 Heege Rd, Affton, MO 63123", "📞 Phone: 314-571-9756", "✉️ Email: info@showmeelectrical.com", "🌐 Website: https://www.showmeelectrical.com"] },
   ],
   flags: [
-    "§11 lists the business as \"Show Me Electrical, St. Louis, MO\" with no street address; the site's NAP is 5602 Heege Rd, Affton, MO 63123 (street spelling itself still unconfirmed — Hegee/Heege). Decide whether the policy should carry the full address.",
-    "Website is cited as https://www.showmeelectrical.com (www). The rebuild's canonical host is showmeelectrical.com without www; confirm the canonical host and update the policy to match at launch.",
-    "§7 says cookies and analytics tools are used. The rebuilt site currently sets no analytics or advertising cookies; keep the wording only if analytics/ads tags are added before launch.",
-    "§2 names Google Ads, Facebook and Instagram marketing campaigns. Confirm these are still in use.",
-    "§5 says that submitting a form is an express opt-in to phone, email and SMS communications. The rebuilt contact form collects a phone number only so the business can reply; it presents no SMS or marketing opt-in and records none. Owner to decide: narrow the policy to what the site does, or keep the wording for a future SMS program run outside the website.",
-    "Contact section line \"Show Me Electrical\" is rendered as an address block; the phone, email and website lines are preserved with their original emoji markers.",
+    "Website is cited as https://www.showmeelectrical.com (www) in §1 and §11. The rebuild's canonical host is showmeelectrical.com without www (www will redirect). Proposed edit in docs/policy-revision-proposal.md.",
+    "§7 says cookies and analytics tools are used. The rebuilt site sets no analytics or advertising cookies (analytics disabled for this review; GA4 is a separate follow-up). Proposed edit in docs/policy-revision-proposal.md.",
+    "§5 says submitting a form is an express opt-in to phone, email and SMS communications. The website form collects a phone number only so the business can reply; it presents and records no SMS enrolment. Any separate text-messaging programme the business runs is unaffected. Proposed edit in docs/policy-revision-proposal.md.",
   ],
 };

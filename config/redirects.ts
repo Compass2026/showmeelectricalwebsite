@@ -51,6 +51,25 @@ export const redirects: Redirect[] = [
   },
   { source: "/category/blog", destination: "/blog", permanent: true },
 
+  // Retained job-site photos: the old upload URL → the re-encoded file, so an
+  // inbound link or image-search result still resolves. Stock and unused
+  // uploads are deliberately not redirected (migration inventory §7b).
+  ...[
+    ["2025/10/10BF7BF3-A2B5-48E8-8859-44E5ABA87C19_4_5005_c.jpg", "industrial-high-bay"],
+    ["2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg", "commercial-checkout"],
+    ["2025/10/IMG_0179-1.jpg", "finished-interior-lighting"],
+    ["2025/10/IMG_0354-1.jpg", "ceiling-fan-install"],
+    ["2025/10/IMG_0488-1.jpg", "roughin-attic"],
+    ["2025/10/IMG_1447-1.jpg", "commercial-panels"],
+    ["2025/10/IMG_2411-1.jpg", "roughin-wall"],
+    ["2025/10/IMG_7032-1.jpg", "roughin-framing"],
+    ["2025/10/PHOTO-2025-04-15-22-41-56.jpg", "service-entrance"],
+  ].map(([old, name]) => ({
+    source: `/wp-content/uploads/${old}`,
+    destination: `/photos/${name}.webp`,
+    permanent: true,
+  })),
+
   // WordPress sitemap index and its four sub-sitemaps → the Next.js sitemap.
   // Listed explicitly (from the live wp-sitemap.xml) rather than by pattern,
   // so nothing is appended to the destination as a query string.
