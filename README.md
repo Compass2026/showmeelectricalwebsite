@@ -6,7 +6,7 @@ codebase:
 | Property | Routes | Status |
 |---|---|---|
 | **Careers site** | `/careers`, `/careers/jobs/[slug]`, `/api/apply` | **LIVE** at `careers.showmeelectrical.com` |
-| **Main site** | `/`, `/contact`, `/services/{residential,commercial,industrial}` | **Prototype** — under review |
+| **Main site** | `/`, `/about`, `/contact`, `/services/{residential,commercial,industrial}` | **Prototype** — under review |
 
 This repo is also the first implementation of the reusable **Compass
 Marketing website system**. See "Reusing this for another client" below and
@@ -115,6 +115,7 @@ config/
   theme.config.ts    Motion settings + the brand reconciliation record
 content/
   home.ts            Homepage copy, with provenance notes per block
+  about.ts           About page copy — the live About page's three paragraphs
   shared.ts          Trust points + process steps used by home and service pages
   services/
     types.ts         ServicePageContent — the data model every service page is
@@ -124,15 +125,15 @@ content/
     industrial.ts    The industrial hub — credentials first, no gallery
 components/
   motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
-  site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice
+  site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice,
+                     PageHero, Breadcrumbs, ValueGrid
 content/
   reviewer-notes.ts  Provisional-content notes shown only in the preview banner
   decor/             Decoration registry (HeroBackdrop, storyRailPath) + the
                      client's motif (CircuitBackground) — selected by theme config
   home/              Hero, TrustBar, ServicePathways, AboutSection, Testimonials
-  services/          ServicePage renderer + its sections: ServiceHero, ServiceList,
-                     PhotoGallery, ProcessSteps, Faq, RelatedLinks, ClosingCta,
-                     Breadcrumbs
+  services/          ServicePage renderer + its sections: ServiceList,
+                     PhotoGallery, ProcessSteps, Faq, RelatedLinks, ClosingCta
   (root)             Careers components — Header, Footer, JobCard, ApplicationForm
 lib/
   seo.ts             Structured data helpers

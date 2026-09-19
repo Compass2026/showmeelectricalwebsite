@@ -1,17 +1,23 @@
 import Reveal from "@/components/motion/Reveal";
-import { testimonials } from "@/content/home";
+
+export interface Testimonial {
+  quote: string;
+  /** Attributed exactly as the client publishes it. */
+  name: string;
+  /** True when sentences were omitted; rendered as a visible "Excerpt" label. */
+  excerpt?: boolean;
+}
 
 /**
- * Testimonials reproduced from the client's live homepage — see the source
- * notes on `testimonials` in content/home.ts. Every entry is attributed
- * exactly as the client publishes it; there is no fallback label, because no
- * verification process is documented and none may be implied. Excerpts are
- * marked as such.
+ * Testimonial cards. Takes `items` as a prop and carries none of its own —
+ * every entry is attributed exactly as the client publishes it, there is no
+ * fallback label (no verification process is documented, so none may be
+ * implied), and excerpts are marked as such.
  */
-export default function Testimonials() {
+export default function Testimonials({ items }: { items: Testimonial[] }) {
   return (
     <div className="mt-12 grid gap-6 lg:grid-cols-3">
-      {testimonials.map((t, i) => (
+      {items.map((t, i) => (
         <Reveal key={i} delay={i * 0.1} className="h-full">
           <figure className="flex h-full flex-col rounded-xl border border-white/10 bg-navy-800/60 p-7 backdrop-blur">
             <svg

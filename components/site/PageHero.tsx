@@ -2,23 +2,34 @@ import Image from "next/image";
 import { HeroBackdrop } from "@/components/decor";
 import Reveal from "@/components/motion/Reveal";
 import Button from "@/components/site/Button";
-import Breadcrumbs from "./Breadcrumbs";
+import Breadcrumbs from "@/components/site/Breadcrumbs";
 import { site } from "@/config/site.config";
-import type { ServicePageContent } from "@/content/services/types";
+import type { Crumb, Photo } from "@/content/services/types";
+
+export interface PageHeroContent {
+  eyebrow: string;
+  /** The page's only H1. */
+  headline: string;
+  intro: string;
+  image: Photo;
+}
 
 /**
- * Service-page hero. Same navy-and-circuit language as the homepage, sized so
- * the H1, intro and both CTAs sit inside a typical desktop opening screen.
+ * Inner-page hero (service pages, About, and any future page with a
+ * breadcrumb). Same navy-and-backdrop language as the homepage, sized so the
+ * H1, intro and both CTAs sit inside a typical desktop opening screen.
+ *
  * Every entrance is `immediate` — this is above the fold by design and must
- * never wait for a scroll trigger.
+ * never wait for a scroll trigger. The backdrop comes from the decoration
+ * registry; nothing here is client- or industry-specific.
  */
-export default function ServiceHero({
-  content,
+export default function PageHero({
+  hero,
+  breadcrumbs,
 }: {
-  content: ServicePageContent;
+  hero: PageHeroContent;
+  breadcrumbs: Crumb[];
 }) {
-  const { hero, breadcrumbs } = content;
-
   return (
     <section className="relative overflow-hidden bg-navy-950">
       <HeroBackdrop />

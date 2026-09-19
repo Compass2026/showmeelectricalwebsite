@@ -150,3 +150,25 @@ export function breadcrumbJsonLd(
     })),
   };
 }
+
+/**
+ * schema.org AboutPage for /about. `about` points at the business node, so the
+ * page must also emit `localBusinessJsonLd()` for the reference to resolve.
+ */
+export function aboutPageJsonLd(
+  path: string,
+  name: string,
+  description: string,
+  baseUrl: string = site.productionUrl
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": `${baseUrl}${path}#webpage`,
+    url: `${baseUrl}${path}`,
+    name,
+    description,
+    about: { "@id": `${baseUrl}/#business` },
+    isPartOf: { "@id": `${baseUrl}/#website` },
+  };
+}

@@ -4,8 +4,8 @@
 *Service Taxonomy, Keyword Map & Tracked List v1.1* (approved 2026-09-02) ·
 *Compass Master SEO Audit Checklist v1.0* · *Compass SOP SEO-AEO-GEO v3.1*.
 
-**Status:** proposed. The three service hubs are built (marked ✅), plus the
-homepage and contact page. Everything else is planned and not yet routed —
+**Status:** proposed. The three service hubs, the About page, the homepage
+and the contact page are built (marked ✅). Everything else is planned and not yet routed —
 nothing in this document is a promise that a URL resolves today. §8 splits
 the plan into launch essentials and later SEO expansion.
 
@@ -39,7 +39,7 @@ the plan into launch essentials and later SEO expansion.
 | Page | Purpose | Primary keyword | Existing URL | Proposed URL | Status |
 |---|---|---|---|---|---|
 | Home | Business overview, three pathways, process, trust | electrician st louis (260/mo) | `/` | `/` | ✅ Prototype |
-| About | Dan, the credential, the team, how the company works | *(supporting: st louis electrician)* | `/about/` | `/about` | Planned — content already on the homepage About section |
+| About | Dan, the credential, how the company works | *(brand; supporting: st louis electrician)* | `/about/` | `/about` | ✅ Built |
 | Contact | Phone, email, address, enquiry form | — | `/contact/` | `/contact` | ✅ Built (form pending backend) |
 | Services hub | Index of the three pathways and all 24 services | electrical contractor st louis | `/services/` | `/services` | Planned — the live page is empty chrome |
 | Service area hub | Counties, Tier-1/2 city links, Tier-3 city list | electrician near me *(won via GBP, not this page)* | `/locations/` | `/service-area` | Planned |
@@ -204,7 +204,7 @@ the site or for extracting the Compass starter. The plan splits in two.
 | `/services/commercial` hub | ✅ built |
 | `/services/industrial` hub | ✅ built |
 | `/contact` | ✅ built (enquiry form pending backend) |
-| `/about` | planned — content exists on the homepage; standalone route only |
+| `/about` | ✅ built |
 | `/service-area` hub | planned — counties + Tier-1/2 city list, no city pages yet |
 | `/privacy-policy`, `/terms-of-service` | planned — copy carries over |
 | `/blog` + the 3 existing posts | planned — retained, redirected |

@@ -12,7 +12,7 @@ import ServicePathways from "@/components/home/ServicePathways";
 import AboutSection from "@/components/home/AboutSection";
 import Testimonials from "@/components/home/Testimonials";
 import { site } from "@/config/site.config";
-import { storyStages, emergencyCallout } from "@/content/home";
+import { storyStages, emergencyCallout, about, testimonials } from "@/content/home";
 import { trustPoints } from "@/content/shared";
 import { localBusinessJsonLd, websiteJsonLd } from "@/lib/seo";
 
@@ -129,7 +129,13 @@ export default function HomePage() {
 
         {/* ---------- About ---------- */}
         <Section id="about" tone="cream" headingId="about-heading">
-          <AboutSection />
+          <AboutSection
+            eyebrow="Meet the owner"
+            heading={about.heading}
+            paragraphs={about.paragraphs}
+            image={about.image}
+            cta={{ label: "More about Dan", href: "/about" }}
+          />
         </Section>
 
         {/* ---------- Testimonials ---------- */}
@@ -142,7 +148,7 @@ export default function HomePage() {
           intro="Reviews published by our customers on the Show Me Electrical website."
           center
         >
-          <Testimonials />
+          <Testimonials items={testimonials} />
         </Section>
 
         {/* ---------- Service area ---------- */}

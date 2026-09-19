@@ -3,7 +3,7 @@ import SiteFooter from "@/components/site/SiteFooter";
 import PreviewNotice from "@/components/site/PreviewNotice";
 import Section from "@/components/site/Section";
 import TrustBar from "@/components/home/TrustBar";
-import ServiceHero from "./ServiceHero";
+import PageHero from "@/components/site/PageHero";
 import ServiceList from "./ServiceList";
 import PhotoGallery from "./PhotoGallery";
 import ProcessSteps from "./ProcessSteps";
@@ -56,7 +56,13 @@ export default function ServicePage({
   const render = (key: ServiceSectionKey) => {
     switch (key) {
       case "hero":
-        return <ServiceHero key={key} content={content} />;
+        return (
+          <PageHero
+            key={key}
+            hero={content.hero}
+            breadcrumbs={content.breadcrumbs}
+          />
+        );
 
       case "services":
         return (

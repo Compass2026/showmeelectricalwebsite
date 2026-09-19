@@ -25,6 +25,8 @@ Nothing here is built speculatively for hypothetical clients or frameworks.
 | Decoration registry | `components/decor/index.tsx` | Hero backdrop and scroll-story rail are chosen by `config/theme.config.ts`'s `decoration` block. The circuit motif is one entry. |
 | Design tokens | `app/globals.css` `@theme` block | Colours and font variables. Utilities generate from these. |
 | Trust strip | `components/home/TrustBar` | Takes `points` as a prop; carries no facts of its own. |
+| Inner-page hero + breadcrumbs | `components/site/PageHero`, `components/site/Breadcrumbs` | Used by every service page and About. Content and crumbs are props; backdrop from the decoration registry. |
+| Story, testimonials, values | `components/home/AboutSection`, `components/home/Testimonials`, `components/site/ValueGrid` | All prop-driven; no copy of their own. |
 
 ## 2. Still specific to Show Me Electrical
 
@@ -44,7 +46,7 @@ Everything that is a **fact about the client** or a **choice made for them**:
 | Circuit decoration | `components/decor/CircuitBackground.tsx`, `decoration: "circuit"` | Electrical-industry motif. Selected by config; not required. |
 | Careers property | `app/careers/`, `lib/jobs.ts`, `components/{Header,Footer,JobCard,ApplicationForm,…}.tsx`, `/api/apply` | A second, **live** product for this client. Its components predate the system and are not generalised. |
 | Careers coupling in shared files | `middleware.ts` (host rules 1–3), `lib/host.ts` (`resolveProperty`), `app/sitemap.ts` (careers branch imports `jobs`), `app/robots.ts` (per-host), `config/site.config.ts` (`careersUrl`, "Careers" nav + footer entries), `app/page.tsx` ("See our open roles" in the final CTA) | **Honest status: the shared routing and sitemap code assumes a careers host exists.** A client without careers needs a *coordinated* change across all of these — not a config flag today. Listed as §5.3. |
-| Homepage section components | `components/home/{Hero,ServicePathways,AboutSection,Testimonials}` | Each imports its block from `content/home.ts` directly. They are page compositions rather than generic sections — see §5. |
+| Homepage section components | `components/home/{Hero,ServicePathways}` | Each imports its block from `content/home.ts` directly. `AboutSection` and `Testimonials` were converted to prop-driven sections for the About page; these two remain — see §5.2. |
 | Brand reconciliation record | `config/theme.config.ts` header comment | History of this client's brand decisions. |
 
 ## 3. What must change to start a new client website
@@ -122,11 +124,10 @@ complete and validated on real pages.
    to role-based tokens (`surface`, `surface-deep`, `accent`, `accent-ink`,
    `ink`, `paper`) so a client palette is a value change, not a find-and-
    replace. Do this once the full page set exists, so it is done once.
-2. **Homepage sections as content-driven components.** `Hero`,
-   `ServicePathways`, `AboutSection`, `Testimonials` should take their block
-   as a prop the way `ServicePage` sections do, with `app/page.tsx` as the
-   composition. Straightforward; deferred so it is done against the final
-   homepage rather than twice.
+2. **Homepage sections as content-driven components.** `AboutSection` and
+   `Testimonials` now take their content as props (done for the About page).
+   `Hero` and `ServicePathways` still import from `content/home.ts`;
+   convert them the same way against the final homepage.
 3. **Make careers optional by configuration.** Today the routing, host
    resolution and sitemap assume a careers host (see §2). The starter should
    read `site.careersUrl` (or its absence) and skip every careers rule when
@@ -205,3 +206,26 @@ No component was copied.
 
 Nothing in `components/site/`, `components/motion/`, `components/decor/`,
 `lib/` or `middleware.ts` changed for this milestone.
+
+### Milestone: About page (2026-09-19)
+
+`/about` is composed in its route from existing sections; no new page
+renderer was needed. Content is `content/about.ts` plus the shared trust
+points and the homepage's testimonials.
+
+**Shared components that required changes**, and why:
+
+| Component | Change | Reason |
+|---|---|---|
+| `components/services/ServiceHero` → `components/site/PageHero` | Takes `hero` + `breadcrumbs` props instead of a `ServicePageContent` | The same hero serves About and any future inner page |
+| `components/services/Breadcrumbs` → `components/site/Breadcrumbs` | Moved | Not service-specific |
+| `components/home/AboutSection` | Prop-driven (`eyebrow`, `heading`, `paragraphs`, `image`, `cta`) | Was reading `content/home.ts` directly; roadmap 5.2 |
+| `components/home/Testimonials` | Prop-driven (`items`) | Same |
+| `components/site/ValueGrid` | **New**, generic | Short-statement grid |
+| `lib/seo.ts` | `aboutPageJsonLd` | AboutPage node referencing the business |
+| `app/sitemap.ts` | `/about` added as a core-page literal | Core pages are still literals (roadmap 5.6) |
+
+**New hardcoded client dependencies:** `content/about.ts` and
+`app/about/page.tsx` (intentional — content and composition). Nav and footer
+"About" entries now point at `/about` (config). No client claim entered a
+shared component.

@@ -21,7 +21,7 @@ export const reviewerNotes: { where: string; note: string }[] = [
   },
   {
     where: "About",
-    note: "A portrait of Dan is needed. The image shown is a job-site photo from the client's own library, standing in — not stock.",
+    note: "/about is built from the live About page's three paragraphs. A portrait of Dan is still needed — the hero and story images are job-site photos from the client's own library, standing in, not stock. Dan's surname is unknown, so no Person schema is emitted yet.",
   },
   {
     where: "Testimonials",

@@ -120,16 +120,16 @@ export const site = {
 
   /* ---------------- Navigation ---------------- */
   /**
-   * MILESTONE NOTE: service, about and service-area pages are the next
-   * assignment. Until they exist these point at the matching homepage
-   * sections so every link in the preview resolves — no 404s for reviewers.
-   * Swap the hrefs to "/services", "/about", "/service-area" when those
-   * routes are built; nothing else needs to change.
+   * Entries point at real routes where they exist (/about, /contact) and at
+   * the matching homepage section where the page is still planned
+   * (/#services hub, /#process, /#service-area), so every link resolves.
+   * Swap an href to the real route when that page is built; nothing else
+   * needs to change.
    */
   nav: [
     { label: "Services", href: "/#services" },
     { label: "Our Process", href: "/#process" },
-    { label: "About", href: "/#about" },
+    { label: "About", href: "/about" },
     { label: "Service Area", href: "/#service-area" },
     { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
@@ -138,7 +138,7 @@ export const site = {
   footerLinks: [
     { label: "Services", href: "/#services" },
     { label: "Our Process", href: "/#process" },
-    { label: "About", href: "/#about" },
+    { label: "About", href: "/about" },
     { label: "Service Area", href: "/#service-area" },
     { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },

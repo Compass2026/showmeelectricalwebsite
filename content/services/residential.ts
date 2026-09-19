@@ -279,7 +279,7 @@ export const residential: ServicePageContent = {
       },
       {
         label: "Meet the owner",
-        href: "/#about",
+        href: "/about",
         description: "Dan, the Master Electrician behind the name.",
       },
       {
