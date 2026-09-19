@@ -13,6 +13,7 @@ import AboutSection from "@/components/home/AboutSection";
 import Testimonials from "@/components/home/Testimonials";
 import { site } from "@/config/site.config";
 import { storyStages, emergencyCallout } from "@/content/home";
+import { trustPoints } from "@/content/shared";
 import { localBusinessJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -53,7 +54,7 @@ export default function HomePage() {
 
       <main id="main">
         <Hero />
-        <TrustBar />
+        <TrustBar points={trustPoints} />
 
         {/* ---------- Service pathways ---------- */}
         <Section

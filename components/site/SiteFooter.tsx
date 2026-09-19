@@ -24,7 +24,7 @@ export default function SiteFooter() {
               <li key={item.label}>
                 <Link
                   href={item.href}
-                  className="text-sm text-white/80 transition-colors hover:text-lime-400"
+                  className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-lime-400"
                 >
                   {item.label}
                 </Link>
@@ -50,13 +50,16 @@ export default function SiteFooter() {
             <li>
               <a
                 href={`mailto:${site.email}`}
-                className="hover:text-lime-400"
+                className="-my-1 inline-block py-1 break-all hover:text-lime-400"
               >
                 {site.email}
               </a>
             </li>
             <li>
-              <a href={site.phoneHref} className="hover:text-lime-400">
+              <a
+                href={site.phoneHref}
+                className="-my-1 inline-block py-1 hover:text-lime-400"
+              >
                 {site.phone}
               </a>
             </li>
@@ -78,7 +81,10 @@ export default function SiteFooter() {
             <ul className="flex gap-5">
               {site.legalLinks.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="hover:text-lime-400">
+                  <Link
+                    href={item.href}
+                    className="-my-1.5 inline-block py-1.5 hover:text-lime-400"
+                  >
                     {item.label}
                   </Link>
                 </li>

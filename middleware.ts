@@ -22,6 +22,11 @@ import { NextResponse, type NextRequest } from "next/server";
  *      careers.showmeelectrical.com/careers            → /
  *      careers.showmeelectrical.com/careers/jobs/<slug> → /jobs/<slug>
  *
+ * 3. NOT FOUND (careers host only) — every other path. The main site's routes
+ *    (/contact, /services/…) must not resolve on the careers host, or each
+ *    would exist at two hostnames as duplicate content. They are rewritten to
+ *    a path that has no route, so Next returns its 404 page with a 404 status.
+ *
  * On the main host "/careers/*" is the real, canonical path and is left alone.
  */
 const CAREERS_HOST_PREFIX = "careers.";
@@ -54,10 +59,9 @@ export function middleware(request: NextRequest) {
         ? `/careers${pathname}`
         : null;
 
-  if (!target) return NextResponse.next();
-
   const url = request.nextUrl.clone();
-  url.pathname = target;
+  // Rule 3 — anything else is not a careers URL: 404, never the main site.
+  url.pathname = target ?? "/careers/__not-found__";
   url.search = search;
   return NextResponse.rewrite(url);
 }

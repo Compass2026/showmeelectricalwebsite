@@ -1,0 +1,161 @@
+/**
+ * SERVICE PAGE CONTENT MODEL
+ *
+ * A service page is data. `components/services/ServicePage.tsx` renders
+ * whatever sections a content file lists, in the order it lists them, so the
+ * residential, commercial and industrial pages — and the 24 individual
+ * service pages beneath them — share one component set while varying copy,
+ * photography, section order and emphasis. No section component knows which
+ * service it is rendering.
+ *
+ * Sourcing rule (same as everywhere): every string traces to the client's
+ * own published material, the approved taxonomy, or an owner-confirmed
+ * decision. Never invent credentials, statistics, guarantees or hours.
+ */
+
+export type ServiceSectionKey =
+  | "hero"
+  | "services"
+  | "gallery"
+  | "trust"
+  | "process"
+  | "faqs"
+  | "related"
+  | "cta";
+
+export interface Photo {
+  src: string;
+  /** Describes what is actually in the frame — never a keyword string. */
+  alt: string;
+  /** Optional visible caption. */
+  caption?: string;
+}
+
+export interface Crumb {
+  label: string;
+  /** Omit on the current page. */
+  href?: string;
+}
+
+export interface ServiceItem {
+  name: string;
+  /** The homeowner's situation, in their words. */
+  problem: string;
+  /** What Show Me Electrical does about it. */
+  solution: string;
+  /** Dedicated page, once it exists. Absent = not a link. */
+  href?: string;
+}
+
+export interface Faq {
+  q: string;
+  a: string;
+}
+
+export interface TrustPoint {
+  label: string;
+  detail: string;
+}
+
+export interface ProcessStep {
+  step: string;
+  title: string;
+  body: string;
+}
+
+export interface RelatedLink {
+  label: string;
+  href: string;
+  description: string;
+}
+
+export interface ServicePageContent {
+  /** Route segment, e.g. "residential". */
+  slug: string;
+  /** Path from the site root, e.g. "/services/residential". */
+  path: string;
+
+  seo: {
+    /** ≤ 60 characters, primary term forward. */
+    title: string;
+    /** ≤ 155 characters, service and location present. */
+    description: string;
+    /** Primary keyword this page targets — one per page, no cannibalisation. */
+    keyword: string;
+    supporting: string[];
+    /** Absolute or root-relative image for og:image. */
+    image: string;
+  };
+
+  schema: {
+    /** schema.org Service `name`. */
+    name: string;
+    /** schema.org Service `serviceType`. */
+    serviceType: string;
+  };
+
+  breadcrumbs: Crumb[];
+
+  hero: {
+    eyebrow: string;
+    /** The page's only H1. Carries the primary keyword and the location. */
+    headline: string;
+    intro: string;
+    image: Photo;
+  };
+
+  services: {
+    /** Small label above the heading. Optional; nothing is shown if absent. */
+    eyebrow?: string;
+    heading: string;
+    intro?: string;
+    items: ServiceItem[];
+  };
+
+  gallery?: {
+    /** Small label above the heading. Optional; nothing is shown if absent. */
+    eyebrow?: string;
+    heading: string;
+    intro?: string;
+    photos: Photo[];
+  };
+
+  trust?: {
+    /** Small label above the heading. Optional; nothing is shown if absent. */
+    eyebrow?: string;
+    heading: string;
+    intro?: string;
+    points: TrustPoint[];
+  };
+
+  process?: {
+    /** Small label above the heading. Optional; nothing is shown if absent. */
+    eyebrow?: string;
+    heading: string;
+    intro?: string;
+    steps: ProcessStep[];
+  };
+
+  faqs: {
+    /** Small label above the heading. Optional; nothing is shown if absent. */
+    eyebrow?: string;
+    heading: string;
+    intro?: string;
+    items: Faq[];
+  };
+
+  related?: {
+    /** Small label above the heading. Optional; nothing is shown if absent. */
+    eyebrow?: string;
+    heading: string;
+    links: RelatedLink[];
+  };
+
+  cta: {
+    heading: string;
+    body: string;
+  };
+
+  /** Render order. Sections not listed are not rendered. */
+  sections: ServiceSectionKey[];
+}

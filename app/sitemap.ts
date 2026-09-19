@@ -32,6 +32,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: origin, changeFrequency: "weekly", priority: 1 },
     { url: `${origin}/contact`, changeFrequency: "monthly", priority: 0.8 },
+    {
+      url: `${origin}/services/residential`,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
     // The careers site has its own hostname and its own sitemap, so its URLs
     // are deliberately not listed here.
   ];

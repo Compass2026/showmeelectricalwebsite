@@ -8,8 +8,9 @@ codebase:
 | **Careers site** | `/careers`, `/careers/jobs/[slug]`, `/api/apply` | **LIVE** at `careers.showmeelectrical.com` |
 | **Main site** | `/`, `/contact` | **Prototype** — homepage under review |
 
-This repo is also the first draft of the reusable **Compass Marketing website
-template**. See "Reusing this for another client" below.
+This repo is also the first implementation of the reusable **Compass
+Marketing website system**. See "Reusing this for another client" below and
+`docs/template-roadmap.md` for what is reusable today and what is not yet.
 
 ---
 
@@ -114,17 +115,29 @@ config/
   theme.config.ts    Motion settings + the brand reconciliation record
 content/
   home.ts            Homepage copy, with provenance notes per block
+  shared.ts          Trust points + process steps used by home and service pages
+  services/
+    types.ts         ServicePageContent — the data model every service page is
+    residential.ts   The residential hub, as data
 components/
   motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
   site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice
 content/
   reviewer-notes.ts  Provisional-content notes shown only in the preview banner
+  decor/             Decoration registry (HeroBackdrop, storyRailPath) + the
+                     client's motif (CircuitBackground) — selected by theme config
   home/              Hero, TrustBar, ServicePathways, AboutSection, Testimonials
+  services/          ServicePage renderer + its sections: ServiceHero, ServiceList,
+                     PhotoGallery, ProcessSteps, Faq, RelatedLinks, ClosingCta,
+                     Breadcrumbs
   (root)             Careers components — Header, Footer, JobCard, ApplicationForm
 lib/
   seo.ts             Structured data helpers
   jobs.ts            Careers role data
 docs/
+  page-plan.md             Proposed site structure, URL map and redirects
+  template-roadmap.md      What is reusable, what is client-specific, what a new
+                           client changes, what remains before the Compass starter
   migration-inventory.md   WordPress → Next.js page-by-page plan
   open-questions.md        Conflicts and decisions still needed from Tom
   decisions.md             Owner-confirmed decisions that override assumptions
@@ -139,10 +152,22 @@ docs/
   exception is `motionColors` in `config/theme.config.ts`: GSAP tweens colour
   properties directly and cannot resolve a Tailwind class, so the handful of
   literals it needs live there, mirrored from the same tokens.
-- **Motion settings** live in `config/theme.config.ts`.
+- **Motion settings** live in `config/theme.config.ts`, and so does the
+  `decoration` choice: the circuit motif behind heroes and on the scroll-story
+  rail is one entry in `components/decor/`, selected by config. Another client
+  sets `"none"`/`"line"` or adds their own entry; no component changes.
+- **Verified facts are never component defaults.** `TrustBar` takes `points`;
+  `ServicePage` takes content; nothing in `components/` carries a claim.
 - **Careers constants** (`lib/jobs.ts`) re-export from `site.config.ts` rather
   than keeping a second copy of the phone, email, address and domains.
 - **Components** read from those and hard-code nothing client-specific.
+- **Service pages are data.** `content/services/<slug>.ts` is a
+  `ServicePageContent` object — copy, photos, FAQs, and a `sections` array
+  giving the render order. `components/services/ServicePage.tsx` renders
+  whatever it is given and emits Service, FAQPage, BreadcrumbList and
+  LocalBusiness JSON-LD from the same objects, so a new service page is a new
+  content file plus a three-line route. No section component knows which
+  service it is showing.
 
 ---
 

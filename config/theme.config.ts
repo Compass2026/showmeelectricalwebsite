@@ -83,3 +83,21 @@ export const motion = {
 } as const;
 
 export type MotionConfig = typeof motion;
+
+/**
+ * Industry decoration — one visual treatment, chosen per client.
+ *
+ * The circuit motif (hero backdrop traces, the jogged "circuit" rail in the
+ * scroll story) is Show Me Electrical's. The components that draw it take
+ * their treatment from here via `components/decor`, so a plumber, roofer or
+ * law firm keeps the same hero, scroll story and process strip with a
+ * different or no motif — without touching the components.
+ */
+export const decoration = {
+  /** Backdrop behind hero sections: "circuit" | "none". */
+  heroBackdrop: "circuit",
+  /** Connector between scroll-story stages: "circuit" (jogged trace) | "line". */
+  storyRail: "circuit",
+} as const;
+
+export type Decoration = typeof decoration;

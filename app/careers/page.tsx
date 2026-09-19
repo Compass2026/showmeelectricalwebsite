@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CircuitBackground from "@/components/CircuitBackground";
+import CircuitBackground from "@/components/decor/CircuitBackground";
 import CareerTimeline from "@/components/CareerTimeline";
 import JobCard from "@/components/JobCard";
 import ApplicationForm from "@/components/ApplicationForm";

@@ -31,13 +31,13 @@ export default function SiteHeader() {
           <div className="flex items-center gap-4 sm:gap-6">
             <a
               href={site.phoneHref}
-              className="font-medium hover:text-lime-400"
+              className="-my-1.5 inline-block py-1.5 font-medium hover:text-lime-400"
             >
               {site.phone}
             </a>
             <a
               href={`mailto:${site.email}`}
-              className="hidden font-medium hover:text-lime-400 sm:inline"
+              className="-my-1.5 hidden py-1.5 font-medium hover:text-lime-400 sm:inline-block"
             >
               {site.email}
             </a>
@@ -57,7 +57,7 @@ export default function SiteHeader() {
               <Link
                 key={item.label}
                 href={item.href}
-                className="text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-lime-400"
+                className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-lime-400"
               >
                 {item.label}
               </Link>

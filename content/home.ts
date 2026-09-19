@@ -21,6 +21,7 @@
  */
 
 import type { StoryStage } from "@/components/motion/ScrollStory";
+import { processSteps } from "./shared";
 
 export const hero = {
   eyebrow: "Residential · Commercial · Industrial",
@@ -40,31 +41,18 @@ export const hero = {
   },
 };
 
-/**
- * Source: live /about/ page and live FAQ. No numbers invented.
- * The Master Electrician credential is owner-confirmed — see decisions D-002.
- */
-export const trustPoints = [
-  {
-    label: "Master Electrician",
-    detail: "Owner-led by Dan — on the job himself, not behind a sales desk.",
-  },
-  {
-    label: "20+ years",
-    detail: "Across residential, commercial and industrial systems.",
-  },
-  {
-    label: "Licensed, insured & bonded",
-    detail: "Backed by proper certifications and liability coverage.",
-  },
-  {
-    label: "Free consultations",
-    detail: "We review the work and answer questions — no strings attached.",
-  },
-];
+/** Trust points are shared with the service pages — see content/shared.ts. */
+export { trustPoints } from "./shared";
 
 /** Source: live homepage service cards, lightly tightened. */
-export const servicePathways = [
+export const servicePathways: {
+  slug: string;
+  title: string;
+  summary: string;
+  examples: string[];
+  image: { src: string; alt: string };
+  href?: string;
+}[] = [
   {
     slug: "residential",
     title: "Residential",
@@ -80,6 +68,7 @@ export const servicePathways = [
       src: "/photos/finished-interior-lighting.webp",
       alt: "Finished interior with recessed ceiling lighting installed",
     },
+    /** Built — see content/services/residential.ts. */
     href: "/services/residential",
   },
   {
@@ -97,7 +86,7 @@ export const servicePathways = [
       src: "/photos/commercial-checkout.webp",
       alt: "Newly built retail checkout counter with electrical service installed",
     },
-    href: "/services/commercial",
+    /** No page yet — the card is not a link until /services/commercial exists. */
   },
   {
     slug: "industrial",
@@ -114,7 +103,7 @@ export const servicePathways = [
       src: "/photos/industrial-high-bay.webp",
       alt: "High-bay lighting installation in an industrial warehouse, viewed from a lift",
     },
-    href: "/services/industrial",
+    /** No page yet — the card is not a link until /services/industrial exists. */
   },
 ];
 
@@ -137,35 +126,23 @@ export const emergencyCallout = {
  * the live homepage ("Request a Quote", "Concepts & planning",
  * "Install & Execution"), with the third extended to completed work.
  */
-export const storyStages: StoryStage[] = [
-  {
-    step: "01",
-    title: "Plan",
-    body: "Start with a free consultation. We review the project, answer your questions and map the electrical work against your space, its use and what you will need from it later — no strings attached.",
-    image: {
+export const storyStages: StoryStage[] = processSteps.map((step, i) => ({
+  ...step,
+  image: [
+    {
       src: "/photos/roughin-wall.webp",
-      alt: "Conduit and boxes laid out in a framed wall before drywall",
+      alt: "Electrical boxes set in metal-stud framing beneath a suspended ceiling grid, before drywall",
     },
-  },
-  {
-    step: "02",
-    title: "Install",
-    body: "Our electricians deliver clean, efficient installs — conduit run straight, boxes set true, everything on time and up to code. Rough-in is where quality is decided, long before anything is covered up.",
-    image: {
+    {
       src: "/photos/roughin-attic.webp",
-      alt: "Wiring and fixture boxes installed through open roof framing",
+      alt: "Recessed light housings and wiring roughed in across a vaulted ceiling in new framing",
     },
-  },
-  {
-    step: "03",
-    title: "Power on",
-    body: "Final connections, testing and inspection. The work gets closed up and handed over finished — safe, labelled and built to last, from a single fixture to a full service.",
-    image: {
+    {
       src: "/photos/finished-interior-lighting.webp",
-      alt: "Completed interior with recessed lighting powered on",
+      alt: "Finished interior with recessed lighting powered on and a tray ceiling",
     },
-  },
-];
+  ][i],
+}));
 
 /**
  * Source: live /about/ page, condensed. The Master Electrician credential is

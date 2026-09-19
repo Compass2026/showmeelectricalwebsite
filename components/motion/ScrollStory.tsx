@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { gsap } from "./gsap";
 import { useResponsiveGSAP } from "./useResponsiveGSAP";
 import { motionColors } from "@/config/theme.config";
+import { storyRailPath } from "@/components/decor";
 
 export interface StoryStage {
   /** Short label shown in the node, e.g. "01". */
@@ -15,13 +16,16 @@ export interface StoryStage {
 }
 
 /**
- * Signature "Powering your project" scroll story.
+ * Signature scroll story: staged copy and photography on a central rail whose
+ * connector is drawn in by scroll. The rail's shape (a jogged circuit trace
+ * for Show Me Electrical, a plain line for another client) comes from the
+ * decoration registry — the behaviour here is industry-agnostic.
  *
- * Desktop: three rows on a central circuit rail. Copy sits on one side of the
+ * Desktop: three rows on a central rail. Copy sits on one side of the
  * rail and the photograph on the other, alternating row by row, so each stage
  * is a balanced pair rather than a stack. As the visitor scrolls, the dim base
- * line between nodes is overdrawn in lime — the circuit energising — and each
- * node lights as its stage arrives.
+ * line between nodes is overdrawn in the accent colour and each node lights
+ * as its stage arrives.
  *
  * Mobile: a plain left-rail timeline — node, title, copy, photo — read top to
  * bottom. The circuit renders fully drawn and static.
@@ -34,6 +38,7 @@ export interface StoryStage {
  */
 export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
   const scope = useRef<HTMLOListElement>(null);
+  const rail = storyRailPath();
 
   useResponsiveGSAP(scope, ({ isMobile }) => {
     if (isMobile) return;
@@ -113,7 +118,7 @@ export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
                 >
                   {/* Dim base trace — always present */}
                   <path
-                    d="M20 0 V60 L34 80 V120 L20 140 V200"
+                    d={rail}
                     stroke="currentColor"
                     className="text-white/15"
                     strokeWidth="2"
@@ -122,7 +127,7 @@ export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
                   {/* Energised overlay — full length by default, drawn by scroll */}
                   <path
                     data-circuit
-                    d="M20 0 V60 L34 80 V120 L20 140 V200"
+                    d={rail}
                     stroke="var(--color-lime-500)"
                     strokeWidth="2"
                     strokeLinecap="round"

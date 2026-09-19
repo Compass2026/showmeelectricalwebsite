@@ -34,6 +34,12 @@ interface RevealProps {
  * Responsive behaviour is delegated to `useResponsiveGSAP`, so crossing the
  * mobile breakpoint or toggling reduced motion re-runs this setup and reverts
  * the previous one.
+ *
+ * RULE: the animated element (this container, or each direct child when
+ * `stagger` is set) must not carry a CSS `transition` on opacity or
+ * transform. A CSS transition on a GSAP-tweened property fights the tween and
+ * can leave the element stuck at its start state. Put hover transitions on an
+ * inner element instead.
  */
 export default function Reveal({
   children,

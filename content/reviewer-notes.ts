@@ -9,7 +9,7 @@
 export const reviewerNotes: { where: string; note: string }[] = [
   {
     where: "Services",
-    note: "The three pathway cards are not links yet. Residential, commercial and industrial service pages are the next milestone.",
+    note: "The Residential card links to the completed /services/residential page. Commercial and industrial cards are not links yet — those hubs are next. The 13 residential service names on that page are not links either, until their individual pages exist.",
   },
   {
     where: "Emergency repairs",

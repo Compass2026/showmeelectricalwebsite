@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CircuitBackground from "@/components/CircuitBackground";
+import { HeroBackdrop } from "@/components/decor";
 import StaggerText from "@/components/motion/StaggerText";
 import Reveal from "@/components/motion/Reveal";
 import Parallax from "@/components/motion/Parallax";
@@ -20,7 +20,7 @@ import { hero } from "@/content/home";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-navy-950">
-      <CircuitBackground />
+      <HeroBackdrop />
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-950/40 to-navy-950"

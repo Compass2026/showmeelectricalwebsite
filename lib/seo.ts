@@ -1,4 +1,5 @@
 import { site } from "@/config/site.config";
+import type { Crumb, Faq, ServicePageContent } from "@/content/services/types";
 
 /**
  * Structured data helpers — client-agnostic.
@@ -75,5 +76,77 @@ export function websiteJsonLd(baseUrl: string = site.productionUrl) {
     url: baseUrl,
     name: site.name,
     publisher: { "@id": `${baseUrl}/#business` },
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * Service pages
+ * ------------------------------------------------------------------ */
+
+/**
+ * schema.org Service for a service page. `provider` references the business
+ * node by @id, so the page must also emit `localBusinessJsonLd()` in the same
+ * graph for that reference to resolve in a validator.
+ */
+export function serviceJsonLd(
+  content: ServicePageContent,
+  baseUrl: string = site.productionUrl
+) {
+  const url = `${baseUrl}${content.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name: content.schema.name,
+    serviceType: content.schema.serviceType,
+    description: content.seo.description,
+    url,
+    provider: { "@id": `${baseUrl}/#business` },
+    areaServed: site.counties.map((name) => ({
+      "@type": "AdministrativeArea",
+      name,
+    })),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: content.services.heading,
+      itemListElement: content.services.items.map((item) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: item.name },
+      })),
+    },
+  };
+}
+
+/**
+ * FAQPage. The question and answer strings are the same objects the page
+ * renders, so the schema matches the visible text exactly (SOP §6.6).
+ */
+export function faqPageJsonLd(faqs: Faq[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+}
+
+/** BreadcrumbList from the same crumbs the visible breadcrumb renders. */
+export function breadcrumbJsonLd(
+  crumbs: Crumb[],
+  currentPath: string,
+  baseUrl: string = site.productionUrl
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.label,
+      item: `${baseUrl}${c.href ?? currentPath}`,
+    })),
   };
 }
