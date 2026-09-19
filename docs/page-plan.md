@@ -4,9 +4,10 @@
 *Service Taxonomy, Keyword Map & Tracked List v1.1* (approved 2026-09-02) ·
 *Compass Master SEO Audit Checklist v1.0* · *Compass SOP SEO-AEO-GEO v3.1*.
 
-**Status:** proposed. One service page is built (marked ✅). Everything else
-is planned and not yet routed — nothing in this document is a promise that a
-URL resolves today.
+**Status:** proposed. The three service hubs are built (marked ✅), plus the
+homepage and contact page. Everything else is planned and not yet routed —
+nothing in this document is a promise that a URL resolves today. §8 splits
+the plan into launch essentials and later SEO expansion.
 
 ---
 
@@ -58,9 +59,9 @@ same call returned the map's 260/mo, confirming the location).
 
 | Pathway | Primary keyword | Vol/mo | Existing URL | Proposed URL | Status |
 |---|---|---|---|---|---|
-| Residential | residential electrician st louis | 20 (measured) | — *(none; homepage card only)* | `/services/residential` | ✅ **Built this milestone** |
-| Commercial | commercial electrician st louis (#14, hub) | 10 | — | `/services/commercial` | Planned |
-| Industrial | industrial electrician st louis (#20, hub) | 10 | — | `/services/industrial` | Planned |
+| Residential | residential electrician st louis | 20 (measured) | — *(none; homepage card only)* | `/services/residential` | ✅ Built |
+| Commercial | commercial electrician st louis (#14, hub) | 10 | — | `/services/commercial` | ✅ Built — process before photos |
+| Industrial | industrial electrician st louis (#20, hub) | 10 | — | `/services/industrial` | ✅ Built — credentials first, no gallery (one industrial photo exists) |
 
 ## 3. Service pages (24) — one per taxonomy entry
 
@@ -189,13 +190,43 @@ above behaves consistently.
 - **No `/about` yet** — its content is on the homepage; the standalone page
   is a routing change, not a content change, and follows the service pages.
 
-## 8. Build order proposed
+## 8. Scope: launch essentials vs. later SEO expansion
 
-1. ✅ Residential hub (this milestone) — proves the reusable structure.
-2. Commercial + industrial hubs — same components, different section order
-   and emphasis.
-3. The six highest-value service pages: emergency (#2), panel upgrades (#3),
-   ceiling fans (#9), EV chargers (#12), rewiring (#5), generators (#13).
-4. Services hub `/services`, then the remaining 15 service pages.
-5. Service-area hub + 8 Tier-1 cities, then 12 Tier-2.
-6. About, blog, legal, redirects, launch prep.
+Completing every page in this plan is **not** a prerequisite for launching
+the site or for extracting the Compass starter. The plan splits in two.
+
+### Launch essentials — what the rebuilt site needs to replace WordPress
+
+| Page | Status |
+|---|---|
+| Home | ✅ built |
+| `/services/residential` hub | ✅ built |
+| `/services/commercial` hub | ✅ built |
+| `/services/industrial` hub | ✅ built |
+| `/contact` | ✅ built (enquiry form pending backend) |
+| `/about` | planned — content exists on the homepage; standalone route only |
+| `/service-area` hub | planned — counties + Tier-1/2 city list, no city pages yet |
+| `/privacy-policy`, `/terms-of-service` | planned — copy carries over |
+| `/blog` + the 3 existing posts | planned — retained, redirected |
+| Launch redirects (§6) | planned — data-driven in `next.config.ts` |
+| Enquiry form backend | planned — Resend, mirroring `/api/apply` |
+
+That set reproduces everything the live WordPress site has, better, with
+nothing lost. It is the gate for DNS.
+
+### Later SEO expansion — built on demand, measured page by page
+
+| Set | Count | Trigger to build |
+|---|---|---|
+| Individual residential service pages | 13 | Highest-value first: emergency (#2), panel upgrades (#3), ceiling fans (#9), EV chargers (#12), rewiring (#5), generators (#13). The rest as Search Console shows impressions for the hub. |
+| Individual commercial service pages | 5 | Footprint pages (map §"Maintenance caveat"); build when sales needs something to point a facility manager at. |
+| Individual industrial service pages | 4 | Same. |
+| Tier-1 city pages | 8 | After the service-area hub, one at a time, each with genuinely local content. |
+| Tier-2 city pages | 12 | Only once Tier-1 pages show impressions. |
+| New blog posts | 6 | One per month, per the map's topic list. |
+
+The three hubs already carry Service schema with an offer catalog naming
+every child service, so the taxonomy is machine-readable today even though
+the child pages are not built. `content/services/index.ts` lists only
+implemented pages; the sitemap reads from it, so nothing planned is ever
+advertised before it exists.

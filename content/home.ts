@@ -37,7 +37,8 @@ export const hero = {
   body: "Owner-led electrical contractor for residential, commercial and industrial work across the Greater St. Louis area. Free consultations, straight answers, code-compliant work.",
   image: {
     src: "/photos/commercial-panels.webp",
-    alt: "Electrical panels installed on a brick wall at a commercial job site",
+    /** Corrected 2026-09-19: these are wall-mounted stainless units, not panels. */
+    alt: "Four wall-mounted stainless-steel units with flue pipes on a white brick wall in a commercial space, each wired through conduit to a junction box",
   },
 };
 
@@ -86,7 +87,8 @@ export const servicePathways: {
       src: "/photos/commercial-checkout.webp",
       alt: "Newly built retail checkout counter with electrical service installed",
     },
-    /** No page yet — the card is not a link until /services/commercial exists. */
+    /** Built — see content/services/commercial.ts. */
+    href: "/services/commercial",
   },
   {
     slug: "industrial",
@@ -103,7 +105,8 @@ export const servicePathways: {
       src: "/photos/industrial-high-bay.webp",
       alt: "High-bay lighting installation in an industrial warehouse, viewed from a lift",
     },
-    /** No page yet — the card is not a link until /services/industrial exists. */
+    /** Built — see content/services/industrial.ts. */
+    href: "/services/industrial",
   },
 ];
 

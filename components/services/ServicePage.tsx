@@ -29,19 +29,28 @@ import type {
  * pages all use this one component with different emphasis.
  *
  * Structured data emitted in the initial HTML: LocalBusiness (so the
- * Service's `provider` @id resolves on this page), Service, FAQPage and
- * BreadcrumbList — all from the same objects the visible sections render.
+ * Service's `provider` @id resolves on this page), Service, BreadcrumbList,
+ * and FAQPage only when an FAQ section with questions is rendered — all from
+ * the same objects the visible sections render.
  */
 export default function ServicePage({
   content,
 }: {
   content: ServicePageContent;
 }) {
+  // FAQPage is emitted only when the FAQ section is actually rendered on
+  // this page (listed in `sections`) AND has questions — and it is built from
+  // the very same items the <Faq> renders, so schema text equals visible text.
+  const faqs =
+    content.sections.includes("faqs") && content.faqs?.items.length
+      ? content.faqs
+      : undefined;
+
   const jsonLd = [
     localBusinessJsonLd(),
     serviceJsonLd(content),
     breadcrumbJsonLd(content.breadcrumbs, content.path),
-    ...(content.faqs.items.length ? [faqPageJsonLd(content.faqs.items)] : []),
+    ...(faqs ? [faqPageJsonLd(faqs.items)] : []),
   ];
 
   const render = (key: ServiceSectionKey) => {
@@ -113,19 +122,19 @@ export default function ServicePage({
         ) : null;
 
       case "faqs":
-        return (
+        return faqs ? (
           <Section
             key={key}
             id="faqs"
             tone="light"
-            eyebrow={content.faqs.eyebrow}
+            eyebrow={faqs.eyebrow}
             headingId="faqs-heading"
-            heading={content.faqs.heading}
-            intro={content.faqs.intro}
+            heading={faqs.heading}
+            intro={faqs.intro}
           >
-            <Faq items={content.faqs.items} />
+            <Faq items={faqs.items} />
           </Section>
-        );
+        ) : null;
 
       case "related":
         return content.related ? (

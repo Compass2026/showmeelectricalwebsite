@@ -6,7 +6,7 @@ codebase:
 | Property | Routes | Status |
 |---|---|---|
 | **Careers site** | `/careers`, `/careers/jobs/[slug]`, `/api/apply` | **LIVE** at `careers.showmeelectrical.com` |
-| **Main site** | `/`, `/contact` | **Prototype** — homepage under review |
+| **Main site** | `/`, `/contact`, `/services/{residential,commercial,industrial}` | **Prototype** — under review |
 
 This repo is also the first implementation of the reusable **Compass
 Marketing website system**. See "Reusing this for another client" below and
@@ -118,7 +118,10 @@ content/
   shared.ts          Trust points + process steps used by home and service pages
   services/
     types.ts         ServicePageContent — the data model every service page is
+    index.ts         Registry of IMPLEMENTED service pages; the sitemap reads it
     residential.ts   The residential hub, as data
+    commercial.ts    The commercial hub — process before photos
+    industrial.ts    The industrial hub — credentials first, no gallery
 components/
   motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
   site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice
@@ -166,8 +169,9 @@ docs/
   giving the render order. `components/services/ServicePage.tsx` renders
   whatever it is given and emits Service, FAQPage, BreadcrumbList and
   LocalBusiness JSON-LD from the same objects, so a new service page is a new
-  content file plus a three-line route. No section component knows which
-  service it is showing.
+  content file, a three-line route and a registry entry. No section component
+  knows which service it is showing. FAQPage schema is emitted only when an
+  FAQ section with questions is actually rendered.
 
 ---
 

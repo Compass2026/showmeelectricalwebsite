@@ -11,6 +11,13 @@
  * Sourcing rule (same as everywhere): every string traces to the client's
  * own published material, the approved taxonomy, or an owner-confirmed
  * decision. Never invent credentials, statistics, guarantees or hours.
+ *
+ * Length is a page choice, not a template rule. A page may list four
+ * services or thirteen, ask three questions or none, and omit any optional
+ * section. `ServicePage` renders only the sections listed in `sections`
+ * whose content is present, and emits FAQPage schema only when the FAQ
+ * section is both rendered and non-empty — so a short page has no empty
+ * areas and no schema describing content it does not show.
  */
 
 export type ServiceSectionKey =
@@ -136,7 +143,7 @@ export interface ServicePageContent {
     steps: ProcessStep[];
   };
 
-  faqs: {
+  faqs?: {
     /** Small label above the heading. Optional; nothing is shown if absent. */
     eyebrow?: string;
     heading: string;

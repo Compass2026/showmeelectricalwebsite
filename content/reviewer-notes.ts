@@ -9,7 +9,11 @@
 export const reviewerNotes: { where: string; note: string }[] = [
   {
     where: "Services",
-    note: "The Residential card links to the completed /services/residential page. Commercial and industrial cards are not links yet — those hubs are next. The 13 residential service names on that page are not links either, until their individual pages exist.",
+    note: "All three homepage cards link to their hub pages: /services/residential, /services/commercial and /services/industrial. The individual service names on those pages are not links until their own pages exist (later SEO expansion, see docs/page-plan.md).",
+  },
+  {
+    where: "Industrial photography",
+    note: "The client's library holds one authentic industrial image (the high-bay warehouse), used as the hero. The industrial page has no photo gallery until more industrial job photos are supplied.",
   },
   {
     where: "Emergency repairs",
