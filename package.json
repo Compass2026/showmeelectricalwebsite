@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "qa:manifest": "tsx scripts/qa/route-manifest.ts",
+    "qa:crawl": "node scripts/qa/crawl.mjs",
+    "qa": "npm run qa:manifest && npm run qa:crawl -- http://localhost:3000"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -22,6 +25,7 @@
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "tailwindcss": "^4.1.11",
+    "tsx": "^4.23.13",
     "typescript": "^5.7.0"
   }
 }

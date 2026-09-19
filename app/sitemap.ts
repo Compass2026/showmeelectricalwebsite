@@ -1,20 +1,20 @@
 import type { MetadataRoute } from "next";
 import { jobs } from "@/lib/jobs";
 import { resolveProperty } from "@/lib/host";
-import { servicePages } from "@/content/services";
-import { articles, blog } from "@/content/blog";
-import { legalDocuments } from "@/content/legal";
+import { publishedRoutes } from "@/lib/routes";
 
 /**
- * Host-aware sitemap.
+ * Host-aware sitemap, generated entirely from the registry of published
+ * routes (lib/routes.ts). Nothing is listed unless it is registered and
+ * therefore built; previews, drafts and redirected URLs never appear.
  *
- * Each hostname gets only its own URLs. A single sitemap listing both
+ * `lastModified` is emitted only when a route records a significant content
+ * change (article revision, policy update) — never the build time. Google
+ * ignores priority and changefreq, so neither is emitted.
+ *
+ * Each hostname gets only its own URLs: a single sitemap spanning both
  * showmeelectrical.com and careers.showmeelectrical.com would be ignored for
- * the cross-domain entries unless the domains are cross-verified in Search
- * Console, so the two are kept separate.
- *
- * Only routes that actually exist are listed. Service and location pages from
- * the approved taxonomy are deliberately absent until those pages are built.
+ * the cross-domain entries unless both are verified together.
  */
 export const dynamic = "force-dynamic";
 
@@ -23,44 +23,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   if (property === "careers") {
     return [
-      { url: `${origin}/`, changeFrequency: "weekly", priority: 1 },
-      ...jobs.map((job) => ({
-        url: `${origin}/jobs/${job.slug}`,
-        changeFrequency: "weekly" as const,
-        priority: 0.8,
-      })),
+      { url: `${origin}/` },
+      ...jobs.map((job) => ({ url: `${origin}/jobs/${job.slug}` })),
     ];
   }
 
-  return [
-    { url: origin, changeFrequency: "weekly", priority: 1 },
-    { url: `${origin}/about`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${origin}/contact`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${origin}/services`, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${origin}/service-area`, changeFrequency: "monthly", priority: 0.7 },
-    // Service pages come from the registry of IMPLEMENTED pages, never from
-    // the page plan: a planned page is not listed until it exists.
-    ...servicePages.map((page) => ({
-      url: `${origin}${page.path}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.9,
-    })),
-    // Blog index + every registered post (content/blog/index.ts).
-    { url: `${origin}${blog.path}`, changeFrequency: "weekly", priority: 0.6 },
-    ...articles.map((post) => ({
-      url: `${origin}${post.path}`,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-      ...(post.publishedAt ? { lastModified: post.publishedAt } : {}),
-    })),
-    // Legal documents (content/legal/index.ts).
-    ...legalDocuments.map((doc) => ({
-      url: `${origin}${doc.path}`,
-      changeFrequency: "yearly" as const,
-      priority: 0.2,
-      ...(doc.lastUpdated ? { lastModified: doc.lastUpdated } : {}),
-    })),
-    // The careers site has its own hostname and its own sitemap, so its URLs
-    // are deliberately not listed here.
-  ];
+  return publishedRoutes().map((route) => ({
+    url: route.path === "/" ? origin : `${origin}${route.path}`,
+    ...(route.lastModified ? { lastModified: route.lastModified } : {}),
+  }));
 }

@@ -11,6 +11,7 @@ import Faq from "./Faq";
 import RelatedLinks from "./RelatedLinks";
 import ClosingCta from "./ClosingCta";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import {
   localBusinessJsonLd,
   serviceJsonLd,
@@ -182,27 +183,11 @@ export default function ServicePage({
 
 /** Next.js metadata for a service page, from its content. */
 export function serviceMetadata(content: ServicePageContent) {
-  const url = `${site.productionUrl}${content.path}`;
-  const image = content.seo.image.startsWith("http")
-    ? content.seo.image
-    : `${site.productionUrl}${content.seo.image}`;
-  return {
-    title: { absolute: content.seo.title },
+  return pageMetadata({
+    title: content.seo.title,
     description: content.seo.description,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "website" as const,
-      siteName: site.name,
-      title: content.seo.title,
-      description: content.seo.description,
-      url,
-      images: [{ url: image }],
-    },
-    twitter: {
-      card: "summary_large_image" as const,
-      title: content.seo.title,
-      description: content.seo.description,
-      images: [image],
-    },
-  };
+    path: content.path,
+    image: content.seo.image,
+    imageAlt: content.hero.image.alt,
+  });
 }

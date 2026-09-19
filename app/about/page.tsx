@@ -12,6 +12,7 @@ import RelatedLinks from "@/components/services/RelatedLinks";
 import Faq from "@/components/services/Faq";
 import ClosingCta from "@/components/services/ClosingCta";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import { about } from "@/content/about";
 import { trustPoints } from "@/content/shared";
 import { testimonials } from "@/content/home";
@@ -25,28 +26,14 @@ import {
 
 export const dynamic = "force-static";
 
-const url = `${site.productionUrl}${about.path}`;
-const image = `${site.productionUrl}${about.seo.image}`;
 
-export const metadata: Metadata = {
-  title: { absolute: about.seo.title },
+export const metadata: Metadata = pageMetadata({
+  title: about.seo.title,
   description: about.seo.description,
-  alternates: { canonical: url },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: about.seo.title,
-    description: about.seo.description,
-    url,
-    images: [{ url: image }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: about.seo.title,
-    description: about.seo.description,
-    images: [image],
-  },
-};
+  path: about.path,
+  image: about.seo.image,
+  imageAlt: about.hero.image.alt,
+});
 
 /**
  * /about — composed from the same sections the homepage and service pages

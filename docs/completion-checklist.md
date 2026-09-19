@@ -34,11 +34,11 @@ new blog posts. The live site has none of these today.
 | B1 | Semantic colour tokens | ⬜ | `navy-*`/`lime-*` in component classes → `surface`, `accent`, `ink`, `paper`; done once against the finished page set |
 | B2 | Remaining homepage content separation | ⬜ | `Hero` still imports `content/home.ts`; `AboutSection`, `Testimonials`, `ServicePathways`, `TrustBar` already take props |
 | B3 | Optional careers support | ⬜ | Middleware, host resolution, sitemap and config assume a careers host — make its absence a config omission (roadmap §5.3) |
-| B4 | Sitemap fully from registries | ⬜ | Services, blog and legal come from registries; the five core pages are still literals in `app/sitemap.ts` |
+| B4 | Sitemap fully from registries | ✅ | `lib/routes.ts` builds the published-route list from `content/pages.ts` + services + blog + legal; `app/sitemap.ts` emits it with truthful `lastModified` only (Batch A) |
 | B5 | Enquiry-form route in the starter | ✅ shape · ⬜ starter | `InquiryForm` + `lib/inquiry.ts` + `config/inquiry.config.ts` are already generic; the starter ships the config with empty recipients |
 | B6 | Redirects as per-client data | ✅ shape · ⬜ starter | `config/redirects.ts` is the per-client map already; the starter ships it empty |
 | B7 | Starter scaffolding | ⬜ | Empty typed `site.config.ts`, placeholder tokens, `content/` skeleton, the `docs/` templates, the §3 change list as a checklist |
-| B8 | Validation gate script | ⬜ | The curl + browser checks used here, runnable on any client build |
+| B8 | Validation gate script | 🟡 | `npm run qa:manifest` + `npm run qa:crawl` committed (route manifest, raw-HTML crawl, sitemap parity, share images, JSON-LD references, orphans). Browser/form/agent checks follow in Batch C |
 | B9 | **Check with a different brand** | ⬜ | Swap `site.config.ts`, `@theme` values, fonts, `decoration: "none"/"line"`, one service content file — and confirm nothing electrical, navy, lime or Show Me leaks through. The proof the starter is a starter. |
 
 Detail and rationale for each: `docs/template-roadmap.md` §5.

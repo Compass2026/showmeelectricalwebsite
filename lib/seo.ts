@@ -30,6 +30,8 @@ export function localBusinessJsonLd(baseUrl: string = site.productionUrl) {
     telephone: site.phone,
     email: site.email,
     description: site.businessDescription,
+    logo: `${baseUrl}${site.logoUrl}`,
+    image: `${baseUrl}${site.shareImage}`,
     address: {
       "@type": "PostalAddress",
       streetAddress: site.address.street,
@@ -240,6 +242,7 @@ export function blogPostingJsonLd(
     title: string;
     seo: { description: string };
     publishedAt?: string;
+    modifiedAt?: string;
     author?: string;
     image?: { src: string };
   },
@@ -255,10 +258,11 @@ export function blogPostingJsonLd(
     headline: article.title,
     description: article.seo.description,
     ...(article.publishedAt ? { datePublished: article.publishedAt } : {}),
+    ...(article.modifiedAt ? { dateModified: article.modifiedAt } : {}),
     ...(article.author
       ? { author: { "@type": "Person", name: article.author } }
       : {}),
-    ...(article.image ? { image: `${baseUrl}${article.image.src}` } : {}),
+    image: `${baseUrl}${article.image ? article.image.src : site.shareImage}`,
     publisher: { "@id": `${baseUrl}/#business` },
     isPartOf: { "@id": `${baseUrl}/#website` },
   };

@@ -12,6 +12,7 @@ import Faq from "@/components/services/Faq";
 import ClosingCta from "@/components/services/ClosingCta";
 import Reveal from "@/components/motion/Reveal";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import { servicesDirectory } from "@/content/services-directory";
 import { servicePages } from "@/content/services";
 import {
@@ -27,25 +28,12 @@ export const dynamic = "force-static";
 const url = `${site.productionUrl}${servicesDirectory.path}`;
 const image = `${site.productionUrl}${servicesDirectory.seo.image}`;
 
-export const metadata: Metadata = {
-  title: { absolute: servicesDirectory.seo.title },
+export const metadata: Metadata = pageMetadata({
+  title: servicesDirectory.seo.title,
   description: servicesDirectory.seo.description,
-  alternates: { canonical: url },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: servicesDirectory.seo.title,
-    description: servicesDirectory.seo.description,
-    url,
-    images: [{ url: image }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: servicesDirectory.seo.title,
-    description: servicesDirectory.seo.description,
-    images: [image],
-  },
-};
+  path: servicesDirectory.path,
+  image: servicesDirectory.seo.image,
+});
 
 /**
  * /services — the directory. The pathway cards and the full catalog are

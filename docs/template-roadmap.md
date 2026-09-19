@@ -5,9 +5,11 @@ Marketing website system. This document tracks what is already reusable, what
 is still client-specific, what a second client would have to change, and what
 stands between this repository and a neutral Compass starter.
 
-The rule that governs every decision below: **the real client site is
-completed and validated first; the starter is extracted from it afterwards.**
-Nothing here is built speculatively for hypothetical clients or frameworks.
+The rule that governs every decision below: **template work depends on
+validation against real pages, not on the client's production launch.** The
+Show Me build is the reference implementation; the starter is extracted from
+the validated code and proven with a second brand (Build Standard v1 §1, §10).
+Nothing here is built speculatively for hypothetical frameworks.
 
 ---
 
@@ -27,10 +29,13 @@ Nothing here is built speculatively for hypothetical clients or frameworks.
 | Trust strip | `components/home/TrustBar` | Takes `points` as a prop; carries no facts of its own. |
 | Inner-page hero + breadcrumbs | `components/site/PageHero`, `components/site/Breadcrumbs` | Used by every service page and About. Content and crumbs are props; backdrop from the decoration registry. |
 | Story, testimonials, values, pathways, coverage | `components/home/AboutSection`, `components/home/Testimonials`, `components/site/ValueGrid`, `components/home/ServicePathways`, `components/site/CoverageGroups` | All prop-driven; no copy or geography of their own. |
-| Long-form content | `content/blocks.ts` (`Block` union), `components/site/Blocks` | Headings, paragraphs, lists, quote, line-block. Typography only; client content never carries markup. |
+| Long-form content | `content/blocks.ts` (`Block`, `Inline`, `RichText`), `components/site/Blocks` | Headings, paragraphs, lists, quote, line-block, semantic table, sources. Typed inline links/emphasis — client content never carries markup; every href is data the QA manifest checks. |
 | Article + legal layouts | `components/site/ArticleLayout`, `components/site/LegalLayout` | Render an `Article` / `LegalDocument`. Date and byline only when present — never a placeholder. |
 | Content models + registries | `content/blog/types.ts`, `content/legal/types.ts`; `content/blog/index.ts`, `content/legal/index.ts` | Registries drive the index page, static params, the sitemap and the reviewer notice. |
-| Article / blog schema | `lib/seo.ts` — `blogPostingJsonLd`, `blogJsonLd` | `datePublished` and `author` emitted only when the content carries them. |
+| Article / blog schema | `lib/seo.ts` — `blogPostingJsonLd`, `blogJsonLd` | `datePublished`, `dateModified` and `author` emitted only when the content carries them; image falls back to the owned share asset. |
+| Page metadata | `lib/metadata.ts` — `pageMetadata`, `absoluteUrl` | Canonical, Open Graph and Twitter with the owned default share image on every route; article dates/authors when known. |
+| Published-route registry | `lib/routes.ts`, `content/pages.ts` | One list for sitemap, route manifest, link and orphan checks; truthful `lastModified` only. |
+| QA scripts | `scripts/qa/route-manifest.ts`, `scripts/qa/crawl.mjs` | Manifest + raw-HTML crawl (status, head tags, canonical, share images fetchable, internal links, JSON-LD references, sitemap parity, orphans, 404). |
 | Launch redirects as data | `config/redirects.ts` → `next.config.ts` | Per-client map; the mechanism is client-agnostic. |
 | Inquiry form | `components/site/InquiryForm`, `lib/inquiry.ts`, `app/api/inquiry/route.ts` | Labels, service groups, endpoint and fallback contacts are props; validation shared by form and route returns codes, not copy; the route reads recipients/sender from config + env. |
 | Nav items may be external | `NavItem.external`; `SiteHeader`, `SiteFooter` | Renders a plain anchor for off-site links (used for the careers host here). |
@@ -104,8 +109,11 @@ In order, with the file each step touches:
     contents are not.
 
 Nothing in `components/site/`, `components/motion/`, `components/services/`,
-`components/decor/index.tsx`, `lib/`, `middleware.ts`, `app/robots.ts` or
-`app/sitemap.ts` should need editing for step 1–11.
+`components/decor/index.tsx` or `lib/seo.ts` should need editing for steps
+1–9c. **Step 10 is the exception**: until careers is a configuration flag
+(§5.3, Batch C of the template completion), a client without careers still
+requires the coordinated edits listed there in `middleware.ts`, `lib/host.ts`,
+`app/sitemap.ts` and `app/robots.ts`. That is a known gap, not a claim.
 
 ## 4. Adopting components in an existing compatible website
 
@@ -158,10 +166,9 @@ complete and validated on real pages.
    `lib/inquiry.ts`. The careers `/api/apply` still has its own copies of the
    `readEnv`/`esc`/`row` helpers; fold them into a shared `lib/email.ts` at
    extraction (not touched now — the careers workflow is live).
-6. **Sitemap from registries throughout.** Service pages, blog posts and
-   legal documents come from their registries. The five core pages are still
-   literal entries in `app/sitemap.ts`; a core-page registry would finish
-   this.
+6. **Sitemap from registries throughout.** ✅ Done (Batch A) —
+   `content/pages.ts` registers the core pages; `lib/routes.ts` merges every
+   registry; `app/sitemap.ts` reads only that list.
 7. **Redirect config.** ✅ Done — `config/redirects.ts` is the per-client
    map, read by `next.config.ts`. The starter ships it empty.
 8. **Starter scaffolding.** Empty `site.config.ts` with every field typed and
@@ -350,3 +357,27 @@ value is a per-client tuning knob, not a fact. Policy content edits are
 client content. New docs (`launch-audit.md`, `launch-checklist.md`,
 `deployment-plan.md`, `policy-revision-proposal.md`) are engagement
 records; their structure is reusable for the starter's `docs/` templates.
+
+### Template completion — Batch A (2026-09-19)
+
+Governing documents: Compass Website Build Standard v1, Page Template
+Library v1, Show Me Audit and Template Completion Brief (Drive). Branch
+`claude/template-completion` from the reviewed commit `e2dba27`; the Show Me
+launch candidate stays on `claude/main-site-foundation-v1`.
+
+| Finding | What changed | Where |
+|---|---|---|
+| G1 typed contextual links, richer content | `Inline`/`RichText` runs (text, typed link, strong, em), `table` and `sources` blocks; `Blocks` renders links as ordinary anchors, tables with `<caption>`/`<th scope>` in a scrollable region. Three articles now link relevant built hubs, the service-area page and contact in their body; `relatedServices`/`relatedArticles` resolved from registries and rendered as labelled `<nav>` lists. | `content/blocks.ts`, `components/site/Blocks.tsx`, `content/blog/*`, `ArticleLayout`, `app/blog/[slug]` |
+| G4 complete metadata defaults | `lib/metadata.ts` (`pageMetadata`) used by every route incl. `serviceMetadata`; owned `public/share-default.png` (1200×630, generated from the client's logo, no photography) as the default card; `public/brand/logo-512.png` replaces the WordPress logo URL in `site.logoUrl`; root layout carries default OG/Twitter image; business schema emits `logo`/`image` from owned assets. | `lib/metadata.ts`, `config/site.config.ts`, `app/**/page.tsx`, `lib/seo.ts`, `lib/jobs.ts` (absolute logo) |
+| G5 truthful freshness, complete route registry | `Article.modifiedAt` (set to 2026-09-19 on the three revised posts, bylines and `publishedAt` preserved) shown as "Updated", emitted as `dateModified`, used as sitemap lastmod; `content/pages.ts` + `lib/routes.ts`; sitemap without priority/changefreq; unknown dates omitted. | `content/blog/types.ts`, `lib/routes.ts`, `app/sitemap.ts` |
+| G6 documentation/copy | Residential "25 to 30 years old" generalised; page plan: contact form status, FAQ-count rule, `/st-louis` final; roadmap: careers contradiction resolved (step 10 is the documented exception until Batch C), "only file" claim corrected, validation-not-launch rule. | `content/services/residential.ts`, `docs/page-plan.md`, this file, `config/site.config.ts` |
+| G8 (started) | `npm run qa:manifest`, `npm run qa:crawl` committed; `docs/route-manifest.md` generated. | `scripts/qa/*`, `package.json` |
+| G9 (semantic part) | Article relationships are real anchors under labelled headings; dates are `<time>` elements; tables are semantic. Unknown facts remain omitted (no invented dates). | as above |
+
+New dependency: `tsx` (dev only) to run TypeScript QA scripts against the
+registries. No runtime dependency added.
+
+**Not in this batch:** the semantic-table block has no client article that
+needs one; its rendering is proven in the Batch C second-brand fixture. City,
+branch and individual-service templates (G2) are Batch B; neutral branding,
+optional careers, starter and agent trials (G3, G8 remainder, G9) are Batch C.

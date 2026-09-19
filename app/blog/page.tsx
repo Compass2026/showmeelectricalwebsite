@@ -8,6 +8,7 @@ import Section from "@/components/site/Section";
 import Reveal from "@/components/motion/Reveal";
 import ClosingCta from "@/components/services/ClosingCta";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import { articles, blog } from "@/content/blog";
 import {
   localBusinessJsonLd,
@@ -18,28 +19,14 @@ import {
 
 export const dynamic = "force-static";
 
-const url = `${site.productionUrl}${blog.path}`;
-const image = `${site.productionUrl}${blog.seo.image}`;
 
-export const metadata: Metadata = {
-  title: { absolute: blog.seo.title },
+export const metadata: Metadata = pageMetadata({
+  title: blog.seo.title,
   description: blog.seo.description,
-  alternates: { canonical: url },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: blog.seo.title,
-    description: blog.seo.description,
-    url,
-    images: [{ url: image }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: blog.seo.title,
-    description: blog.seo.description,
-    images: [image],
-  },
-};
+  path: blog.path,
+  image: blog.seo.image,
+  imageAlt: blog.hero.image.alt,
+});
 
 function formatDate(iso: string) {
   return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", {

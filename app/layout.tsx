@@ -38,6 +38,12 @@ export const metadata: Metadata = {
   },
   description:
     "Owner-led electrical contractor serving the Greater St. Louis area with residential, commercial and industrial electrical work.",
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    images: [{ url: site.shareImage, width: 1200, height: 630, alt: site.name }],
+  },
+  twitter: { card: "summary_large_image", images: [site.shareImage] },
   robots: allowIndexing
     ? { index: true, follow: true }
     : { index: false, follow: false, nocache: true },

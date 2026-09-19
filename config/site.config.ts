@@ -1,5 +1,8 @@
 /**
- * CLIENT CONTENT — the only file a new Compass client build must rewrite.
+ * CLIENT CONTENT — the client identity record. A new Compass client build
+ * rewrites this file first; the other client-owned inputs are listed in
+ * docs/template-roadmap.md §3 (theme values, fonts, content/, photos,
+ * redirects, delivery config).
  *
  * Everything here is business identity: who the client is, how to reach them,
  * where they work, and what the site links to. No design values, no copy that
@@ -121,9 +124,15 @@ export const site = {
     "Industrial electrical services",
     "Emergency electrical repairs",
   ],
-  /** Logo used for structured data and social cards. */
-  logoUrl:
-    "https://showmeelectrical.com/wp-content/uploads/2024/08/Show-me-electric-white-logo-4.png",
+  /**
+   * Owned brand assets, served by this site (never a retired WordPress
+   * upload). `shareImage` is the default Open Graph / Twitter card for every
+   * page without a bespoke image (1200×630, generated from the client's logo
+   * on the brand surface — no photography, no claims). `logoUrl` is the
+   * 512×512 tile referenced by structured data.
+   */
+  shareImage: "/share-default.png",
+  logoUrl: "/brand/logo-512.png",
 
   /* ---------------- Calls to action ---------------- */
   primaryCta: { label: "Get a free quote", href: "/contact" },

@@ -23,6 +23,10 @@ export const post: Article = {
   },
   publishedAt: "2026-01-22",
   author: "Tom Dombrowski",
+  /** Substantive owner-approved edits applied 2026-09-19 (docs/launch-review.md). */
+  modifiedAt: "2026-09-19",
+  relatedServices: ["/services/residential"],
+  relatedArticles: ["the-most-common-electrical-hazards-found-in-missouri-homes", "top-5-signs-your-home-needs-electrical-rewiring"],
   excerpt: "Electrical issues don’t always show up as a major outage or a burnt wire. In many Missouri homes, problems start small and grow into real hazards before anyone realizes the danger. Here are the red flags that mean it’s time to call a licensed electrician.",
   body: [
     { type: "p", text: "Electrical issues don’t always show up as a major outage or a burnt wire. In many Missouri homes, problems start small and grow into real hazards before anyone realizes the danger. Knowing the early warning signs can protect your family, your home, and your investment. Here are the most common red flags that mean it’s time to call a licensed electrician right away." },
@@ -37,7 +41,7 @@ export const post: Article = {
     { type: "h2", text: "Buzzing, Crackling, or Popping Sounds" },
     { type: "p", text: "Electricity should always run silently. Any noise coming from a switch, panel, light, or outlet is a warning something is arcing or failing. These sounds can indicate loose wiring, faulty breakers, or improper grounding. Noises like these should never be ignored." },
     { type: "h2", text: "Your Home Still Has Two-Prong Outlets or Aluminum Wiring" },
-    { type: "p", text: "Older wiring systems can fail without warning and may not meet current safety standards. Two-prong outlets lack grounding protection, and aluminum wiring is known to loosen over time and increase fire risk. If your home has either, an electrician should inspect the system and recommend the safest upgrades." },
+    { type: "p", text: ["Older wiring systems can fail without warning and may not meet current safety standards. Two-prong outlets lack grounding protection, and aluminum wiring is known to loosen over time and increase fire risk. If your home has either, an electrician should inspect the system and recommend the safest upgrades.", " See the signs your home may need ", { type: "link", text: "rewiring", href: "/blog/top-5-signs-your-home-needs-electrical-rewiring" }, "."] },
     { type: "h2", text: "You Experience Shocks or Tingling When Touching Appliances" },
     { type: "p", text: "A small zap or vibration when touching a plugged-in appliance is not normal. This usually means there’s a grounding problem or stray current flowing through the appliance or outlet. This can become extremely dangerous if left unresolved." },
     { type: "h2", text: "GFCI Outlets Keep Tripping" },
@@ -45,8 +49,8 @@ export const post: Article = {
     { type: "h2", text: "Why Acting Quickly Matters" },
     { type: "p", text: "Electrical issues rarely fix themselves. What starts as a small warning can grow into a major safety hazard. Calling a licensed electrician protects your home from fire risks, prevents expensive damage, and keeps your family safe." },
     { type: "h2", text: "Need Help? Contact Show Me Electrical" },
-    { type: "p", text: "When something feels off with your electrical system, don’t wait. The team at Show Me Electrical is licensed, bonded, insured, and ready to help homeowners across the Greater St. Louis area with safe and reliable electrical repair." },
-    { type: "p", text: "Call now or send us the details online to get trusted electrical help for your home." },
+    { type: "p", text: ["When something feels off with your electrical system, don’t wait. The team at Show Me Electrical is licensed, bonded, insured, and ready to help homeowners across the ", { type: "link", text: "Greater St. Louis area", href: "/service-area" }, " with safe and reliable ", { type: "link", text: "electrical repair", href: "/services/residential#services" }, "."] },
+    { type: "p", text: ["Call now or ", { type: "link", text: "send us the details online", href: "/contact" }, " to get trusted electrical help for your home."] },
   ],
   flags: [],
 };

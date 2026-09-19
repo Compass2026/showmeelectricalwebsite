@@ -45,6 +45,13 @@ export const blog = {
     { label: "Home", href: "/" },
     { label: "Blog", href: "/blog" },
   ] as Crumb[],
+  /** Labels the article layout renders around an article; no client facts. */
+  labels: {
+    published: "Published",
+    updated: "Updated",
+    relatedServices: "Related services",
+    relatedArticles: "Keep reading",
+  },
   cta: {
     heading: "Seeing one of these signs at home?",
     body: "Call us to talk it through, or send the details and we'll get you on the schedule. Free consultations, straight answers.",

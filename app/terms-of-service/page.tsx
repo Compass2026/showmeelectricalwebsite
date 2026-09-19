@@ -4,6 +4,7 @@ import SiteFooter from "@/components/site/SiteFooter";
 import PreviewNotice from "@/components/site/PreviewNotice";
 import LegalLayout from "@/components/site/LegalLayout";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import { doc } from "@/content/legal/terms-of-service";
 import { legal } from "@/content/legal";
 import {
@@ -15,22 +16,13 @@ import {
 
 export const dynamic = "force-static";
 
-const url = `${site.productionUrl}${doc.path}`;
 const title = `${doc.title} | ${site.name}`;
 
-export const metadata: Metadata = {
-  title: { absolute: title },
+export const metadata: Metadata = pageMetadata({
+  title,
   description: doc.seo.description,
-  alternates: { canonical: url },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title,
-    description: doc.seo.description,
-    url,
-  },
-  twitter: { card: "summary", title, description: doc.seo.description },
-};
+  path: doc.path,
+});
 
 /** Legal document as data (content/legal/terms-of-service.ts) in the shared LegalLayout. */
 export default function LegalPage() {

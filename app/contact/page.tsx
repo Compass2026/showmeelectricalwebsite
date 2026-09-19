@@ -5,6 +5,7 @@ import PreviewNotice from "@/components/site/PreviewNotice";
 import Reveal from "@/components/motion/Reveal";
 import InquiryForm from "@/components/site/InquiryForm";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import { contact } from "@/content/contact";
 import { inquiryServiceGroups } from "@/lib/inquiry";
 import {
@@ -16,21 +17,12 @@ import {
 
 export const dynamic = "force-static";
 
-const url = `${site.productionUrl}${contact.path}`;
 
-export const metadata: Metadata = {
-  title: { absolute: contact.seo.title },
+export const metadata: Metadata = pageMetadata({
+  title: contact.seo.title,
   description: contact.seo.description,
-  alternates: { canonical: url },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: contact.seo.title,
-    description: contact.seo.description,
-    url,
-  },
-  twitter: { card: "summary", title: contact.seo.title, description: contact.seo.description },
-};
+  path: contact.path,
+});
 
 /**
  * /contact — inquiry form delivered by /api/inquiry, with the phone, email

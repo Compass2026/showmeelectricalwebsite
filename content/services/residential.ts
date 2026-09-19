@@ -93,7 +93,7 @@ export const residential: ServicePageContent = {
       {
         name: "Electrical Panel Upgrades & Replacement",
         problem:
-          "Breakers trip when the microwave and a space heater run together, the panel is 25 to 30 years old, or the house still has a fuse box.",
+          "Breakers trip when the microwave and a space heater run together, the panel is an older model, or the house still has a fuse box.",
         solution:
           "We replace undersized or worn panels with modern breaker panels sized for today's loads — HVAC, kitchen, home office, EV charging — so the house stops fighting itself.",
       },

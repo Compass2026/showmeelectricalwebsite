@@ -6,6 +6,9 @@ import PreviewNotice from "@/components/site/PreviewNotice";
 import ArticleLayout from "@/components/site/ArticleLayout";
 import { site } from "@/config/site.config";
 import { articles, blog, findArticle } from "@/content/blog";
+import { servicePages } from "@/content/services";
+import type { RelatedLink } from "@/content/services/types";
+import { pageMetadata } from "@/lib/metadata";
 import {
   localBusinessJsonLd,
   websiteJsonLd,
@@ -26,33 +29,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = findArticle(slug);
   if (!post) return {};
-  const url = `${site.productionUrl}${post.path}`;
-  const image = post.image
-    ? `${site.productionUrl}${post.image.src}`
-    : `${site.productionUrl}${blog.seo.image}`;
   // Brand suffix only while the whole title stays within 60 characters.
   const suffixed = `${post.title} | ${site.name}`;
-  return {
-    title: { absolute: suffixed.length <= 60 ? suffixed : post.title },
+  return pageMetadata({
+    title: suffixed.length <= 60 ? suffixed : post.title,
     description: post.seo.description,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "article",
-      siteName: site.name,
-      title: post.title,
-      description: post.seo.description,
-      url,
-      images: [{ url: image }],
-      ...(post.publishedAt ? { publishedTime: post.publishedAt } : {}),
-      ...(post.author ? { authors: [post.author] } : {}),
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.seo.description,
-      images: [image],
-    },
-  };
+    path: post.path,
+    image: post.image?.src,
+    imageAlt: post.image?.alt,
+    type: "article",
+    publishedTime: post.publishedAt,
+    modifiedTime: post.modifiedAt,
+    authors: post.author ? [post.author] : undefined,
+  });
+}
+
+/**
+ * Related links are resolved from the registries, so an article can only
+ * ever point at a published service page or article. An unregistered
+ * reference is dropped here and reported by the route-manifest check.
+ */
+function relatedServiceLinks(paths: string[] = []): RelatedLink[] {
+  return paths.flatMap((path) => {
+    const page = servicePages.find((p) => p.path === path);
+    return page
+      ? [{ label: page.directory?.title ?? page.schema.name, href: page.path, description: page.directory?.summary ?? page.seo.description }]
+      : [];
+  });
+}
+
+function relatedArticleLinks(slugs: string[] = []): RelatedLink[] {
+  return slugs.flatMap((slug) => {
+    const a = findArticle(slug);
+    return a ? [{ label: a.title, href: a.path, description: a.excerpt }] : [];
+  });
 }
 
 export default async function BlogPostPage({ params }: Props) {
@@ -77,7 +87,14 @@ export default async function BlogPostPage({ params }: Props) {
       <PreviewNotice />
       <SiteHeader />
       <main id="main">
-        <ArticleLayout article={post} breadcrumbs={breadcrumbs} cta={blog.cta} />
+        <ArticleLayout
+          article={post}
+          breadcrumbs={breadcrumbs}
+          labels={blog.labels}
+          relatedServices={relatedServiceLinks(post.relatedServices)}
+          relatedArticles={relatedArticleLinks(post.relatedArticles)}
+          cta={blog.cta}
+        />
       </main>
       <SiteFooter />
     </>

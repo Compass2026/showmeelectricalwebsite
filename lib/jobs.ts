@@ -300,7 +300,7 @@ export function jobPostingJsonLd(job: Job) {
       "@type": "Organization",
       name: "Show Me Electrical Services",
       sameAs: WP_URL,
-      logo: site.logoUrl,
+      logo: `${site.productionUrl}${site.logoUrl}`,
     },
     jobLocation: {
       "@type": "Place",

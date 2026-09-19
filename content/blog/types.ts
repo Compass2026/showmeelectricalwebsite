@@ -21,6 +21,16 @@ export interface Article {
   publishedAt?: string;
   /** Byline exactly as published at the source. Omit if unknown. */
   author?: string;
+  /**
+   * ISO date of the last SUBSTANTIVE revision, when one has happened. Shown
+   * as "Updated", emitted as `dateModified`, used as the sitemap lastmod.
+   * Never set by a build or a cosmetic change; omit when unknown.
+   */
+  modifiedAt?: string;
+  /** Published service pages this article supports (root-relative paths). */
+  relatedServices?: string[];
+  /** Slugs of other published articles worth reading next. */
+  relatedArticles?: string[];
   /** One or two sentences for the index and for `description` fallbacks. */
   excerpt: string;
   /** Optional lead image — only ever the client's own photography. */

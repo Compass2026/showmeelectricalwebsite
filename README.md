@@ -173,7 +173,8 @@ config/
   redirects.ts       Legacy URL map → next.config.ts redirects()
   inquiry.config.ts  Contact-form recipient/sender defaults (server-only)
 content/
-  blocks.ts          Block union — long-form content as data
+  blocks.ts          Block/Inline union — long-form content as data, incl. typed links, tables, sources
+  pages.ts           Registry of core pages (parent, relationships, incoming links)
   blog/              Article type, registry (index.ts) and the migrated posts
   legal/             LegalDocument type, registry and the migrated documents
   contact.ts         Contact page copy + every inquiry-form label and message
@@ -202,6 +203,8 @@ content/
                      PhotoGallery, ProcessSteps, Faq, RelatedLinks, ClosingCta
   (root)             Careers components — Header, Footer, JobCard, ApplicationForm
 lib/
+  metadata.ts        pageMetadata(): canonical + Open Graph/Twitter with the owned default share image
+  routes.ts          Published-route registry merged from every content registry (sitemap, manifest, QA)
   seo.ts             Structured data helpers
   inquiry.ts         Inquiry model + validation shared by form and route; service options from the registry
   jobs.ts            Careers role data
@@ -292,6 +295,17 @@ Rules the system follows:
 CSS handles simple hover and focus states; GSAP is only used for scroll work.
 
 ---
+
+## QA commands
+
+```bash
+npm run qa:manifest                       # docs/route-manifest.md + .qa/routes.json from the registries; fails on unresolved content links
+npm run build && npm start &              # production build on :3000
+npm run qa:crawl -- http://localhost:3000 # raw-HTML crawl: status, head tags, canonical, share images fetchable,
+                                          # internal links, JSON-LD references, sitemap = manifest, orphans, 404
+```
+
+Run the manifest before the crawl; the crawl reads `.qa/routes.json`.
 
 ## Local development
 

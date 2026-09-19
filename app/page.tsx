@@ -12,6 +12,7 @@ import ServicePathways from "@/components/home/ServicePathways";
 import AboutSection from "@/components/home/AboutSection";
 import Testimonials from "@/components/home/Testimonials";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import {
   storyStages,
   emergencyCallout,
@@ -30,21 +31,12 @@ export const dynamic = "force-static";
  * emergency electrician st louis (owner-confirmed as offered — decisions
  * D-001; no availability claim anywhere on the page).
  */
-export const metadata: Metadata = {
-  title:
-    "Electrician in St. Louis, MO | Show Me Electrical",
+export const metadata: Metadata = pageMetadata({
+  title: "Electrician in St. Louis, MO | Show Me Electrical",
   description:
     "Owner-led by a Master Electrician serving the Greater St. Louis area: residential, commercial, industrial and emergency electrical work. Free consultation.",
-  alternates: { canonical: site.productionUrl },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: "Electrician in St. Louis, MO | Show Me Electrical",
-    description:
-      "Owner-led by a Master Electrician, serving the Greater St. Louis area — residential, commercial, industrial and emergency electrical repairs. Free consultations.",
-    url: site.productionUrl,
-  },
-};
+  path: "/",
+});
 
 export default function HomePage() {
   return (

@@ -77,6 +77,8 @@ export interface RelatedLink {
 }
 
 export interface ServicePageContent {
+  /** ISO date of the last substantive content revision, when known. */
+  modifiedAt?: string;
   /** Route segment, e.g. "residential". */
   slug: string;
   /** Path from the site root, e.g. "/services/residential". */

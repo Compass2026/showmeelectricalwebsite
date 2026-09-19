@@ -31,8 +31,9 @@ the plan into launch essentials and later SEO expansion.
    title ≤ 60 chars and description ≤ 155 chars, one H1 carrying the primary
    keyword, self-referencing canonical, OG tags, BreadcrumbList on every page,
    Service + FAQPage on service pages, FAQPage text matching visible text
-   exactly, 10+ FAQs on service and location pages, everything in the initial
-   HTML.
+   exactly, FAQs only where they are genuinely useful (no fixed count — the
+   Build Standard v1 replaces the older "10+ FAQs" rule with usefulness),
+   everything in the initial HTML.
 
 ---
 
@@ -42,7 +43,7 @@ the plan into launch essentials and later SEO expansion.
 |---|---|---|---|---|---|
 | Home | Business overview, three pathways, process, trust | electrician st louis (260/mo) | `/` | `/` | ✅ Prototype |
 | About | Dan, the credential, how the company works | *(brand; supporting: st louis electrician)* | `/about/` | `/about` | ✅ Built |
-| Contact | Phone, email, address, enquiry form | — | `/contact/` | `/contact` | ✅ Built (form pending backend) |
+| Contact | Phone, email, address, enquiry form | — | `/contact/` | `/contact` | ✅ Built, form delivering via `/api/inquiry` |
 | Services hub | Directory of the three pathways and all services | electrical contractor st louis | `/services/` | `/services` | ✅ Built — registry-driven |
 | Service area hub | Counties and approved communities; no city pages yet | electrician near me *(won via GBP, not this page)* | `/locations/` | `/service-area` | ✅ Built |
 | Blog index | Post listing | — | `/category/blog/` | `/blog` | Planned |
@@ -127,7 +128,7 @@ BreadcrumbList; unique content per city, never templated swaps (checklist
 
 | Tier | City | Primary keyword | Existing URL | Proposed URL |
 |---|---|---|---|---|
-| 1 | St. Louis | electrician st louis | `/st-louis/` | `/service-area/st-louis` |
+| 1 | St. Louis | electrician st louis | `/st-louis/` (redirects to `/services/industrial`, final) | `/service-area/st-louis` |
 | 1 | St. Charles | electrician st charles mo | — | `/service-area/st-charles` |
 | 1 | Chesterfield | electrician chesterfield mo | — | `/service-area/chesterfield` |
 | 1 | O'Fallon, MO | electrician o'fallon mo | — | `/service-area/ofallon` |
@@ -139,9 +140,11 @@ BreadcrumbList; unique content per city, never templated swaps (checklist
 | 3 | ~50 remaining communities | — | — | listed on `/service-area`, no page |
 
 The live `/st-louis/` page is titled *"Industrial Electrical solutions for
-St. Louis"* — a narrow industrial page wearing a city URL. It becomes the
-Tier-1 St. Louis city page and its industrial content moves to
-`/services/industrial`.
+St. Louis"* — a narrow industrial page wearing a city URL. Its content maps
+to `/services/industrial`, and that redirect is **final** (decided on the old
+page's content, 2026-09-19; see §6 and `docs/migration-inventory.md` §1 #5).
+A future Tier-1 St. Louis city page gets the new URL above and does not
+change the redirect.
 
 ## 5. Blog
 

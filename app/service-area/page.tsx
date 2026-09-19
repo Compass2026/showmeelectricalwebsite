@@ -10,6 +10,7 @@ import RelatedLinks from "@/components/services/RelatedLinks";
 import Faq from "@/components/services/Faq";
 import ClosingCta from "@/components/services/ClosingCta";
 import { site } from "@/config/site.config";
+import { pageMetadata } from "@/lib/metadata";
 import { serviceArea } from "@/content/service-area";
 import {
   localBusinessJsonLd,
@@ -21,28 +22,14 @@ import {
 
 export const dynamic = "force-static";
 
-const url = `${site.productionUrl}${serviceArea.path}`;
-const image = `${site.productionUrl}${serviceArea.seo.image}`;
 
-export const metadata: Metadata = {
-  title: { absolute: serviceArea.seo.title },
+export const metadata: Metadata = pageMetadata({
+  title: serviceArea.seo.title,
   description: serviceArea.seo.description,
-  alternates: { canonical: url },
-  openGraph: {
-    type: "website",
-    siteName: site.name,
-    title: serviceArea.seo.title,
-    description: serviceArea.seo.description,
-    url,
-    images: [{ url: image }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: serviceArea.seo.title,
-    description: serviceArea.seo.description,
-    images: [image],
-  },
-};
+  path: serviceArea.path,
+  image: serviceArea.seo.image,
+  imageAlt: serviceArea.hero.image.alt,
+});
 
 /**
  * /service-area — coverage as data (content/service-area.ts) rendered by
