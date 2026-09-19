@@ -371,13 +371,16 @@ launch candidate stays on `claude/main-site-foundation-v1`.
 | G4 complete metadata defaults | `lib/metadata.ts` (`pageMetadata`) used by every route incl. `serviceMetadata`; owned `public/share-default.png` (1200×630, generated from the client's logo, no photography) as the default card; `public/brand/logo-512.png` replaces the WordPress logo URL in `site.logoUrl`; root layout carries default OG/Twitter image; business schema emits `logo`/`image` from owned assets. | `lib/metadata.ts`, `config/site.config.ts`, `app/**/page.tsx`, `lib/seo.ts`, `lib/jobs.ts` (absolute logo) |
 | G5 truthful freshness, complete route registry | `Article.modifiedAt` (set to 2026-09-19 on the three revised posts, bylines and `publishedAt` preserved) shown as "Updated", emitted as `dateModified`, used as sitemap lastmod; `content/pages.ts` + `lib/routes.ts`; sitemap without priority/changefreq; unknown dates omitted. | `content/blog/types.ts`, `lib/routes.ts`, `app/sitemap.ts` |
 | G6 documentation/copy | Residential "25 to 30 years old" generalised; page plan: contact form status, FAQ-count rule, `/st-louis` final; roadmap: careers contradiction resolved (step 10 is the documented exception until Batch C), "only file" claim corrected, validation-not-launch rule. | `content/services/residential.ts`, `docs/page-plan.md`, this file, `config/site.config.ts` |
-| G8 (started) | `npm run qa:manifest`, `npm run qa:crawl` committed; `docs/route-manifest.md` generated. | `scripts/qa/*`, `package.json` |
+| G8 (started) | `npm run qa:manifest`, `npm run qa:crawl` committed; `docs/route-manifest.md` generated. Review correction (same day): the crawl now checks exactly one canonical against an explicit production origin, compares sitemap entries as full URLs on that origin, builds incoming links only from rendered anchors on other pages (self-links and registry "nav"/"footer" notes ignored), resolves cross-page and same-page fragments against destination ids, requires both `og:image` and `twitter:image` on the production host and validates owned assets on the local build only under an explicit `--assets remap` mode (reported as local asset validation, declared URLs never fetched or silently substituted). `npm run qa:crawl:test` runs negative fixtures proving each of those failures is caught. | `scripts/qa/crawl.mjs`, `scripts/qa/crawl.test.mjs`, `package.json`, README |
 | G9 (semantic part) | Article relationships are real anchors under labelled headings; dates are `<time>` elements; tables are semantic. Unknown facts remain omitted (no invented dates). | as above |
 
 New dependency: `tsx` (dev only) to run TypeScript QA scripts against the
 registries. No runtime dependency added.
 
 **Not in this batch:** the semantic-table block has no client article that
-needs one; its rendering is proven in the Batch C second-brand fixture. City,
+needs one; its rendering and accessibility remain **unverified** until a
+fixture demonstrates them (scheduled for the fictional branch fixture in
+Batch B and re-checked in the Batch C second-brand fixture). Actual AI-agent
+trials remain outstanding (Batch C). City,
 branch and individual-service templates (G2) are Batch B; neutral branding,
 optional careers, starter and agent trials (G3, G8 remainder, G9) are Batch C.

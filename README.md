@@ -299,13 +299,42 @@ CSS handles simple hover and focus states; GSAP is only used for scroll work.
 ## QA commands
 
 ```bash
+npm run qa:crawl:test                     # negative fixtures: proves the crawl fails on a wrong canonical/sitemap origin,
+                                          # an orphan or self-linked page, a missing fragment, a missing Twitter image
 npm run qa:manifest                       # docs/route-manifest.md + .qa/routes.json from the registries; fails on unresolved content links
 npm run build && npm start &              # production build on :3000
-npm run qa:crawl -- http://localhost:3000 # raw-HTML crawl: status, head tags, canonical, share images fetchable,
-                                          # internal links, JSON-LD references, sitemap = manifest, orphans, 404
+npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap
 ```
 
+What the crawl asserts, per published route, from the raw server HTML (no
+browser):
+
+- exactly one `<link rel=canonical>`, equal to the production origin plus the
+  route (`--origin` overrides the manifest's origin; the origin is the
+  configured production URL, never the URL being crawled);
+- exactly one title, description and `<h1>`;
+- `og:image` **and** `twitter:image` present, absolute, on the production
+  host; then fetched. `--assets remote` fetches the declared URLs as written
+  (only meaningful when the crawl target *is* the production host),
+  `--assets remap` fetches the same paths from the crawl target and reports
+  the result as **local asset validation** (the declared URLs are not
+  fetched), `--assets skip` fetches nothing. The crawl never substitutes a
+  host silently: the mode is chosen explicitly and printed in the notes;
+- every internal link lands on a 200 (following redirects); fragment links,
+  cross-page (`/a#x`) and same-page (`#x`), resolve to an element id on the
+  destination page;
+- every page has at least one incoming link from a *different* rendered
+  page. Self-links do not count, and registry notes such as "nav" or
+  "footer" are ignored: only what is actually rendered counts;
+- JSON-LD parses and its `@id` references resolve;
+- the sitemap lists exactly the manifest's full URLs on the production
+  origin, with `lastmod` only where a date is recorded;
+- an unknown path returns 404.
+
 Run the manifest before the crawl; the crawl reads `.qa/routes.json`.
+`--host` sends a `Host` header so the middleware treats a local server as
+the main site. Browser-level checks (hydration, form behaviour, tap targets,
+screenshots) are separate probes, not part of this crawl.
 
 ## Local development
 

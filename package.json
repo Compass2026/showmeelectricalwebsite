@@ -9,7 +9,8 @@
     "lint": "next lint",
     "qa:manifest": "tsx scripts/qa/route-manifest.ts",
     "qa:crawl": "node scripts/qa/crawl.mjs",
-    "qa": "npm run qa:manifest && npm run qa:crawl -- http://localhost:3000"
+    "qa:crawl:test": "node scripts/qa/crawl.test.mjs",
+    "qa": "npm run qa:crawl:test && npm run qa:manifest && npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

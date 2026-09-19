@@ -8,7 +8,7 @@
  *   npx tsx scripts/qa/route-manifest.ts
  */
 import { mkdirSync, writeFileSync } from "node:fs";
-import { publishedRoutes, isPublishedHref } from "../../lib/routes";
+import { publishedRoutes, isPublishedHref, siteOrigin } from "../../lib/routes";
 import { articles } from "../../content/blog";
 import { legalDocuments } from "../../content/legal";
 import { blockHrefs, isInternalHref } from "../../content/blocks";
@@ -50,7 +50,7 @@ const lines: string[] = [
 ];
 writeFileSync("docs/route-manifest.md", lines.join("\n"));
 mkdirSync(".qa", { recursive: true });
-writeFileSync(".qa/routes.json", JSON.stringify({ routes, contentLinks }, null, 2));
+writeFileSync(".qa/routes.json", JSON.stringify({ origin: siteOrigin, routes, contentLinks }, null, 2));
 console.log(`manifest: ${routes.length} routes, ${contentLinks.length} content links, ${badInternal.length} unresolved internal, ${badExternal.length} non-https external`);
 if (badInternal.length || badExternal.length) {
   for (const l of [...badInternal, ...badExternal]) console.error(`  BAD LINK ${l.from} → ${l.href}`);

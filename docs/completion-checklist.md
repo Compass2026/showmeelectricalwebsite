@@ -38,7 +38,7 @@ new blog posts. The live site has none of these today.
 | B5 | Enquiry-form route in the starter | ✅ shape · ⬜ starter | `InquiryForm` + `lib/inquiry.ts` + `config/inquiry.config.ts` are already generic; the starter ships the config with empty recipients |
 | B6 | Redirects as per-client data | ✅ shape · ⬜ starter | `config/redirects.ts` is the per-client map already; the starter ships it empty |
 | B7 | Starter scaffolding | ⬜ | Empty typed `site.config.ts`, placeholder tokens, `content/` skeleton, the `docs/` templates, the §3 change list as a checklist |
-| B8 | Validation gate script | 🟡 | `npm run qa:manifest` + `npm run qa:crawl` committed (route manifest, raw-HTML crawl, sitemap parity, share images, JSON-LD references, orphans). Browser/form/agent checks follow in Batch C |
+| B8 | Validation gate script | 🟡 | `npm run qa:crawl:test` + `npm run qa:manifest` + `npm run qa:crawl` committed (negative fixtures; route manifest; raw-HTML crawl: single canonical on the production origin, sitemap as full URLs, rendered-only incoming links, fragment resolution, OG + Twitter images with explicit local asset validation, JSON-LD references, 404). Browser/form/agent checks follow in Batch C |
 | B9 | **Check with a different brand** | ⬜ | Swap `site.config.ts`, `@theme` values, fonts, `decoration: "none"/"line"`, one service content file — and confirm nothing electrical, navy, lime or Show Me leaks through. The proof the starter is a starter. |
 
 Detail and rationale for each: `docs/template-roadmap.md` §5.
