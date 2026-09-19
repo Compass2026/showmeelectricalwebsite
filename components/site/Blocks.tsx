@@ -171,8 +171,10 @@ function Run({ run }: { run: Inline }) {
   }
 }
 
+// Prose links stay inline so they wrap with the sentence; the paragraph's
+// line height (≥ 27px) already gives them a 24px+ target on touch screens.
 const anchorClass =
-  "-my-1 inline-block py-1 font-semibold text-lime-700 underline decoration-lime-700/40 underline-offset-[3px] hover:decoration-lime-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500";
+  "font-semibold text-lime-700 underline decoration-lime-700/40 underline-offset-[3px] hover:decoration-lime-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500";
 
 function Anchor({ href, title, children }: { href: string; title?: string; children: React.ReactNode }) {
   if (isInternalHref(href)) {
