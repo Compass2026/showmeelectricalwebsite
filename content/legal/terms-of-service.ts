@@ -4,10 +4,12 @@ import type { LegalDocument } from "./types";
  * MIGRATED FROM WORDPRESS — terms-of-service
  *
  * Source: https://showmeelectrical.com/terms-of-service/ (fetched 2026-09-19).
- * "Last Updated: November 10, 2025" at the source. Revised 2026-09-19: §14
- * contact block completed with the confirmed address, phone and email
- * (owner-approved edit A4; address D-005). No other wording changed; the
- * remaining proposed edits are in docs/policy-revision-proposal.md.
+ * "Last Updated: November 10, 2025" at the source. Revised 2026-09-19
+ * (owner-approved, docs/policy-revision-proposal.md): §14 contact block
+ * completed (A4, D-005); canonical host without www (§1); industrial
+ * services added to §2; §5 first paragraph describes the form as
+ * inquiry-only and separates it from the Text Messaging Program, whose
+ * details are left as written.
  *
  * Wording is reproduced verbatim for review — nothing has been replaced with
  * generic legal text. Section headings were h3 under an h2 page title at the
@@ -26,11 +28,12 @@ export const doc: LegalDocument = {
   body: [
     { type: "p", text: "Welcome to Show Me Electrical. By accessing or using our services, you agree to comply with and be bound by these Terms of Service (“Terms”). If you do not agree with these Terms, please do not use our Website or services." },
     { type: "h2", text: "1. Agreement to Terms" },
-    { type: "lines", lines: ["These Terms govern your access to and use of the Website https://www.showmeelectrical.com and any services provided by Show Me Electrical, including but not limited to electrical installations, repairs, maintenance, and related contracting services.", "By submitting information or contacting us through our Website, you agree to these Terms."] },
+    { type: "lines", lines: ["These Terms govern your access to and use of the Website https://showmeelectrical.com and any services provided by Show Me Electrical, including but not limited to electrical installations, repairs, maintenance, and related contracting services.", "By submitting information or contacting us through our Website, you agree to these Terms."] },
     { type: "h2", text: "2. Services Provided" },
     { type: "p", text: "Show Me Electrical provides professional electrical services, including but not limited to:" },
     { type: "ul", items: [
       "Residential and commercial electrical installations and repairs.",
+      "Industrial electrical installations, maintenance, and repairs.",
       "Lighting upgrades and electrical panel replacements.",
       "Generator installations and backup systems.",
       "EV charger installations and smart home electrical solutions.",
@@ -46,7 +49,7 @@ export const doc: LegalDocument = {
     { type: "h2", text: "4. Privacy and Data Collection" },
     { type: "p", text: "By using our Website, you acknowledge that we collect personal information through forms and communications, as described in our Privacy Policy. You agree to provide accurate and complete information when interacting with our services and forms." },
     { type: "h2", text: "5. Opt-In Communications (SMS/Text Messaging Program)" },
-    { type: "p", text: "By submitting a form or providing contact information, you consent to receiving communications from Show Me Electrical regarding electrical services, project updates, and related promotions." },
+    { type: "p", text: "By submitting a form or providing contact information, you consent to Show Me Electrical contacting you about your inquiry and related electrical services. Submitting the Website contact form does not enrol you in the Text Messaging Program described below; enrolment in that program is separate." },
     { type: "p", text: "Text Messaging Program Details:" },
     { type: "ul", items: [
       "Brand Name: Show Me Electrical",
@@ -77,10 +80,5 @@ export const doc: LegalDocument = {
     { type: "p", text: "If you have any questions or concerns about these Terms of Service, please contact us:" },
     { type: "lines", lines: ["Show Me Electrical", "5602 Heege Rd, Affton, MO 63123", "Phone: 314-571-9756", "Email: info@showmeelectrical.com", "Website: showmeelectrical.com"] },
   ],
-  flags: [
-    "§2 \"Services Provided\" lists residential and commercial work only — industrial electrical is a core service on the site. Proposed edit in docs/policy-revision-proposal.md.",
-    "§1 cites https://www.showmeelectrical.com (www); the rebuild's canonical host has no www. Proposed edit in docs/policy-revision-proposal.md.",
-    "§5 text-messaging programme is preserved verbatim. The website contact form does not enrol anyone in it; a one-sentence clarification is proposed in docs/policy-revision-proposal.md.",
-    "§12 governing law: State of Missouri. Two Illinois cities are served; not a website decision — left as-is unless counsel says otherwise.",
-  ],
+  flags: [],
 };

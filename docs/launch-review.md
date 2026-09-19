@@ -2,9 +2,9 @@
 
 Prepared 2026-09-19 against commit on `claude/main-site-foundation-v1`.
 **Update, same day:** Tom approved A1–A6 and decided B1–B6 and B8; those
-edits are applied (bylines and dates preserved). What remains for Tom is
-the policy revision in `docs/policy-revision-proposal.md` (B7, B9, B10) and
-the launch go/no-go. Sections below are kept as the record of what was
+edits are applied (bylines and dates preserved). The policy revision (B7, B9, B10)
+was approved and applied later the same day. What remains for Tom is the
+launch go/no-go (`docs/launch-checklist.md`). Sections below are kept as the record of what was
 proposed; each row's status is marked.
 
 One document, four parts:
@@ -89,7 +89,7 @@ line resolves it for this post.
 
 ## B. Business facts Tom (or Dan) must confirm
 
-Status: B1 removed ✅ · B2 removed ✅ · B3 replaced with neutral wording (no code claim) ✅ · B4 inspection wording taken out of every call to action ✅ · B5 "older panels" ✅ · B6 address confirmed (D-005) ✅ · B7 **open** (in the policy proposal) · B8 decided: no analytics at launch (D-006), wording in the policy proposal · B9 **open** (policy proposal) · B10 **open** (policy proposal) · B11 unchanged.
+Status: B1 removed ✅ · B2 removed ✅ · B3 replaced with neutral wording (no code claim) ✅ · B4 inspection wording taken out of every call to action ✅ · B5 "older panels" ✅ · B6 address confirmed (D-005) ✅ · B7 applied ✅ · B8 decided (D-006) and privacy §7 applied ✅ · B9 applied (form is inquiry-only; programme wording preserved) ✅ · B10 applied ✅ · B11 unchanged.
 
 | # | Fact to confirm | Where it appears | Proposed edit once confirmed |
 |---|---|---|---|
@@ -122,7 +122,7 @@ or DNS until Tom says go.
 | C3 | **Redirects on the real domain** | 🟡 | Rules are built and verified on the preview. Remaining: add `showmeelectrical.com` and `www.showmeelectrical.com` to the Vercel project with www redirecting to the apex; re-run the legacy URL table (`docs/migration-inventory.md` §4) with curl on the real domain; confirm `/global-styles` answers 410; check the WordPress admin for any redirect plugin rules not in the sitemap crawl. |
 | C4 | **Analytics decision** | ✅ decided (D-006) | No GA4 exists; analytics disabled at launch, no placeholder ID. GA4 setup is a separate post-launch follow-up (D). Privacy §7 wording in the policy proposal reflects this. |
 | C5 | **Careers regression on real hostnames** | ⬜ | After DNS: run the routing matrix (README) against `https://careers.showmeelectrical.com` and `https://showmeelectrical.com`: careers `/` and `/jobs/<slug>` 200 and indexable, `/careers/*` 308 to the public form, main-site paths 404 on the careers host, per-host robots and sitemap, canonicals; submit one careers application and confirm receipt. The careers routing code is unchanged by the rebuild, but this is the first time both hosts serve from one production deployment. |
-| C6 | **Content decisions** | 🟡 | A1–A6 and B1–B6, B8 done. Remaining: approve the policy revision (`docs/policy-revision-proposal.md`, 7 edits) — then apply, bump the policy dates, regenerate `docs/final-content-review.md`. |
+| C6 | **Content decisions** | ✅ | A1–A6, B1–B10 applied; policy dates 2026-09-19; `docs/final-content-review.md` regenerated (no open flags). |
 | C7 | **Business facts still missing** | ✅ | Address confirmed (D-005). Business hours block only the emergency-availability wording, which is deliberately absent; not a launch blocker. |
 | C8 | **Deployment hygiene** | ⬜ | Revoke or keep the preview-only Resend key (send-only, agency domain) — it has no production role. Confirm production has no `INQUIRY_DELIVERY` variable. Confirm `APPLICATION_RECIPIENT` for careers is still what Tom wants. |
 | C9 | **Google Business Profile parity** | ⬜ | Per the SOP: the 22 site services and the GBP service list must match; needs GBP access. Listed in checklist A11. |

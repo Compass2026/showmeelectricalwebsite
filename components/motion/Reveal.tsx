@@ -57,6 +57,8 @@ export default function Reveal({
       ? Array.from(scope.current?.children ?? [])
       : [scope.current];
     if (!targets.length || !targets[0]) return;
+    // Late hydration: leave above-the-fold content as rendered (see config).
+    if (immediate && performance.now() > motionCfg.immediateDeadlineMs) return;
 
     const travel = isMobile ? motionCfg.distance * 0.5 : motionCfg.distance;
 

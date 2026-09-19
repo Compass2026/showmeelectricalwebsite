@@ -4,10 +4,14 @@ import type { LegalDocument } from "./types";
  * MIGRATED FROM WORDPRESS — privacy-policy
  *
  * Source: https://showmeelectrical.com/privacy-policy/ (fetched 2026-09-19).
- * "Last Updated: November 10, 2025" at the source. Revised 2026-09-19: the
- * confirmed street address added to §11 (owner-confirmed, D-005). No other
- * wording changed; the remaining proposed edits are in
- * docs/policy-revision-proposal.md and wait for the owner.
+ * "Last Updated: November 10, 2025" at the source. Revised 2026-09-19
+ * (owner-approved, docs/policy-revision-proposal.md): confirmed street
+ * address in §11 (D-005); canonical host without www (§1, §11); §1 technical
+ * data described as hosting logs, not analytics; §4 names the hosting and
+ * email providers that process a submission; §5 describes the contact form
+ * as inquiry-only with no text-messaging enrolment; §7 states that no
+ * analytics or advertising cookies are set (D-006). Business programmes run
+ * outside the Website are left as written.
  *
  * Wording is reproduced verbatim for review — nothing has been replaced with
  * generic legal text. Section headings were h3 under an h2 page title at the
@@ -24,13 +28,13 @@ export const doc: LegalDocument = {
   },
   lastUpdated: "2026-09-19",
   body: [
-    { type: "p", text: "Show Me Electrical (“Company,” “we,” “our,” or “us”) respects your privacy and is committed to protecting it through this Privacy Policy. This policy describes the types of information we may collect from you or that you may provide when you visit our website https://www.showmeelectrical.com (the “Website”), and our practices for collecting, using, maintaining, protecting, and disclosing that information." },
+    { type: "p", text: "Show Me Electrical (“Company,” “we,” “our,” or “us”) respects your privacy and is committed to protecting it through this Privacy Policy. This policy describes the types of information we may collect from you or that you may provide when you visit our website https://showmeelectrical.com (the “Website”), and our practices for collecting, using, maintaining, protecting, and disclosing that information." },
     { type: "h2", text: "1. Information We Collect" },
     { type: "p", text: "We collect the following types of personal information when you submit a form or interact with our Website:" },
     { type: "ul", items: [
       "Contact Information such as your name, phone number, email address, and physical address.",
       "Service Information such as details about your electrical project, installation, repair, or maintenance needs.",
-      "Device & Browsing Data such as IP address, browser type, referring URLs, and usage data collected through cookies and analytics tools.",
+      "Technical Data such as your IP address, browser type and the pages you request, which our hosting provider records in ordinary server logs to operate and secure the Website. The Website does not currently use analytics tools.",
     ] },
     { type: "h2", text: "2. How We Collect Information" },
     { type: "p", text: "We collect your information when you:" },
@@ -52,17 +56,17 @@ export const doc: LegalDocument = {
     { type: "p", text: "We do not sell or rent your personal information. We may share your data only with:" },
     { type: "ul", items: [
       "Authorized employees and agents of Show Me Electrical.",
-      "Third-party service providers who help operate our website, CRM systems, or marketing tools.",
+      "Third-party service providers who help operate our Website — including our hosting provider and the email service that delivers your form submission to us — CRM systems, or marketing tools.",
       "Government or legal authorities, if required by law.",
     ] },
     { type: "p", text: "Mobile information will not be shared with third parties or affiliates for marketing or promotional purposes." },
     { type: "p", text: "All categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties." },
     { type: "h2", text: "5. Opt-In and Communication" },
-    { type: "p", text: "By submitting your information through our forms, you expressly opt in to receive communications from Show Me Electrical via phone, email, or SMS. You can opt out at any time by following the unsubscribe instructions in our messages or by contacting us directly." },
+    { type: "p", text: "By submitting the contact form on our Website, you agree that Show Me Electrical may contact you about your inquiry by phone or email. Submitting the form does not enrol you in any text-messaging program; if you take part in one, it is governed by the Text Messaging Program terms in our Terms of Service. You can ask us to stop contacting you at any time by contacting us directly." },
     { type: "h2", text: "6. Data Security" },
     { type: "p", text: "We implement reasonable administrative, technical, and physical security measures to protect your personal information from unauthorized access, disclosure, or misuse. However, no method of transmission over the internet is 100% secure." },
     { type: "h2", text: "7. Cookies and Tracking Technologies" },
-    { type: "p", text: "We use cookies and similar tracking tools to enhance your browsing experience, analyze traffic, and improve our services. You can control or disable cookies through your browser settings." },
+    { type: "p", text: "Our Website does not currently set analytics or advertising cookies. If we add analytics in future, this section will be updated to describe it. You can control or disable cookies through your browser settings." },
     { type: "h2", text: "8. Your Rights and Choices" },
     { type: "p", text: "You have the right to:" },
     { type: "ul", items: [
@@ -77,11 +81,7 @@ export const doc: LegalDocument = {
     { type: "p", text: "We may update this Privacy Policy periodically. Any changes will be posted on this page with a revised “Last Updated” date. By continuing to use our Website after changes are posted, you agree to the updated policy." },
     { type: "h2", text: "11. Contact Us" },
     { type: "p", text: "If you have any questions about this Privacy Policy, please contact us:" },
-    { type: "lines", lines: ["Show Me Electrical", "5602 Heege Rd, Affton, MO 63123", "📞 Phone: 314-571-9756", "✉️ Email: info@showmeelectrical.com", "🌐 Website: https://www.showmeelectrical.com"] },
+    { type: "lines", lines: ["Show Me Electrical", "5602 Heege Rd, Affton, MO 63123", "📞 Phone: 314-571-9756", "✉️ Email: info@showmeelectrical.com", "🌐 Website: https://showmeelectrical.com"] },
   ],
-  flags: [
-    "Website is cited as https://www.showmeelectrical.com (www) in §1 and §11. The rebuild's canonical host is showmeelectrical.com without www (www will redirect). Proposed edit in docs/policy-revision-proposal.md.",
-    "§7 says cookies and analytics tools are used. The rebuilt site sets no analytics or advertising cookies (analytics disabled for this review; GA4 is a separate follow-up). Proposed edit in docs/policy-revision-proposal.md.",
-    "§5 says submitting a form is an express opt-in to phone, email and SMS communications. The website form collects a phone number only so the business can reply; it presents and records no SMS enrolment. Any separate text-messaging programme the business runs is unaffected. Proposed edit in docs/policy-revision-proposal.md.",
-  ],
+  flags: [],
 };

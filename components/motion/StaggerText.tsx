@@ -38,6 +38,8 @@ export default function StaggerText({
   useResponsiveGSAP(scope, ({ isMobile }) => {
     const targets = scope.current?.querySelectorAll("[data-word]");
     if (!targets?.length) return;
+    // Late hydration: leave above-the-fold text as rendered (see config).
+    if (immediate && performance.now() > motionCfg.immediateDeadlineMs) return;
 
     gsap.from(targets, {
       autoAlpha: 0,

@@ -80,6 +80,16 @@ export const motion = {
 
   /** ScrollTrigger start position for standard section reveals. */
   start: "top 82%",
+  /**
+   * Above-the-fold ("immediate") entrances play only if the page has
+   * hydrated within this many milliseconds of navigation start. Later than
+   * that — a slow phone or connection — the content is simply shown as the
+   * server rendered it. Fading already-painted hero content back in on a
+   * slow device pushes Largest Contentful Paint out by the whole hydration
+   * time (measured: +2.4–3.0 s on a simulated mid-range phone) for no benefit
+   * the visitor can see. Scroll-triggered entrances are unaffected.
+   */
+  immediateDeadlineMs: 1200,
 } as const;
 
 export type MotionConfig = typeof motion;
