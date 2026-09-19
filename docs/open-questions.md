@@ -138,30 +138,24 @@ the preview's reviewer notice. Owner decisions needed:
 | Cookies / analytics / ad platforms | privacy §2, §7 | The rebuild sets no analytics or ad cookies today. Keep the wording only if tags are added before launch. |
 | Terms §2 services list | terms of service | Residential and commercial only — add industrial? |
 | Terms §14 contact | terms of service | Bare `www.` address, no phone or email — add them as the privacy policy does? |
-| `/st-louis/` destination | redirects | Now `/services/industrial` (old page was an industrial pitch). Re-point to a St. Louis city page if one is built. Agree? |
 
 ## 7. Scope note — what exists in the preview
 
-This milestone is the **homepage prototype and the reusable foundation**.
-Service pages, city pages, projects and blog are deferred to the next
-assignment.
+Status as of the contact-form milestone (2026-09-19).
 
-**Routes that exist and work:** `/` (homepage), `/contact`, `/careers`,
-`/careers/jobs/<slug>`, `/robots.txt`, `/sitemap.xml`.
+**Built and routed:** `/`, `/services`, `/services/residential`,
+`/services/commercial`, `/services/industrial`, `/about`, `/service-area`,
+`/blog`, the three migrated posts, `/privacy-policy`, `/terms-of-service`,
+`/contact` (with a working inquiry form → `/api/inquiry`), `/robots.txt`,
+`/sitemap.xml`, and every launch redirect (`docs/migration-inventory.md` §4).
+The careers site (`careers.showmeelectrical.com`) is live and unchanged.
 
-**No link in the preview 404s.** Nav and footer entries for Services, Our
-Process, About and Service Area point at the matching homepage sections
-(`/#services`, `/#process`, `/#about`, `/#service-area`) until those pages are
-built; swapping them to real routes is a one-line change per entry in
-`config/site.config.ts`. The three service cards are deliberately not links
-rather than pointing at pages that do not exist.
+**Not built, by design:** individual service pages, city pages, new blog
+posts — later SEO expansion (`docs/completion-checklist.md` list C).
 
-`/contact` **is built** and is a real page: working `tel:` and `mailto:` links
-and the address. No form is rendered, so nothing can report a false success.
-
-**Reviewer notes are kept out of customer copy.** Everything provisional —
-the un-linked service cards, the unconfirmed emergency hours, the stand-in
-About photo, the missing contact form, the typeface question — is listed in
-the preview banner's "Reviewer notes" fold (`content/reviewer-notes.ts`), not
-as captions or labels on the page. Delete that file with `PreviewNotice` at
-launch.
+**Reviewer notes are kept out of customer copy.** Everything provisional is
+listed in the preview banner's "Reviewer notes" fold
+(`content/reviewer-notes.ts`), never as captions on the page. The flagged
+wording in the migrated posts and legal documents is collected for the final
+content review in `docs/final-content-review.md`. Delete the reviewer-notes
+file with `PreviewNotice` at launch.

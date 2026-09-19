@@ -41,6 +41,19 @@ On the **main host** the same pages would be duplicate content at
 `/careers*` (and the old WordPress `/career*`) to the careers host with the
 path preserved. Nav, footer and About link to `site.careersUrl` directly.
 
+### Contact form
+
+`/contact` renders `components/site/InquiryForm` (reusable: labels, service
+groups, endpoint and fallback contacts are props) with copy from
+`content/contact.ts`. It posts JSON to `/api/inquiry`, which validates with
+the same `lib/inquiry.ts` rules the form ran, then sends through Resend to
+the recipients in `config/inquiry.config.ts` (env-overridable). Success is
+shown only on a 2xx `{ ok: true }`; every other outcome keeps the visitor's
+input on screen with the phone and email as the fallback. Spam protection:
+same-origin check, per-IP rate limit, honeypot, minimum fill time, length
+limits. To test without sending, run with `INQUIRY_DELIVERY=mock` (or `fail`
+for the failure path); both are ignored in production.
+
 ### Legacy WordPress URLs
 
 `config/redirects.ts` is the per-client redirect map, read by
@@ -100,9 +113,12 @@ value. Env vars are snapshotted per deployment, so redeploy after changing one.
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| `RESEND_API_KEY` | **Yes** | — | Careers application email via `/api/apply`. Server-side only. |
+| `RESEND_API_KEY` | **Yes** | — | Careers applications (`/api/apply`) and website inquiries (`/api/inquiry`). Server-side only. Set per target: production has its own key; a send-only key restricted to `send.compassmarketing.ai` is set for **preview** so the form can be tested there. |
 | `RESEND_FROM` | No | `Show Me Electrical Careers <careers@send.compassmarketing.ai>` | Verified sender. |
 | `APPLICATION_RECIPIENT` | No | `info@showmeelectrical.com,thomas@compassmarketing.ai` | Comma-separated recipients. Reply-to is the applicant. |
+| `INQUIRY_RECIPIENT` | No | `info@showmeelectrical.com` | Contact-form recipients (`/api/inquiry`), comma-separated. Default is owner-confirmed (D-004). Reply-to is the visitor when they gave an email. |
+| `INQUIRY_FROM` | No | `Show Me Electrical Website <inquiries@send.compassmarketing.ai>` | Verified sender for inquiries. Only `send.compassmarketing.ai` is verified in Resend today. |
+| `INQUIRY_DELIVERY` | No | *(unset = real delivery)* | `mock` returns success without sending; `fail` simulates a provider failure. **Ignored when `VERCEL_ENV=production`.** For local and preview testing only. |
 | `NEXT_PUBLIC_SITE_URL` | No | `https://showmeelectrical.com` | Production domain for canonicals and structured data. |
 | `NEXT_PUBLIC_ALLOW_INDEXING` | No | *(unset = noindex)* | See below. |
 
@@ -132,10 +148,12 @@ config/
   site.config.ts     Client identity: name, contact, service area, nav, CTAs
   theme.config.ts    Motion settings + the brand reconciliation record
   redirects.ts       Legacy URL map → next.config.ts redirects()
+  inquiry.config.ts  Contact-form recipient/sender defaults (server-only)
 content/
   blocks.ts          Block union — long-form content as data
   blog/              Article type, registry (index.ts) and the migrated posts
   legal/             LegalDocument type, registry and the migrated documents
+  contact.ts         Contact page copy + every inquiry-form label and message
   home.ts            Homepage copy, with provenance notes per block
   about.ts           About page copy — the live About page's three paragraphs
   service-area.ts    Coverage as data: counties + communities (CoverageGroup[])
@@ -151,7 +169,7 @@ components/
   motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
   site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice,
                      PageHero, Breadcrumbs, ValueGrid, CoverageGroups,
-                     Blocks, ArticleLayout, LegalLayout
+                     Blocks, ArticleLayout, LegalLayout, InquiryForm
 content/
   reviewer-notes.ts  Provisional-content notes shown only in the preview banner
   decor/             Decoration registry (HeroBackdrop, storyRailPath) + the
@@ -162,6 +180,7 @@ content/
   (root)             Careers components — Header, Footer, JobCard, ApplicationForm
 lib/
   seo.ts             Structured data helpers
+  inquiry.ts         Inquiry model + validation shared by form and route; service options from the registry
   jobs.ts            Careers role data
 docs/
   page-plan.md             Proposed site structure, URL map and redirects

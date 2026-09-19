@@ -98,3 +98,18 @@ in the later SEO expansion plan.
 | `content/service-area.ts` | New "Illinois / Metro East" group with the two cities; hero, FAQ and description mention them |
 | `app/page.tsx` | Service-area chips and intro include both cities |
 | `content/services/*.ts`, `content/about.ts` | "Which areas do you serve?" answers include both cities |
+
+## D-004 — Website inquiries go to info@showmeelectrical.com (2026-09-19)
+
+**Decision (Tom):** the `/contact` inquiry form delivers to
+`info@showmeelectrical.com`, by email only — no SMS, no marketing
+subscription, no CRM hand-off.
+
+**Applied:** `config/inquiry.config.ts` (default recipient), overridable per
+environment with `INQUIRY_RECIPIENT`. Sender is a verified agency address
+(`inquiries@send.compassmarketing.ai`) until a showmeelectrical.com sending
+domain is verified; Reply-To is the visitor's email when given.
+
+**Not decided by this:** whether the careers application recipients change
+(they do not — `/api/apply` is untouched), and the verified client sending
+domain.

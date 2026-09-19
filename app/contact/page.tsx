@@ -3,91 +3,127 @@ import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import PreviewNotice from "@/components/site/PreviewNotice";
 import Reveal from "@/components/motion/Reveal";
-import Button from "@/components/site/Button";
+import InquiryForm from "@/components/site/InquiryForm";
 import { site } from "@/config/site.config";
+import { contact } from "@/content/contact";
+import { inquiryServiceGroups } from "@/lib/inquiry";
+import {
+  localBusinessJsonLd,
+  websiteJsonLd,
+  webPageJsonLd,
+  breadcrumbJsonLd,
+} from "@/lib/seo";
 
 export const dynamic = "force-static";
 
+const url = `${site.productionUrl}${contact.path}`;
+
 export const metadata: Metadata = {
-  title: "Contact — Free Electrical Quotes in St. Louis, MO",
-  description: `Contact ${site.legalName} for a free consultation. Call ${site.phone} or email ${site.email}. Serving the ${site.serviceArea}.`,
-  alternates: { canonical: `${site.productionUrl}/contact` },
+  title: { absolute: contact.seo.title },
+  description: contact.seo.description,
+  alternates: { canonical: url },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    title: contact.seo.title,
+    description: contact.seo.description,
+    url,
+  },
+  twitter: { card: "summary", title: contact.seo.title, description: contact.seo.description },
 };
 
 /**
- * Contact page.
- *
- * NO FORM. The WordPress contact form has no replacement backend yet, and a
- * form that cannot submit must never show a success message. Until the route
- * handler is built (mirroring the careers /api/apply Resend integration),
- * every action here is a real `tel:` or `mailto:` link that works today.
- * That status is recorded in the reviewer notice, not on the page.
+ * /contact — inquiry form delivered by /api/inquiry, with the phone, email
+ * and address alongside so no visitor depends on the form alone.
  */
 export default function ContactPage() {
+  const breadcrumbs = [{ label: "Home", href: "/" }, { label: "Contact" }];
+  const jsonLd = [
+    localBusinessJsonLd(),
+    websiteJsonLd(),
+    webPageJsonLd(contact.path, contact.seo.title, contact.seo.description),
+    breadcrumbJsonLd(breadcrumbs, contact.path),
+  ];
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PreviewNotice />
       <SiteHeader />
 
       <main id="main">
         <section className="bg-navy-950 py-16 sm:py-20">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6">
-            <Reveal>
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <Reveal immediate>
               <p className="text-sm font-bold uppercase tracking-widest text-lime-500">
-                Contact
+                {contact.hero.eyebrow}
               </p>
               <h1 className="mt-3 text-3xl font-extrabold text-white sm:text-5xl">
-                Let&apos;s talk about your project
+                {contact.hero.headline}
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
-                Free consultation, straight answers and a clear scope before any
-                work starts. Call or email and we&apos;ll get you on the
-                schedule.
+                {contact.hero.intro}
               </p>
             </Reveal>
           </div>
         </section>
 
-        <section className="bg-white py-16 sm:py-20">
-          <div className="mx-auto grid max-w-4xl gap-8 px-4 sm:px-6 md:grid-cols-2">
-            <Reveal className="rounded-xl border border-navy-900/10 bg-cream p-8">
-              <h2 className="text-lg font-bold text-navy-900">Call us</h2>
-              <p className="mt-2 text-sm leading-relaxed text-charcoal/70">
-                Fastest way to reach us during business hours.
+        <section className="bg-cream py-16 sm:py-20" aria-labelledby="inquiry-heading">
+          <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+            <Reveal immediate className="rounded-2xl border border-navy-900/10 bg-white p-6 shadow-sm sm:p-10">
+              <p className="text-sm font-bold uppercase tracking-widest text-lime-700">
+                {contact.form.eyebrow}
               </p>
-              <a
-                href={site.phoneHref}
-                className="mt-4 block text-2xl font-extrabold text-navy-900 hover:text-lime-700"
-              >
-                {site.phone}
-              </a>
+              <h2 id="inquiry-heading" className="mt-2 text-2xl font-extrabold text-navy-900 sm:text-3xl">
+                {contact.form.heading}
+              </h2>
+              <p className="mt-3 max-w-xl leading-relaxed text-charcoal/75">{contact.form.intro}</p>
+              <div className="mt-8">
+                <InquiryForm
+                  endpoint="/api/inquiry"
+                  labels={contact.formLabels}
+                  groups={inquiryServiceGroups}
+                  fallback={{ phone: site.phone, phoneHref: site.phoneHref, email: site.email }}
+                />
+              </div>
             </Reveal>
 
-            <Reveal delay={0.1} className="rounded-xl border border-navy-900/10 bg-cream p-8">
-              <h2 className="text-lg font-bold text-navy-900">Email us</h2>
-              <p className="mt-2 text-sm leading-relaxed text-charcoal/70">
-                Send project details and we&apos;ll come back to you.
-              </p>
-              <a
-                href={`mailto:${site.email}`}
-                className="mt-4 block break-words text-lg font-bold text-navy-900 hover:text-lime-700"
-              >
-                {site.email}
-              </a>
-            </Reveal>
+            <div className="grid content-start gap-6">
+              <Reveal immediate delay={0.1} className="rounded-xl border border-navy-900/10 bg-white p-8">
+                <h2 className="text-lg font-bold text-navy-900">{contact.cards.call.heading}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{contact.cards.call.body}</p>
+                <a
+                  href={site.phoneHref}
+                  className="mt-4 block text-2xl font-extrabold text-navy-900 hover:text-lime-700"
+                >
+                  {site.phone}
+                </a>
+              </Reveal>
 
-            <Reveal delay={0.15} className="rounded-xl border border-navy-900/10 p-8 md:col-span-2">
-              <h2 className="text-lg font-bold text-navy-900">Our shop</h2>
-              <address className="mt-3 not-italic leading-relaxed text-charcoal/75">
-                {site.address.street}
-                <br />
-                {site.address.city}, {site.address.state} {site.address.zip}
-              </address>
-              <p className="mt-4 text-sm text-charcoal/70">
-                Serving the {site.serviceArea}.
-              </p>
-            </Reveal>
+              <Reveal immediate delay={0.15} className="rounded-xl border border-navy-900/10 bg-white p-8">
+                <h2 className="text-lg font-bold text-navy-900">{contact.cards.email.heading}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{contact.cards.email.body}</p>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="mt-4 block break-words text-lg font-bold text-navy-900 hover:text-lime-700"
+                >
+                  {site.email}
+                </a>
+              </Reveal>
 
+              <Reveal immediate delay={0.2} className="rounded-xl border border-navy-900/10 bg-white p-8">
+                <h2 className="text-lg font-bold text-navy-900">{contact.cards.shop.heading}</h2>
+                <address className="mt-3 not-italic leading-relaxed text-charcoal/75">
+                  {site.address.street}
+                  <br />
+                  {site.address.city}, {site.address.state} {site.address.zip}
+                </address>
+                <p className="mt-4 text-sm text-charcoal/70">Serving the {site.serviceArea}.</p>
+              </Reveal>
+            </div>
           </div>
         </section>
       </main>

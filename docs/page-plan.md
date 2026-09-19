@@ -167,7 +167,7 @@ the production build (2026-09-19) — the full table with hop counts is in
 |---|---|---|
 | `/about/`, `/services/`, `/contact/`, `/privacy-policy/`, `/terms-of-service/` | same path without the slash | Next's own slash-strip; no rule needed |
 | `/locations/` | `/service-area` | renamed |
-| `/st-louis/` | `/services/industrial` | the old page was an industrial pitch, not a city page (inventory §1 #5); re-point if a St. Louis city page is built |
+| `/st-louis/` | `/services/industrial` | the old page was an industrial pitch, not a city page (inventory §1 #5). Final on that content — a later St. Louis city page does not change it |
 | `/careers/`, `/career/` | `https://careers.showmeelectrical.com/` | separate host; duplicate page |
 | `/<post-slug>/` ×3 | `/blog/<post-slug>` | moved under `/blog` |
 | `/category/blog/` | `/blog` | consolidated |

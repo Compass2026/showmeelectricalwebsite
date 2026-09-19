@@ -57,8 +57,8 @@ export const reviewerNotes: { where: string; note: string }[] = [
     note: "Nav, footer and About now link straight to careers.showmeelectrical.com, and showmeelectrical.com/careers redirects there, so the careers pages exist at one address. On this preview the Careers link therefore leaves the preview for the live careers site.",
   },
   {
-    where: "Contact",
-    note: "No enquiry form yet — there is no submission backend, so none is shown rather than one that fails silently. Phone and email links are live.",
+    where: "Contact form",
+    note: "Live inquiry form delivering by email to info@showmeelectrical.com (owner-confirmed). Success is shown only after the server accepts the message; on any failure the entered details stay in the form and the phone and email links are offered. On this preview it sends from the agency's verified address until a showmeelectrical.com sending domain is set up.",
   },
   {
     where: "Headings typeface",

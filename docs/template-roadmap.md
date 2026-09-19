@@ -32,6 +32,7 @@ Nothing here is built speculatively for hypothetical clients or frameworks.
 | Content models + registries | `content/blog/types.ts`, `content/legal/types.ts`; `content/blog/index.ts`, `content/legal/index.ts` | Registries drive the index page, static params, the sitemap and the reviewer notice. |
 | Article / blog schema | `lib/seo.ts` — `blogPostingJsonLd`, `blogJsonLd` | `datePublished` and `author` emitted only when the content carries them. |
 | Launch redirects as data | `config/redirects.ts` → `next.config.ts` | Per-client map; the mechanism is client-agnostic. |
+| Inquiry form | `components/site/InquiryForm`, `lib/inquiry.ts`, `app/api/inquiry/route.ts` | Labels, service groups, endpoint and fallback contacts are props; validation shared by form and route returns codes, not copy; the route reads recipients/sender from config + env. |
 | Nav items may be external | `NavItem.external`; `SiteHeader`, `SiteFooter` | Renders a plain anchor for off-site links (used for the careers host here). |
 
 ## 2. Still specific to Show Me Electrical
@@ -47,6 +48,8 @@ Everything that is a **fact about the client** or a **choice made for them**:
 | Reviewer notes | `content/reviewer-notes.ts` | This engagement's open items. Now also pulls the `flags` off every article and legal document. |
 | Migrated posts and legal documents | `content/blog/*.ts`, `content/legal/*.ts` | Verbatim client content with provenance headers and `flags`. |
 | Redirect map | `config/redirects.ts` | This client's WordPress URLs. |
+| Inquiry recipients, sender, subject prefix | `config/inquiry.config.ts` | Client delivery settings (server-only). |
+| Contact page copy + form labels | `content/contact.ts` | Every string the form shows. |
 | Careers redirect on the main host | `middleware.ts` rule 4 | Reads `site.careersUrl`; part of the careers coupling (§5.3). |
 | Photography | `public/photos/` | Client's own job-site images. |
 | Logo | `public/logo-white.webp` | |
@@ -87,6 +90,7 @@ In order, with the file each step touches:
 9. **`content/reviewer-notes.ts`** — this engagement's open items.
 9a. **`content/blog/<slug>.ts` + `content/blog/index.ts`**, **`content/legal/<slug>.ts` + `content/legal/index.ts`** — the client's articles and legal documents as `Block[]`, registered. The routes (`app/blog/…`, `app/privacy-policy`, `app/terms-of-service`) need no edit beyond the legal slugs.
 9b. **`config/redirects.ts`** — the client's legacy URL map, or an empty array.
+9c. **`config/inquiry.config.ts`** + **`content/contact.ts`** — recipients, sender, subject prefix; page copy and form labels. Set `RESEND_API_KEY` per environment.
 10. **Careers — coordinated change, not a deletion.** If the client has no
     careers property: remove `app/careers/` and `/api/apply`; remove middleware
     rules 1–3 and the `careers.` host test in `lib/host.ts`; remove the
@@ -150,9 +154,10 @@ complete and validated on real pages.
 4. **Location-page model.** A `LocationPageContent` type and renderer,
    mirroring the service-page model, once the Tier-1 city pages are built for
    this client and the pattern is proven.
-5. **Contact form route.** The Resend pattern exists in `/api/apply`; a
-   generic enquiry handler with the same honeypot and rate limiting belongs in
-   the starter.
+5. **Contact form route.** ✅ Done — `/api/inquiry` + `InquiryForm` +
+   `lib/inquiry.ts`. The careers `/api/apply` still has its own copies of the
+   `readEnv`/`esc`/`row` helpers; fold them into a shared `lib/email.ts` at
+   extraction (not touched now — the careers workflow is live).
 6. **Sitemap from registries throughout.** Service pages, blog posts and
    legal documents come from their registries. The five core pages are still
    literal entries in `app/sitemap.ts`; a core-page registry would finish
@@ -303,3 +308,34 @@ No client string entered `components/`, `lib/` or `content/blocks.ts`. The
 "Last updated" label, the "By" byline prefix and the "Blog" eyebrow default in
 `ArticleLayout` are English UI strings, not client facts — the same class as
 "Skip to content".
+
+### Milestone: contact form (2026-09-19)
+
+A reusable inquiry form and delivery route. The component owns behaviour
+(validation, submit states, preserving input on failure); every string is a
+prop from `content/contact.ts`; service choices are generated from the
+service-page registry; recipients and sender live in a server-only config
+overridable by environment.
+
+**Shared components that required changes**, and why:
+
+| Component | Change | Reason |
+|---|---|---|
+| `components/site/InquiryForm` | **New**, generic | Form behaviour without copy |
+| `lib/inquiry.ts` | **New** — limits, normalisation, validation (codes), service groups from the registry | One rule set for client and server |
+| `app/api/inquiry/route.ts` | **New** — same-origin, rate limit, honeypot, speed trap, validation, Resend, mock/fail modes outside production | Delivery |
+| `app/contact/page.tsx` | Composes the form beside the phone/email/address cards | No visitor depends on the form alone |
+| `content/reviewer-notes.ts` | Contact entry updated | |
+
+**New hardcoded client dependencies:**
+
+| Dependency | Where | Intentional? |
+|---|---|---|
+| Recipient, sender, subject prefix, source label | `config/inquiry.config.ts` | **Yes** — server-only client config, env-overridable |
+| Page copy and form labels | `content/contact.ts` | **Yes** — content |
+| Rate-limit and speed-trap numbers | `config/inquiry.config.ts` | **Yes** — tunable per client, not facts |
+| Copies of `readEnv`/`esc`/`row` in the new route | `app/api/inquiry/route.ts` | **Accepted for now** — duplicated from `/api/apply` rather than refactoring the live careers route; fold into `lib/email.ts` at extraction (§5.5) |
+
+No client string entered `components/site/InquiryForm.tsx` or
+`lib/inquiry.ts`. The "Website" honeypot label and the spinner are UI
+mechanics, not client facts.

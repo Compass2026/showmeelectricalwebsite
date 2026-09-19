@@ -28,9 +28,9 @@ export const redirects: Redirect[] = [
   // Renamed / consolidated pages
   { source: "/locations", destination: "/service-area", permanent: true },
   // The old page was an industrial pitch for St. Louis (H1 "Industrial
-  // Electrical solutions for St. Louis, Missouri") plus a county list — the
-  // nearest built page is the industrial hub. Re-point to a St. Louis city
-  // page if one is built later.
+  // Electrical solutions for St. Louis, Missouri") plus a county list, so
+  // its content maps to the industrial hub. Decided on the old page's
+  // content, not as a placeholder for a future city page (Tom, 2026-09-19).
   { source: "/st-louis", destination: "/services/industrial", permanent: true },
 
   // Posts moved under /blog

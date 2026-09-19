@@ -18,7 +18,7 @@ that sitemap plus a fetch of each URL, not from a homepage crawl.
 | 2 | `/about/` | Owner story (Dan) | `/about` | **Improve** | Strong, usable copy. Reused on the homepage About section. Trailing-slash change needs a redirect. |
 | 3 | `/services/` | Services hub | `/services` | **Rebuilt ✅ — 301 at launch** | The live page is empty chrome; the rebuilt directory lists the three pathways and all 22 services from the registry of built pages. `/services/` → `/services` (trailing slash only). |
 | 4 | `/locations/` | Locations index | `/service-area` | **Consolidated ✅ — 301 at launch** | The live page is thin. Rebuilt as the service-area page: seven counties, approved communities, no city pages yet. `/locations/` → `/service-area`. |
-| 5 | `/st-louis/` | St. Louis "city" page | `/services/industrial` | **Redirected ✅ — 301 at launch** | Inspected 2026-09-19: the page is an industrial pitch, not a city page — H1 *"Industrial Electrical solutions for St. Louis, Missouri"*, sub-head *"Powering St. Charles, Lincoln & Warren Counties with Expert Industrial power"*, and a six-county "Areas we serve" list. Nothing else. The nearest built page by topic is the industrial hub; the county list lives at `/service-area`. A St. Louis city page is later SEO expansion (`docs/page-plan.md` §4); if one is built, re-point this rule then. Not retained: the old copy is thinner than the hub and would be a second, weaker industrial page. |
+| 5 | `/st-louis/` | St. Louis "city" page | `/services/industrial` | **Redirected ✅ — 301 at launch** | Inspected 2026-09-19: the page is an industrial pitch, not a city page — H1 *"Industrial Electrical solutions for St. Louis, Missouri"*, sub-head *"Powering St. Charles, Lincoln & Warren Counties with Expert Industrial power"*, and a six-county "Areas we serve" list. Nothing else. The nearest built page by topic is the industrial hub; the county list lives at `/service-area`. **Final on the old page's content** (Tom, 2026-09-19): this mapping stands regardless of whether a St. Louis city page is built later. Not retained as a page: the old copy is thinner than the hub and would be a second, weaker industrial page. |
 | 6 | `/contact/` | Contact + form | `/contact` | **Improve** | Form backend must be replaced (see §5). |
 | 7 | `/careers/` | Careers | `https://careers.showmeelectrical.com/` | **Redirected ✅** | `middleware.ts` rule 4 sends main-host `/careers*` to the careers host (path preserved, so `/careers/jobs/x` → `/jobs/x`). |
 | 8 | `/career/` | Careers (duplicate) | `https://careers.showmeelectrical.com/` | **Redirected ✅** | **Duplicate of #7.** Same middleware rule. |
@@ -83,8 +83,8 @@ the README re-run after this change).
 
 | Item | Current | Needed |
 |---|---|---|
-| Homepage contact form | Elementor form (Name, Company, Phone, Email, Subject, Message) | Rebuild as a route handler. The careers site already sends via Resend (`/api/apply`) — reuse that pattern. **Backend not yet built; the prototype uses `tel:` and `mailto:` links only and never shows a false success message.** |
-| Contact page form | Elementor form | Same as above. |
+| Homepage contact form | Elementor form (Name, Company, Phone, Email, Subject, Message) | **Replaced ✅** by the `/contact` inquiry form (`/api/inquiry`, Resend, same pattern as the careers form). Fields: name, email, phone, service (from the service registry), project details. The homepage links to `/contact` rather than embedding a second form. |
+| Contact page form | Elementor form | **Replaced ✅** — see above. Recipient owner-confirmed: info@showmeelectrical.com (D-004). Delivery verified on the preview: see `docs/completion-checklist.md` A6. |
 | Careers application | Live at careers.showmeelectrical.com, Resend-backed | **No change. Preserved as-is.** |
 
 ## 6. SEO findings from the existing site
@@ -102,21 +102,45 @@ Verified by `curl` against raw HTML, not a browser.
 | **Address inconsistency** | Low | Homepage says *"5602 Hegee Rd"*; other pages say *"5602 Heege Rd"*. Footer says *"St. Louis MO"*, About says *"Affton, MO"*. **Confirm the correct address** — it feeds NAP consistency and LocalBusiness schema. |
 | **Stale copyright** | Low | Footer reads "Show Me Electrical 2025". |
 
-## 7. Media
+## 7. Media — retained photos mapped, retired assets listed
 
-32 unique images in `/wp-content/uploads/`. Split into two groups:
+32 unique files under `/wp-content/uploads/` (plus Elementor CSS artifacts).
+Image URLs are not redirected — nothing the rebuild controls links to them —
+so each old URL will 404 after the move. The tables below are the record of
+what became what.
 
-**Real job-site photography (usable).** iPhone-style filenames (`IMG_*`,
-`PHOTO-*`, UUID names from `2025/10`). Visually verified as genuine Show Me
-Electrical work: panels, conduit rough-ins, high-bay lighting, retail
-build-outs, finished interiors. Nine are optimised into `/public/photos` for
-this prototype.
+### 7a. Retained — the client's own job-site photography (9)
 
-**Stock photography (do not present as client work).** Filenames ending in a
-`-utc` timestamp are stock downloads — `worker-is-cutting-wires…`,
-`electrical-outlet-replacement…`, `vintage-electric-switch…`,
-`interior-of-a-lobby-hotel…`, `living-room…`. The brand board independently
-confirms two of these as stock. **None are used in this prototype.**
+Visually verified as genuine Show Me Electrical work, re-encoded to WebP at
+up to 1600px wide (`public/photos/`). Old paths are relative to
+`https://showmeelectrical.com/wp-content/uploads/`.
+
+| Old WordPress file | New file | Shows | Used on |
+|---|---|---|---|
+| `2025/10/10BF7BF3-A2B5-48E8-8859-44E5ABA87C19_4_5005_c.jpg` | `/photos/industrial-high-bay.webp` | High-bay warehouse lighting | Home, `/services/industrial` (hero) |
+| `2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg` | `/photos/commercial-checkout.webp` | Retail checkout build-out | Home, `/services/commercial` |
+| `2025/10/IMG_0179-1.jpg` | `/photos/finished-interior-lighting.webp` | Finished interior lighting | Home, `/services/residential` |
+| `2025/10/IMG_0354-1.jpg` | `/photos/ceiling-fan-install.webp` | Ceiling fan installation | `/services/residential` |
+| `2025/10/IMG_0488-1.jpg` | `/photos/roughin-attic.webp` | Recessed lighting rough-in, vaulted ceiling | Home, `/about`, `/blog`, `/services/residential` |
+| `2025/10/IMG_1447-1.jpg` | `/photos/commercial-panels.webp` | Stainless wall units (not panels — alt corrected) | Home, `/services`, `/services/commercial` |
+| `2025/10/IMG_2411-1.jpg` | `/photos/roughin-wall.webp` | Commercial wall rough-in | Home, `/services/commercial` |
+| `2025/10/IMG_7032-1.jpg` | `/photos/roughin-framing.webp` | Rough-in in new framing | `/services/residential` |
+| `2025/10/PHOTO-2025-04-15-22-41-56.jpg` | `/photos/service-entrance.webp` | Exterior service entrance, conduit risers | Home, `/about`, `/service-area`, `/services/commercial` |
+
+Brand asset: `2024/08/Show-me-electric-white-logo-4.png` → `/logo-white.webp`
+(cropped to the artwork). `2024/08/Show-me-electric-white-logo-2.png` is a
+duplicate upload of the same logo and is retired.
+
+### 7b. Retired — intentionally not carried over
+
+| Group | Files | Why |
+|---|---|---|
+| **Stock photography** (never presented as client work) | `2025/06/vintage-electric-switch-…-utc.jpg` (+ `-scaled`), `2025/10/interior-of-a-lobby-hotel-reception-3d-illustratio-…-utc-1-1-1.jpg`, `2025/10/living-room-…-utc-4-1-1.jpg`, `2026/01/electrical-outlet-replacement-…-utc.jpg` (+ `-scaled`), `2026/01/worker-is-cutting-wires-…-utc.jpg` (+ `-scaled`) | `-utc` timestamp filenames are stock-library downloads; the brand board independently confirms two. The blog posts' featured images were these, so the posts now carry no image rather than a stock one. |
+| **Additional client photos, unused for now** | `2025/10/66432045448__0F850129-…jpg`, `2025/10/7BD07746-…_4_5005_c.jpg`, `2025/10/87B73734-…_4_5005_c.jpg`, `2025/10/AD15139E-…_4_5005_c.jpg`, `2025/10/IMG_4323.jpg`, `2025/10/IMG_4659-1-1536x2048-1.jpg`, `2025/10/IMG_4815-1-1536x2048-1.jpg`, `2025/10/IMG_4886-1536x2048-1.jpg`, `2025/10/PHOTO-2025-04-15-23-37-49-1.jpg`, `2025/07/IMG_5571.jpeg` | Same job-site library, not needed by the current page set. Candidates for the individual service pages later; each must be visually verified before use, as the nine above were. Not migrated = not lost: they stay in the WordPress media library until the site is retired, and should be exported with it. |
+| **Facebook-sourced image** | `2025/06/499399452_2959955684207140_…_n.jpg` | Facebook CDN filename; provenance not verifiable, not used. |
+| **Graphics of unknown provenance** | `2025/05/SHOW-ME-INVESTMENT-2.png`, `2025/05/unnamed.png`, `2025/05/unnamed-2.png`, `2025/05/unnamed-3.png` | Not photography; not referenced by any rebuilt page. Available in the WordPress library if the owner wants them. |
+| **Site icon** | `2024/08/cropped-Untitled-design.png` | Replaced by `app/icon.svg`. |
+| **Elementor CSS** | `elementor/css/post-*.css` | Build artifacts of the old theme. |
 
 **Missing:** a portrait of Dan. The About page shows a job-site photo as a
 stand-in; recorded in the reviewer notice, not captioned on the page.
