@@ -20,6 +20,12 @@ import {
  * the visitor's input intact after a failure.
  *
  * Success is shown ONLY after the server answers 2xx with `{ ok: true }`.
+ *
+ * Before hydration (and forever without JavaScript) the submit button is
+ * rendered disabled, so the browser can never perform a native submission
+ * that would put the visitor's details into a URL. `method="post"` +
+ * `action` are a second guard for the same reason. The phone and email are
+ * always on the page beside the form.
  */
 export interface InquiryFormLabels {
   name: string;
@@ -78,7 +84,9 @@ export default function InquiryForm({
   const [errors, setErrors] = useState<InquiryErrors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [failure, setFailure] = useState<string>("");
-  const startedAt = useRef<number>(Date.now());
+  /** False in server HTML and until React has attached the submit handler. */
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const alertRef = useRef<HTMLDivElement>(null);
 
   // Move focus to the failure notice once it has rendered.
@@ -127,7 +135,7 @@ export default function InquiryForm({
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...data, website: honeypot, startedAt: startedAt.current }),
+        body: JSON.stringify({ ...data, website: honeypot }),
         signal: controller.signal,
       });
       clearTimeout(timer);
@@ -180,7 +188,6 @@ export default function InquiryForm({
             setValues(empty);
             setErrors({});
             setStatus("idle");
-            startedAt.current = Date.now();
           }}
           className="mt-6 text-sm font-bold text-lime-700 underline underline-offset-4"
         >
@@ -197,7 +204,13 @@ export default function InquiryForm({
     [errors[f] ? errId(f) : null, hintId ?? null].filter(Boolean).join(" ") || undefined;
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-busy={status === "submitting"}>
+    <form
+      onSubmit={onSubmit}
+      method="post"
+      action={endpoint}
+      noValidate
+      aria-busy={status === "submitting"}
+    >
       <noscript>
         <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-900">
           {labels.noscript}{" "}
@@ -373,7 +386,8 @@ export default function InquiryForm({
       <div className="mt-8 flex flex-wrap items-center gap-4">
         <button
           type="submit"
-          disabled={status === "submitting"}
+          disabled={!ready || status === "submitting"}
+          aria-disabled={!ready || undefined}
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-navy-950 shadow-lg shadow-lime-500/20 transition-colors hover:bg-lime-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500 disabled:cursor-wait disabled:opacity-70"
         >
           {status === "submitting" && (

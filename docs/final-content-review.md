@@ -40,8 +40,7 @@ Source: https://showmeelectrical.com/top-signs-you-need-to-call-an-electrician-i
 |---|---|---|
 | 1 | "Need Help Fast?" and "get fast, trusted electrical help" — response-time adjacent wording. It stops short of a 24/7, after-hours or arrival-time promise (decision D-001), so it is preserved; recommend softening to "prompt" or removing "fast" until hours are confirmed. | ⬜ |
 | 2 | "ready to help homeowners across Missouri" — broader than the listed service area. Preserved as published; recommend narrowing to the listed area. | ⬜ |
-| 3 | "request service online" — there is no enquiry form yet on the rebuilt site (contact page is phone and email until the form backend is built). Preserved; the page CTA band links to /contact. | ⬜ |
-| 4 | Byline "Tom Dombrowski" is the WordPress author account (Compass Marketing), not the business owner. Preserved as published; decide whether posts should be bylined to the business instead. | ⬜ |
+| 3 | Byline "Tom Dombrowski" is the WordPress author account (Compass Marketing), not the business owner. Preserved as published; decide whether posts should be bylined to the business instead. | ⬜ |
 
 ## Legal documents
 
@@ -54,7 +53,7 @@ Source: https://showmeelectrical.com/privacy-policy/ · file `content/legal/priv
 | 2 | Website is cited as https://www.showmeelectrical.com (www). The rebuild's canonical host is showmeelectrical.com without www; confirm the canonical host and update the policy to match at launch. | ⬜ |
 | 3 | §7 says cookies and analytics tools are used. The rebuilt site currently sets no analytics or advertising cookies; keep the wording only if analytics/ads tags are added before launch. | ⬜ |
 | 4 | §2 names Google Ads, Facebook and Instagram marketing campaigns. Confirm these are still in use. | ⬜ |
-| 5 | §4–5 SMS/opt-in language matches the Terms §5 text-messaging program. The rebuilt site has no form yet, so no opt-in is collected until the contact form ships; the wording will apply once it does. | ⬜ |
+| 5 | §5 says that submitting a form is an express opt-in to phone, email and SMS communications. The rebuilt contact form collects a phone number only so the business can reply; it presents no SMS or marketing opt-in and records none. Owner to decide: narrow the policy to what the site does, or keep the wording for a future SMS program run outside the website. | ⬜ |
 | 6 | Contact section line "Show Me Electrical" is rendered as an address block; the phone, email and website lines are preserved with their original emoji markers. | ⬜ |
 
 ### Terms of Service
@@ -65,7 +64,7 @@ Source: https://showmeelectrical.com/terms-of-service/ · file `content/legal/te
 | 1 | §2 "Services Provided" lists residential and commercial work only — industrial electrical is not mentioned, although it is a core service on the rebuilt site. Owner to decide whether to add it. | ⬜ |
 | 2 | §2 names generator installations, EV charger installations and smart home solutions; these match the residential taxonomy. Fine as is. | ⬜ |
 | 3 | §1 cites https://www.showmeelectrical.com (www); §14 gives only "www.showmeelectrical.com" as contact — no phone or email. Confirm the canonical host and consider adding the phone number and email as the privacy policy does. | ⬜ |
-| 4 | §5 text-messaging program (approximately one message per month, STOP to opt out) is preserved verbatim. The rebuilt site collects no phone numbers until the contact form ships. | ⬜ |
+| 4 | §5 text-messaging program (approximately one message per month, STOP to opt out) is preserved verbatim. The rebuilt contact form asks for a phone number only as a way to reply; it does not enrol anyone in a text-messaging program. Owner to decide whether §5 stays as-is for a programme run outside the website. | ⬜ |
 | 5 | §7 states all website content, including images, is the property of Show Me Electrical. The old site used some stock imagery; the rebuild uses only the client's own photography, so this is now accurate. | ⬜ |
 | 6 | §12 governing law: State of Missouri. The listed service area now includes two Illinois cities; this does not change which law governs the website terms, but the owner may want counsel to confirm. | ⬜ |
 

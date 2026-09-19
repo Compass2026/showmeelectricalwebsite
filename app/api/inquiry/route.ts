@@ -19,9 +19,12 @@ export const runtime = "nodejs";
  * answers with `{ error }` and a non-2xx status, and the form keeps the
  * visitor's input on every one of those paths.
  *
- * Spam protection, in order: same-origin check, per-IP rate limit, honeypot
- * (silent accept), minimum fill time (silent accept), server-side validation
- * and length limits. No captcha — nothing here needs a third-party script.
+ * Spam protection, in order: same-origin check, per-IP rate limit (per
+ * serverless instance — see config), honeypot (silent accept), server-side
+ * validation and length limits. No captcha — nothing here needs a
+ * third-party script. There is deliberately NO timing trap: a visitor who
+ * pastes or autofills can finish in under a second, and a message that
+ * passes every other check must never be silently discarded.
  *
  * Delivery: Resend, the same provider the live careers form uses; key from
  * the environment only. `INQUIRY_DELIVERY=mock|fail` short-circuits the
@@ -31,7 +34,11 @@ export const runtime = "nodejs";
  * The careers `/api/apply` route is untouched by this file.
  */
 
-/* ---------- Per-instance rate limit (same pattern as /api/apply) ---------- */
+/* ---------- Rate limit — PER INSTANCE, same pattern as /api/apply ----------
+ * `hits` is module state in one function instance. Vercel runs many
+ * instances; each has its own map, and a cold start begins empty. Treat this
+ * as a brake on a single connection hammering one warm instance, not as a
+ * deployment-wide quota. */
 const hits = new Map<string, number[]>();
 function rateLimited(ip: string): boolean {
   const { windowMs, maxPerWindow } = inquiryConfig.rateLimit;
@@ -109,10 +116,9 @@ export async function POST(request: NextRequest) {
     return failure("Invalid submission.", 400);
   }
 
-  // Honeypot and speed trap: pretend success so bots learn nothing.
+  // Honeypot: a field people never see. Pretend success so bots learn nothing.
   const honeypot = typeof raw.website === "string" ? raw.website.trim() : "";
-  const startedAt = typeof raw.startedAt === "number" ? raw.startedAt : 0;
-  if (honeypot || (startedAt && Date.now() - startedAt < inquiryConfig.minFillMs)) {
+  if (honeypot) {
     return NextResponse.json({ ok: true });
   }
 

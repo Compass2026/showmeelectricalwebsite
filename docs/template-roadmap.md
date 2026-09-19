@@ -323,7 +323,7 @@ overridable by environment.
 |---|---|---|
 | `components/site/InquiryForm` | **New**, generic | Form behaviour without copy |
 | `lib/inquiry.ts` | **New** — limits, normalisation, validation (codes), service groups from the registry | One rule set for client and server |
-| `app/api/inquiry/route.ts` | **New** — same-origin, rate limit, honeypot, speed trap, validation, Resend, mock/fail modes outside production | Delivery |
+| `app/api/inquiry/route.ts` | **New** — same-origin, per-instance rate limit, honeypot, validation, Resend, mock/fail modes outside production | Delivery |
 | `app/contact/page.tsx` | Composes the form beside the phone/email/address cards | No visitor depends on the form alone |
 | `content/reviewer-notes.ts` | Contact entry updated | |
 
@@ -333,7 +333,7 @@ overridable by environment.
 |---|---|---|
 | Recipient, sender, subject prefix, source label | `config/inquiry.config.ts` | **Yes** — server-only client config, env-overridable |
 | Page copy and form labels | `content/contact.ts` | **Yes** — content |
-| Rate-limit and speed-trap numbers | `config/inquiry.config.ts` | **Yes** — tunable per client, not facts |
+| Rate-limit numbers | `config/inquiry.config.ts` | **Yes** — tunable per client, not facts |
 | Copies of `readEnv`/`esc`/`row` in the new route | `app/api/inquiry/route.ts` | **Accepted for now** — duplicated from `/api/apply` rather than refactoring the live careers route; fold into `lib/email.ts` at extraction (§5.5) |
 
 No client string entered `components/site/InquiryForm.tsx` or

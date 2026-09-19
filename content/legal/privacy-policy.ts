@@ -81,7 +81,7 @@ export const doc: LegalDocument = {
     "Website is cited as https://www.showmeelectrical.com (www). The rebuild's canonical host is showmeelectrical.com without www; confirm the canonical host and update the policy to match at launch.",
     "§7 says cookies and analytics tools are used. The rebuilt site currently sets no analytics or advertising cookies; keep the wording only if analytics/ads tags are added before launch.",
     "§2 names Google Ads, Facebook and Instagram marketing campaigns. Confirm these are still in use.",
-    "§4–5 SMS/opt-in language matches the Terms §5 text-messaging program. The rebuilt site has no form yet, so no opt-in is collected until the contact form ships; the wording will apply once it does.",
+    "§5 says that submitting a form is an express opt-in to phone, email and SMS communications. The rebuilt contact form collects a phone number only so the business can reply; it presents no SMS or marketing opt-in and records none. Owner to decide: narrow the policy to what the site does, or keep the wording for a future SMS program run outside the website.",
     "Contact section line \"Show Me Electrical\" is rendered as an address block; the phone, email and website lines are preserved with their original emoji markers.",
   ],
 };

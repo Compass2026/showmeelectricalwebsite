@@ -78,7 +78,7 @@ export const doc: LegalDocument = {
     "§2 \"Services Provided\" lists residential and commercial work only — industrial electrical is not mentioned, although it is a core service on the rebuilt site. Owner to decide whether to add it.",
     "§2 names generator installations, EV charger installations and smart home solutions; these match the residential taxonomy. Fine as is.",
     "§1 cites https://www.showmeelectrical.com (www); §14 gives only \"www.showmeelectrical.com\" as contact — no phone or email. Confirm the canonical host and consider adding the phone number and email as the privacy policy does.",
-    "§5 text-messaging program (approximately one message per month, STOP to opt out) is preserved verbatim. The rebuilt site collects no phone numbers until the contact form ships.",
+    "§5 text-messaging program (approximately one message per month, STOP to opt out) is preserved verbatim. The rebuilt contact form asks for a phone number only as a way to reply; it does not enrol anyone in a text-messaging program. Owner to decide whether §5 stays as-is for a programme run outside the website.",
     "§7 states all website content, including images, is the property of Show Me Electrical. The old site used some stock imagery; the rebuild uses only the client's own photography, so this is now accurate.",
     "§12 governing law: State of Missouri. The listed service area now includes two Illinois cities; this does not change which law governs the website terms, but the owner may want counsel to confirm.",
   ],

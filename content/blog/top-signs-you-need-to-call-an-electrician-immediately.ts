@@ -50,7 +50,6 @@ export const post: Article = {
   flags: [
     "\"Need Help Fast?\" and \"get fast, trusted electrical help\" — response-time adjacent wording. It stops short of a 24/7, after-hours or arrival-time promise (decision D-001), so it is preserved; recommend softening to \"prompt\" or removing \"fast\" until hours are confirmed.",
     "\"ready to help homeowners across Missouri\" — broader than the listed service area. Preserved as published; recommend narrowing to the listed area.",
-    "\"request service online\" — there is no enquiry form yet on the rebuilt site (contact page is phone and email until the form backend is built). Preserved; the page CTA band links to /contact.",
     "Byline \"Tom Dombrowski\" is the WordPress author account (Compass Marketing), not the business owner. Preserved as published; decide whether posts should be bylined to the business instead.",
   ],
 };

@@ -136,6 +136,7 @@ the preview's reviewer notice. Owner decisions needed:
 | Privacy §11 address | privacy policy | "St. Louis, MO" only — add the street address once Hegee/Heege is settled? |
 | `https://www.showmeelectrical.com` | privacy + terms | Canonical host on the rebuild has no `www`. Confirm the host and update both documents at launch. |
 | Cookies / analytics / ad platforms | privacy §2, §7 | The rebuild sets no analytics or ad cookies today. Keep the wording only if tags are added before launch. |
+| SMS / text-messaging opt-in | privacy §5, terms §5 | The contact form collects a phone number only so the business can reply; it presents and records no SMS or marketing opt-in. Narrow the wording, or keep it for a programme run outside the website? |
 | Terms §2 services list | terms of service | Residential and commercial only — add industrial? |
 | Terms §14 contact | terms of service | Bare `www.` address, no phone or email — add them as the privacy policy does? |
 

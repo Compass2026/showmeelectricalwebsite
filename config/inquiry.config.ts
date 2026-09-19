@@ -32,7 +32,12 @@ export const inquiryConfig = {
     /** "mock" | "fail" — honoured only outside production. See route. */
     delivery: "INQUIRY_DELIVERY",
   },
+  /**
+   * PER-INSTANCE rate limit. The counter lives in the memory of one
+   * serverless instance, so on Vercel it bounds bursts against a single warm
+   * function, not the deployment as a whole (each instance, region and cold
+   * start has its own map). It is a cheap brake on naive scripts, nothing
+   * more — see README "Contact form" for the platform-level protection.
+   */
   rateLimit: { windowMs: 10 * 60 * 1000, maxPerWindow: 5 },
-  /** Submissions faster than this after the form loaded are treated as bots. */
-  minFillMs: 3000,
 } as const;
