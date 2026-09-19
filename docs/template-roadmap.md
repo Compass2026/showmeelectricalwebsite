@@ -339,3 +339,14 @@ overridable by environment.
 No client string entered `components/site/InquiryForm.tsx` or
 `lib/inquiry.ts`. The "Website" honeypot label and the spinner are UI
 mechanics, not client facts.
+
+### Milestone: release preparation (2026-09-19)
+
+No new page or component. One shared-system change: `motion.immediateDeadlineMs`
+in `config/theme.config.ts`, read by `Reveal` and `StaggerText` — immediate
+entrances are skipped when hydration is late, so the motion system no longer
+trades Largest Contentful Paint for a fade on slow devices. Generic; the
+value is a per-client tuning knob, not a fact. Policy content edits are
+client content. New docs (`launch-audit.md`, `launch-checklist.md`,
+`deployment-plan.md`, `policy-revision-proposal.md`) are engagement
+records; their structure is reusable for the starter's `docs/` templates.

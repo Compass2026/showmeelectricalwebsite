@@ -97,9 +97,11 @@ promotion (P1–P2, see `docs/deployment-plan.md` §5).
 | Application form (`/?role=<slug>#apply`, where job pages link) | In the served HTML and interactive after hydration; the job page's apply link 308s from `/careers?role=…` to `/?role=…` on the careers host |
 | `/api/apply` validation | GET 405; missing fields 400; bad email 400; honeypot silent 200; valid body with a dummy key → 502 from the provider (no email sent). Route file unchanged since the live deployment (`git diff` empty). |
 
-P1 — a real application through the live form and P2 — the same matrix on
-the real hostnames are the post-promotion checks in the deployment plan;
-they cannot be run against a preview because Vercel routes by domain.
+P1 — the same matrix and the non-sending apply-route probe on the real
+hostnames — is the post-promotion check in the deployment plan; it cannot
+be run against a preview because Vercel routes by domain. P2 — a real
+application through the live form — happens only if Tom authorizes it
+(D-007: no test messages without authorization).
 
 ## 7. Launch configuration build
 
@@ -113,6 +115,50 @@ Built with `NEXT_PUBLIC_ALLOW_INDEXING=true NEXT_PUBLIC_SITE_URL=https://showmee
 | Reviewer notes text in HTML | Absent |
 | Canonicals and sitemap origin | `https://showmeelectrical.com`, careers host unchanged |
 
+## 7a. Mobile loading performance (lab measurements, not real-user data)
+
+**Environment.** Lighthouse 12.8.2, Chromium 141 headless, mobile form
+factor (412×823, DPR 1.75), performance category only. Two throttling modes:
+*simulated* (Lighthouse's default model: 150 ms RTT, 1.6 Mbps, 4× CPU) and
+*applied* (`devtools`: 562 ms request latency, 1.5 Mbps, 4× CPU, actually
+enforced in the browser). Local runs hit `next start` over HTTP/1.1 in the
+sandbox; deployed runs hit the Vercel preview through the sandbox's HTTPS
+proxy, which also negotiates HTTP/1.1 — so neither run benefits from the
+HTTP/2 multiplexing real visitors get on Vercel, and both are pessimistic
+for request queuing. These are lab numbers on one device profile; there is
+no real-user (field) data yet — see the follow-up in §9.
+
+**Finding (material) and fix.** Above-the-fold entrance animations
+(`Reveal`/`StaggerText` with `immediate`) faded already-painted hero content
+back in after hydration. On a slow device that pushed Largest Contentful
+Paint out by the whole hydration time: LCP render delay of 2.4–3.0 s on
+every page, with FCP under 1.1 s. Fix: `motion.immediateDeadlineMs` (1200)
+in `config/theme.config.ts` — immediate entrances play only if hydration
+happened within 1.2 s of navigation start; otherwise the server-rendered
+content is left as is. Scroll-triggered entrances are unaffected; fast
+devices still see the entrance (verified: hero words at opacity 0 at 266 ms,
+1 after the animation).
+
+| Page | Simulated, before → after | Applied throttling, local build | Applied throttling, **deployed preview** |
+|---|---|---|---|
+| `/` | score 82 → 92 · LCP 3.5 → 3.2 s · TBT 346 → 108 ms · SI 3.2 → 1.5 s | score 79 · FCP 1.8 s · LCP 3.2 s (hero image, queued behind 5 font preloads on HTTP/1.1) · TBT 477 ms · CLS 0.06 | **score 85 · FCP 1.8 s · LCP 1.8 s · TBT 498 ms · CLS 0.055 · SI 2.1 s · 516 KiB** |
+| `/services/residential` | 94 → 96 · LCP 2.8 → 2.6 s · TBT 141 → 112 ms | 87 · FCP 1.8 s · LCP 1.8 s · TBT 425 ms · CLS 0.06 | **84 · FCP 1.8 s · LCP 1.8 s · TBT 557 ms · CLS 0.049 · SI 2.0 s · 363 KiB** |
+| `/contact` | 96 → 96 · LCP 2.7 → 2.7 s · TBT 36 ms | 98 · FCP 1.7 s · LCP 1.7 s · TBT 119 ms · CLS 0.00 | **98 · FCP 1.7 s · LCP 1.7 s · TBT 128 ms · CLS 0.001 · SI 1.7 s · 321 KiB** |
+
+The simulated mode cannot exercise the deadline (its trace runs unthrottled
+and hydrates early), which is why simulated LCP barely moves; under applied
+throttling LCP equals FCP on every page, which is the intended effect.
+
+**Remaining, not launch-blocking.** Total Blocking Time of ~0.5 s on the
+homepage and hubs under 4× CPU slowdown comes from hydration plus the GSAP
+scroll-trigger setup (main-thread "Style & Layout" ~1 s). Score bands: LCP
+and CLS "good", TBT "needs improvement" on those two pages. CLS 0.05 is font
+swap. Cheap follow-ups after real-user data exists: drop the unused Poppins
+500 weight preload, defer the scroll-story rail setup below the fold,
+consider a lower `quality` for hero images. Not done now: no evidence yet
+that real users on real devices are affected, and each change touches the
+shared motion system that every page uses.
+
 ## 8. Findings fixed during the audit
 
 | # | Finding | Fix |
@@ -120,9 +166,14 @@ Built with `NEXT_PUBLIC_ALLOW_INDEXING=true NEXT_PUBLIC_SITE_URL=https://showmee
 | F1 | Homepage and service-area meta descriptions over 155 characters (235, 172) | Rewritten to 155 and 152 |
 | F2 | Hazards post still said "Outdated wiring is one of the leading causes of electrical fires" (a second unsupported ranking, in the body) | "Outdated wiring can cause electrical fires." |
 | F3 | README routing matrix predated rule 4 (main host `/careers` was listed as 200) | Matrix updated: 308 to the careers host, main-site paths 404 on the careers host, banner hidden in production |
+| F4 | Entrance animations delayed LCP by the hydration time on slow devices (§7a) | Late-hydration deadline for immediate entrances |
 
 ## 9. Repeat after launch
 
 See `docs/deployment-plan.md` §8. The audit script (`full-audit.sh` in the
 review package) runs unchanged against any port; the same checks on the real
-hostnames need only the host names swapped.
+hostnames need only the host names swapped. Performance: once the site has
+28 days of Chrome UX Report data (Search Console → Core Web Vitals, or
+PageSpeed Insights "field data"), compare LCP/INP/CLS against the lab
+numbers above and act on the follow-ups in §7a only if the field data
+shows a problem.
