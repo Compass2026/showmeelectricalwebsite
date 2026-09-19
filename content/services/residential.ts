@@ -167,7 +167,7 @@ export const residential: ServicePageContent = {
     eyebrow: "On the job",
     heading: "Residential work, photographed on the job",
     intro:
-      "From the client's own job-site library — no stock photography. Rough-in is where quality is decided, so two of these show the work before the walls closed.",
+      "Our own work, photographed on our own jobs — no stock images. Rough-in is where quality is decided, so two of these show the work before the walls closed.",
     photos: [
       {
         src: "/photos/ceiling-fan-install.webp",
@@ -191,7 +191,7 @@ export const residential: ServicePageContent = {
     eyebrow: "Why us",
     heading: "Why St. Louis homeowners call us back",
     intro:
-      "The facts behind the work — every one of them published by the company itself, none of them invented for this page.",
+      "Who shows up, what backs the work, and what it costs to find out — the short version.",
     points: trustPoints,
   },
 
