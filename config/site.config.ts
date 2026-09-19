@@ -120,26 +120,25 @@ export const site = {
 
   /* ---------------- Navigation ---------------- */
   /**
-   * Entries point at real routes where they exist (/about, /contact) and at
-   * the matching homepage section where the page is still planned
-   * (/#services hub, /#process, /#service-area), so every link resolves.
-   * Swap an href to the real route when that page is built; nothing else
-   * needs to change.
+   * Entries point at real routes where they exist and at the matching
+   * homepage section where the page is still planned (/#process), so every
+   * link resolves. Swap an href to the real route when that page is built;
+   * nothing else needs to change.
    */
   nav: [
-    { label: "Services", href: "/#services" },
+    { label: "Services", href: "/services" },
     { label: "Our Process", href: "/#process" },
     { label: "About", href: "/about" },
-    { label: "Service Area", href: "/#service-area" },
+    { label: "Service Area", href: "/service-area" },
     { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
   ] as NavItem[],
 
   footerLinks: [
-    { label: "Services", href: "/#services" },
+    { label: "Services", href: "/services" },
     { label: "Our Process", href: "/#process" },
     { label: "About", href: "/about" },
-    { label: "Service Area", href: "/#service-area" },
+    { label: "Service Area", href: "/service-area" },
     { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
   ] as NavItem[],

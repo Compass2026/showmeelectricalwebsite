@@ -52,6 +52,13 @@ export const residential: ServicePageContent = {
 
   breadcrumbs: [{ label: "Home", href: "/" }, { label: "Residential Electrical" }],
 
+  /** Source: live homepage service card, lightly tightened. */
+  directory: {
+    title: "Residential",
+    summary:
+      "Safe, code-compliant wiring for custom homes, remodels and additions. From panel upgrades to fixture installs, smart-home wiring to ceiling fans.",
+  },
+
   hero: {
     eyebrow: "Residential electrical services",
     headline: "Residential Electrician in St. Louis, MO",
@@ -284,7 +291,7 @@ export const residential: ServicePageContent = {
       },
       {
         label: "Service area",
-        href: "/#service-area",
+        href: "/service-area",
         description: "St. Louis City and County and the surrounding counties.",
       },
     ],

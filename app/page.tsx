@@ -12,7 +12,13 @@ import ServicePathways from "@/components/home/ServicePathways";
 import AboutSection from "@/components/home/AboutSection";
 import Testimonials from "@/components/home/Testimonials";
 import { site } from "@/config/site.config";
-import { storyStages, emergencyCallout, about, testimonials } from "@/content/home";
+import {
+  storyStages,
+  emergencyCallout,
+  about,
+  testimonials,
+  servicePathways,
+} from "@/content/home";
 import { trustPoints } from "@/content/shared";
 import { localBusinessJsonLd, websiteJsonLd } from "@/lib/seo";
 
@@ -65,7 +71,7 @@ export default function HomePage() {
           heading="Electrical work for every kind of space"
           intro={`Three pathways, one standard of work. Serving the ${site.serviceArea} from our shop in ${site.address.city}.`}
         >
-          <ServicePathways />
+          <ServicePathways items={servicePathways} />
 
           {/*
             Emergency repairs — owner-confirmed service (docs/decisions.md
@@ -95,6 +101,12 @@ export default function HomePage() {
               </div>
             </Reveal>
           )}
+
+          <Reveal delay={0.2} className="mt-8">
+            <Button href="/services" variant="ghost">
+              See every service
+            </Button>
+          </Reveal>
         </Section>
 
         {/* ---------- Signature scroll story ---------- */}
@@ -175,12 +187,17 @@ export default function HomePage() {
               Not sure if you&apos;re in range?{" "}
               <a
                 href={site.phoneHref}
-                className="font-semibold text-lime-700 underline underline-offset-2"
+                className="-my-1 inline-block py-1 font-semibold text-lime-700 underline underline-offset-2"
               >
                 Call {site.phone}
               </a>{" "}
               and we&apos;ll tell you straight.
             </p>
+            <div className="mt-6">
+              <Button href="/service-area" variant="ghost">
+                Full service area
+              </Button>
+            </div>
           </Reveal>
         </Section>
 
@@ -214,7 +231,7 @@ export default function HomePage() {
                 Looking to join the team instead?{" "}
                 <a
                   href="/careers"
-                  className="font-semibold text-lime-400 underline underline-offset-2"
+                  className="-my-1 inline-block py-1 font-semibold text-lime-400 underline underline-offset-2"
                 >
                   See our open roles
                 </a>

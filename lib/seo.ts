@@ -172,3 +172,54 @@ export function aboutPageJsonLd(
     isPartOf: { "@id": `${baseUrl}/#website` },
   };
 }
+
+/** schema.org WebPage for a core page (service area, etc.). */
+export function webPageJsonLd(
+  path: string,
+  name: string,
+  description: string,
+  baseUrl: string = site.productionUrl
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${baseUrl}${path}#webpage`,
+    url: `${baseUrl}${path}`,
+    name,
+    description,
+    about: { "@id": `${baseUrl}/#business` },
+    isPartOf: { "@id": `${baseUrl}/#website` },
+  };
+}
+
+/**
+ * schema.org CollectionPage listing implemented service pages. Items are
+ * inline nodes with their own URLs, so nothing references an @id that is
+ * not on the page.
+ */
+export function collectionPageJsonLd(
+  path: string,
+  name: string,
+  description: string,
+  items: { name: string; url: string }[],
+  baseUrl: string = site.productionUrl
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${baseUrl}${path}#webpage`,
+    url: `${baseUrl}${path}`,
+    name,
+    description,
+    about: { "@id": `${baseUrl}/#business` },
+    isPartOf: { "@id": `${baseUrl}/#website` },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: items.map((item, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: { "@type": "Service", name: item.name, url: item.url },
+      })),
+    },
+  };
+}

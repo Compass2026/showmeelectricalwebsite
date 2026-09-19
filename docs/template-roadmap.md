@@ -26,7 +26,7 @@ Nothing here is built speculatively for hypothetical clients or frameworks.
 | Design tokens | `app/globals.css` `@theme` block | Colours and font variables. Utilities generate from these. |
 | Trust strip | `components/home/TrustBar` | Takes `points` as a prop; carries no facts of its own. |
 | Inner-page hero + breadcrumbs | `components/site/PageHero`, `components/site/Breadcrumbs` | Used by every service page and About. Content and crumbs are props; backdrop from the decoration registry. |
-| Story, testimonials, values | `components/home/AboutSection`, `components/home/Testimonials`, `components/site/ValueGrid` | All prop-driven; no copy of their own. |
+| Story, testimonials, values, pathways, coverage | `components/home/AboutSection`, `components/home/Testimonials`, `components/site/ValueGrid`, `components/home/ServicePathways`, `components/site/CoverageGroups` | All prop-driven; no copy or geography of their own. |
 
 ## 2. Still specific to Show Me Electrical
 
@@ -46,7 +46,7 @@ Everything that is a **fact about the client** or a **choice made for them**:
 | Circuit decoration | `components/decor/CircuitBackground.tsx`, `decoration: "circuit"` | Electrical-industry motif. Selected by config; not required. |
 | Careers property | `app/careers/`, `lib/jobs.ts`, `components/{Header,Footer,JobCard,ApplicationForm,…}.tsx`, `/api/apply` | A second, **live** product for this client. Its components predate the system and are not generalised. |
 | Careers coupling in shared files | `middleware.ts` (host rules 1–3), `lib/host.ts` (`resolveProperty`), `app/sitemap.ts` (careers branch imports `jobs`), `app/robots.ts` (per-host), `config/site.config.ts` (`careersUrl`, "Careers" nav + footer entries), `app/page.tsx` ("See our open roles" in the final CTA) | **Honest status: the shared routing and sitemap code assumes a careers host exists.** A client without careers needs a *coordinated* change across all of these — not a config flag today. Listed as §5.3. |
-| Homepage section components | `components/home/{Hero,ServicePathways}` | Each imports its block from `content/home.ts` directly. `AboutSection` and `Testimonials` were converted to prop-driven sections for the About page; these two remain — see §5.2. |
+| Homepage hero | `components/home/Hero` | The one section still importing its block from `content/home.ts` directly — see §5.2. `AboutSection`, `Testimonials`, `ServicePathways` and `TrustBar` all take props now. |
 | Brand reconciliation record | `config/theme.config.ts` header comment | History of this client's brand decisions. |
 
 ## 3. What must change to start a new client website
@@ -124,10 +124,10 @@ complete and validated on real pages.
    to role-based tokens (`surface`, `surface-deep`, `accent`, `accent-ink`,
    `ink`, `paper`) so a client palette is a value change, not a find-and-
    replace. Do this once the full page set exists, so it is done once.
-2. **Homepage sections as content-driven components.** `AboutSection` and
-   `Testimonials` now take their content as props (done for the About page).
-   `Hero` and `ServicePathways` still import from `content/home.ts`;
-   convert them the same way against the final homepage.
+2. **Homepage sections as content-driven components.** `AboutSection`,
+   `Testimonials` and `ServicePathways` now take their content as props.
+   Only `Hero` still imports from `content/home.ts`; convert it the same way
+   against the final homepage.
 3. **Make careers optional by configuration.** Today the routing, host
    resolution and sitemap assume a careers host (see §2). The starter should
    read `site.careersUrl` (or its absence) and skip every careers rule when
@@ -229,3 +229,26 @@ points and the homepage's testimonials.
 `app/about/page.tsx` (intentional — content and composition). Nav and footer
 "About" entries now point at `/about` (config). No client claim entered a
 shared component.
+
+### Milestone: service area + services directory (2026-09-19)
+
+Both pages composed in their routes from existing sections. Geography lives
+in `content/service-area.ts` (`CoverageGroup[]`) and is rendered by a new
+generic `CoverageGroups`; the directory's cards and catalog are derived from
+`content/services/index.ts`, so it can only ever link to built pages.
+
+**Shared components that required changes**, and why:
+
+| Component | Change | Reason |
+|---|---|---|
+| `components/home/ServicePathways` | Prop-driven (`items: PathwayCard[]`); example list optional | The directory builds cards from the registry; roadmap 5.2 |
+| `components/site/CoverageGroups` | **New**, generic | Coverage as data |
+| `content/services/types.ts` | Optional `directory: { title, summary }` | Directory blurb per page, with fallbacks |
+| `lib/seo.ts` | `webPageJsonLd`, `collectionPageJsonLd` | Core-page and directory nodes; inline items, no dangling @ids |
+| `app/sitemap.ts` | `/services`, `/service-area` as core-page literals | Still literals (5.6) |
+
+**New hardcoded client dependencies:** `content/service-area.ts`,
+`content/services-directory.ts`, the two routes, and `directory` blurbs in
+the three hub content files — all content. Nav and footer now point at
+`/services` and `/service-area` (config). No client fact or geography entered
+a shared component.

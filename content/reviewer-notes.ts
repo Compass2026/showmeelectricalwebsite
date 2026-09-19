@@ -12,6 +12,14 @@ export const reviewerNotes: { where: string; note: string }[] = [
     note: "All three homepage cards link to their hub pages: /services/residential, /services/commercial and /services/industrial. The individual service names on those pages are not links until their own pages exist (later SEO expansion, see docs/page-plan.md).",
   },
   {
+    where: "Service area",
+    note: "Counties come from the brand board and the live site; named communities are the approved keyword map's Missouri Tier-1 and Tier-2 cities. Edwardsville and Belleville, Illinois are in that map but every published coverage statement is Missouri-only — omitted until Tom confirms. No map embed until the street address is confirmed.",
+  },
+  {
+    where: "Services directory",
+    note: "Pathway cards and the full catalog are generated from the registry of built pages. The 22 individual service names are plain text until their own pages exist.",
+  },
+  {
     where: "Industrial photography",
     note: "The client's library holds one authentic industrial image (the high-bay warehouse), used as the hero. The industrial page has no photo gallery until more industrial job photos are supplied.",
   },

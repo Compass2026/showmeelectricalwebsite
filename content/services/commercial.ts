@@ -53,6 +53,13 @@ export const commercial: ServicePageContent = {
 
   breadcrumbs: [{ label: "Home", href: "/" }, { label: "Commercial Electrical" }],
 
+  /** Source: live homepage service card, lightly tightened. */
+  directory: {
+    title: "Commercial",
+    summary:
+      "Scalable electrical for Missouri businesses — retail fit-outs, warehouse lighting, office rewiring, and code compliance that plans for growth.",
+  },
+
   hero: {
     eyebrow: "Commercial electrical services",
     headline: "Commercial Electrician in St. Louis, MO",
@@ -213,7 +220,7 @@ export const commercial: ServicePageContent = {
       },
       {
         label: "Service area",
-        href: "/#service-area",
+        href: "/service-area",
         description: "St. Louis City and County and the surrounding counties.",
       },
     ],

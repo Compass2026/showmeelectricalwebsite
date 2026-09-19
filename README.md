@@ -6,7 +6,7 @@ codebase:
 | Property | Routes | Status |
 |---|---|---|
 | **Careers site** | `/careers`, `/careers/jobs/[slug]`, `/api/apply` | **LIVE** at `careers.showmeelectrical.com` |
-| **Main site** | `/`, `/about`, `/contact`, `/services/{residential,commercial,industrial}` | **Prototype** — under review |
+| **Main site** | `/`, `/about`, `/contact`, `/services`, `/services/{residential,commercial,industrial}`, `/service-area` | **Prototype** — under review |
 
 This repo is also the first implementation of the reusable **Compass
 Marketing website system**. See "Reusing this for another client" below and
@@ -116,6 +116,8 @@ config/
 content/
   home.ts            Homepage copy, with provenance notes per block
   about.ts           About page copy — the live About page's three paragraphs
+  service-area.ts    Coverage as data: counties + communities (CoverageGroup[])
+  services-directory.ts  /services page copy; cards + catalog come from the registry
   shared.ts          Trust points + process steps used by home and service pages
   services/
     types.ts         ServicePageContent — the data model every service page is
@@ -126,7 +128,7 @@ content/
 components/
   motion/            gsap.ts, Reveal, StaggerText, Parallax, ScrollStory
   site/              SiteHeader, SiteFooter, Section, Button, PreviewNotice,
-                     PageHero, Breadcrumbs, ValueGrid
+                     PageHero, Breadcrumbs, ValueGrid, CoverageGroups
 content/
   reviewer-notes.ts  Provisional-content notes shown only in the preview banner
   decor/             Decoration registry (HeroBackdrop, storyRailPath) + the
@@ -140,6 +142,7 @@ lib/
   jobs.ts            Careers role data
 docs/
   page-plan.md             Proposed site structure, URL map and redirects
+  completion-checklist.md  Launch work · starter extraction · later SEO, kept separate
   template-roadmap.md      What is reusable, what is client-specific, what a new
                            client changes, what remains before the Compass starter
   migration-inventory.md   WordPress → Next.js page-by-page plan

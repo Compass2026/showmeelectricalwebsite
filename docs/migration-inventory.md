@@ -15,8 +15,8 @@ that sitemap plus a fetch of each URL, not from a homepage crawl.
 |---|---|---|---|---|---|
 | 1 | `/` | Homepage | `/` | **Improve** | Rebuilt in this milestone. Keeps hero, 3 service pillars, 3-step process and testimonials as source material. **FAQ: do not reuse wholesale** — its emergency-service answer is factually wrong (see §9). |
 | 2 | `/about/` | Owner story (Dan) | `/about` | **Improve** | Strong, usable copy. Reused on the homepage About section. Trailing-slash change needs a redirect. |
-| 3 | `/services/` | Services hub | `/services` | **Rebuild** | **Currently near-empty** — renders only header/footer chrome, no service content. Becomes the hub for the 24-service taxonomy, including Emergency Electrical Service (see §9). |
-| 4 | `/locations/` | Locations index | `/service-area` | **Consolidate + redirect** | Thin. Becomes the service-area page; Tier-3 cities live here per the keyword map. |
+| 3 | `/services/` | Services hub | `/services` | **Rebuilt ✅ — 301 at launch** | The live page is empty chrome; the rebuilt directory lists the three pathways and all 22 services from the registry of built pages. `/services/` → `/services` (trailing slash only). |
+| 4 | `/locations/` | Locations index | `/service-area` | **Consolidated ✅ — 301 at launch** | The live page is thin. Rebuilt as the service-area page: seven counties, approved communities, no city pages yet. `/locations/` → `/service-area`. |
 | 5 | `/st-louis/` | St. Louis city page | `/service-area/st-louis` | **Improve + redirect** | H1 is *"Industrial Electrical solutions for St. Louis, Missouri"* — narrower than a city page should be. Tier-1 city in the keyword map. |
 | 6 | `/contact/` | Contact + form | `/contact` | **Improve** | Form backend must be replaced (see §5). |
 | 7 | `/careers/` | Careers | `https://careers.showmeelectrical.com/` | **Redirect** | Superseded by the live careers site. |

@@ -103,6 +103,12 @@ export interface ServicePageContent {
 
   breadcrumbs: Crumb[];
 
+  /**
+   * How the page is presented in the /services directory and on pathway
+   * cards. Optional; falls back to `schema.name` and `hero.intro`.
+   */
+  directory?: { title: string; summary: string };
+
   hero: {
     eyebrow: string;
     /** The page's only H1. Carries the primary keyword and the location. */

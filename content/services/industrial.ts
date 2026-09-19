@@ -57,6 +57,13 @@ export const industrial: ServicePageContent = {
 
   breadcrumbs: [{ label: "Home", href: "/" }, { label: "Industrial Electrical" }],
 
+  /** Source: live homepage service card, lightly tightened. */
+  directory: {
+    title: "Industrial",
+    summary:
+      "High-voltage work for industrial and large-scale systems — transformers, switchgear and heavy equipment wiring, managed with safety at every step.",
+  },
+
   hero: {
     eyebrow: "Industrial electrical services",
     headline: "Industrial Electrician in St. Louis, MO",
@@ -171,7 +178,7 @@ export const industrial: ServicePageContent = {
       },
       {
         label: "Service area",
-        href: "/#service-area",
+        href: "/service-area",
         description: "St. Louis City and County and the surrounding counties.",
       },
     ],

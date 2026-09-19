@@ -4,8 +4,8 @@
 *Service Taxonomy, Keyword Map & Tracked List v1.1* (approved 2026-09-02) ·
 *Compass Master SEO Audit Checklist v1.0* · *Compass SOP SEO-AEO-GEO v3.1*.
 
-**Status:** proposed. The three service hubs, the About page, the homepage
-and the contact page are built (marked ✅). Everything else is planned and not yet routed —
+**Status:** proposed. Home, the services directory, the three hubs, About,
+Service Area and Contact are built (marked ✅). Everything else is planned and not yet routed —
 nothing in this document is a promise that a URL resolves today. §8 splits
 the plan into launch essentials and later SEO expansion.
 
@@ -41,8 +41,8 @@ the plan into launch essentials and later SEO expansion.
 | Home | Business overview, three pathways, process, trust | electrician st louis (260/mo) | `/` | `/` | ✅ Prototype |
 | About | Dan, the credential, how the company works | *(brand; supporting: st louis electrician)* | `/about/` | `/about` | ✅ Built |
 | Contact | Phone, email, address, enquiry form | — | `/contact/` | `/contact` | ✅ Built (form pending backend) |
-| Services hub | Index of the three pathways and all 24 services | electrical contractor st louis | `/services/` | `/services` | Planned — the live page is empty chrome |
-| Service area hub | Counties, Tier-1/2 city links, Tier-3 city list | electrician near me *(won via GBP, not this page)* | `/locations/` | `/service-area` | Planned |
+| Services hub | Directory of the three pathways and all services | electrical contractor st louis | `/services/` | `/services` | ✅ Built — registry-driven |
+| Service area hub | Counties and approved communities; no city pages yet | electrician near me *(won via GBP, not this page)* | `/locations/` | `/service-area` | ✅ Built |
 | Blog index | Post listing | — | `/category/blog/` | `/blog` | Planned |
 | Privacy policy | Legal | — | `/privacy-policy/` | `/privacy-policy` | Planned — copy carries over |
 | Terms of service | Legal | — | `/terms-of-service/` | `/terms-of-service` | Planned — copy carries over |
@@ -190,43 +190,15 @@ above behaves consistently.
 - **No `/about` yet** — its content is on the homepage; the standalone page
   is a routing change, not a content change, and follows the service pages.
 
-## 8. Scope: launch essentials vs. later SEO expansion
+## 8. Scope
 
-Completing every page in this plan is **not** a prerequisite for launching
-the site or for extracting the Compass starter. The plan splits in two.
+The completion checklist — remaining launch work, Compass starter
+extraction, and later SEO expansion, kept as three separate lists — is
+`docs/completion-checklist.md`. Completing every page in this plan is not a
+prerequisite for launch or for extracting the starter.
 
-### Launch essentials — what the rebuilt site needs to replace WordPress
-
-| Page | Status |
-|---|---|
-| Home | ✅ built |
-| `/services/residential` hub | ✅ built |
-| `/services/commercial` hub | ✅ built |
-| `/services/industrial` hub | ✅ built |
-| `/contact` | ✅ built (enquiry form pending backend) |
-| `/about` | ✅ built |
-| `/service-area` hub | planned — counties + Tier-1/2 city list, no city pages yet |
-| `/privacy-policy`, `/terms-of-service` | planned — copy carries over |
-| `/blog` + the 3 existing posts | planned — retained, redirected |
-| Launch redirects (§6) | planned — data-driven in `next.config.ts` |
-| Enquiry form backend | planned — Resend, mirroring `/api/apply` |
-
-That set reproduces everything the live WordPress site has, better, with
-nothing lost. It is the gate for DNS.
-
-### Later SEO expansion — built on demand, measured page by page
-
-| Set | Count | Trigger to build |
-|---|---|---|
-| Individual residential service pages | 13 | Highest-value first: emergency (#2), panel upgrades (#3), ceiling fans (#9), EV chargers (#12), rewiring (#5), generators (#13). The rest as Search Console shows impressions for the hub. |
-| Individual commercial service pages | 5 | Footprint pages (map §"Maintenance caveat"); build when sales needs something to point a facility manager at. |
-| Individual industrial service pages | 4 | Same. |
-| Tier-1 city pages | 8 | After the service-area hub, one at a time, each with genuinely local content. |
-| Tier-2 city pages | 12 | Only once Tier-1 pages show impressions. |
-| New blog posts | 6 | One per month, per the map's topic list. |
-
-The three hubs already carry Service schema with an offer catalog naming
-every child service, so the taxonomy is machine-readable today even though
-the child pages are not built. `content/services/index.ts` lists only
-implemented pages; the sitemap reads from it, so nothing planned is ever
+The three hubs carry Service schema naming every child service, so the
+taxonomy is machine-readable today even though the child pages are not
+built. `content/services/index.ts` lists only implemented pages; the sitemap
+and the `/services` directory read from it, so nothing planned is ever
 advertised before it exists.

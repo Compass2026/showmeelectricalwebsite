@@ -34,6 +34,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: origin, changeFrequency: "weekly", priority: 1 },
     { url: `${origin}/about`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${origin}/contact`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${origin}/services`, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${origin}/service-area`, changeFrequency: "monthly", priority: 0.7 },
     // Service pages come from the registry of IMPLEMENTED pages, never from
     // the page plan: a planned page is not listed until it exists.
     ...servicePages.map((page) => ({
