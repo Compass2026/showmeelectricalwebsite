@@ -31,11 +31,11 @@ if (process.env.VERCEL_ENV === "production") {
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   /**
-   * Build output per brand (`.next` for the default brand, `.next-<brand>`
-   * otherwise) so two brands can be built and served side by side. Set the
-   * same COMPASS_BRAND for `next start`.
+   * Build output stays in `.next` (Vercel requires it). For local
+   * side-by-side builds of two brands set COMPASS_DIST_DIR (e.g.
+   * `.next-harbor-lane`) for both `next build` and `next start`.
    */
-  distDir: brandName === "showme" ? ".next" : `.next-${brandName}`,
+  ...(process.env.COMPASS_DIST_DIR ? { distDir: process.env.COMPASS_DIST_DIR } : {}),
   /**
    * Settled once, before launch: no trailing slashes. Every WordPress URL
    * ends in one, so Next's own 308 (`/about/` → `/about`) covers each page

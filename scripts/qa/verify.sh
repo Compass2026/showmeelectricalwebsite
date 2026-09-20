@@ -15,9 +15,9 @@ echo "== crawl fixtures"; npm run -s qa:crawl:test
 PORT_A=3451; PORT_B=3452
 run_brand () { # brand host origin port extra-env...
   local brand=$1 host=$2 port=$3
-  echo "== build $brand"; COMPASS_BRAND=$brand npx next build >/dev/null
+  echo "== build $brand"; COMPASS_BRAND=$brand COMPASS_DIST_DIR=.next-verify-$brand npx next build >/dev/null
   COMPASS_BRAND=$brand node scripts/qa/manifest.mjs
-  ( COMPASS_BRAND=$brand INQUIRY_DELIVERY=mock npx next start -p $port >/tmp/verify-$brand.log 2>&1 & ); sleep 4
+  ( COMPASS_BRAND=$brand COMPASS_DIST_DIR=.next-verify-$brand INQUIRY_DELIVERY=mock npx next start -p $port >/tmp/verify-$brand.log 2>&1 & ); sleep 4
   node scripts/qa/crawl.mjs http://localhost:$port --host $host --assets remap
   node scripts/qa/forms.test.mjs http://localhost:$port --host $host
   pkill -f "next start -p $port" || true; sleep 1

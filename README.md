@@ -311,7 +311,7 @@ sets their values in its `theme.css`.
 | Brand | What it is | Build |
 |---|---|---|
 | `showme` | Show Me Electrical — the reference client (real facts, live careers property) | `npm run build` |
-| `harbor-lane` | **Fictional** second-brand demonstration: own identity, palette, fonts, nav, footer, metadata, `Plumber` schema, contact details, two branches with a `/locations` index, a served city, no careers | `COMPASS_BRAND=harbor-lane npm run build` (output in `.next-harbor-lane`) |
+| `harbor-lane` | **Fictional** second-brand demonstration: own identity, palette, fonts, nav, footer, metadata, `Plumber` schema, contact details, two branches with a `/locations` index, a served city, no careers | `COMPASS_BRAND=harbor-lane npm run build` (add `COMPASS_DIST_DIR=.next-harbor-lane` to build and start it beside the default brand locally) |
 
 Careers is optional: with `site.careers = null` there is no careers host
 rule, nav entry, sitemap entry, route (`/careers*` → 404) or application
