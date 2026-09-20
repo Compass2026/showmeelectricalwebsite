@@ -131,6 +131,7 @@ export default function InquiryForm({
     if (Object.keys(found).length) {
       setErrors(found);
       setStatus("idle");
+      focusFirstInvalid(event.currentTarget, found);
       return;
     }
 
@@ -163,6 +164,7 @@ export default function InquiryForm({
       if (res.status === 400 && body.errors && Object.keys(body.errors).length) {
         setErrors(body.errors);
         setStatus("idle");
+        focusFirstInvalid(event.currentTarget, body.errors);
         return;
       }
       setFailure(body.error ?? "");
@@ -416,6 +418,20 @@ export default function InquiryForm({
       </div>
     </form>
   );
+}
+
+/**
+ * After a failed validation, move focus to the first field with a problem
+ * (in form order) so keyboard and screen-reader users land on what to fix.
+ * The "contact" rule points at the email field.
+ */
+function focusFirstInvalid(form: HTMLFormElement, errors: InquiryErrors) {
+  const order: (InquiryField | "contact")[] = ["name", "email", "phone", "service", "details"];
+  const first = order.find((f) => errors[f]) ?? (errors.contact ? "contact" : undefined);
+  const name = first === "contact" ? "email" : first;
+  if (!name) return;
+  const el = form.elements.namedItem(name) as HTMLElement | null;
+  requestAnimationFrame(() => el?.focus());
 }
 
 function newSubmissionId(): string {

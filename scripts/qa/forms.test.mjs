@@ -26,6 +26,7 @@ const headers = { "content-type": "application/json", ...(host ? { host } : {}) 
 let failures = 0;
 const check = (name, ok, detail = "") => { console.log(`${ok ? "ok  " : "FAIL"} ${name}${detail ? ` — ${detail}` : ""}`); if (!ok) failures++; };
 const uuid = () => crypto.randomUUID();
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 let ipN = 0;
 const post = (body, extra = {}) => fetch(`${base}/api/inquiry`, { method: "POST", headers: { ...headers, "x-forwarded-for": `10.9.${Math.floor(ipN / 250)}.${(ipN++ % 250) + 1}`, ...extra }, body: JSON.stringify(body) });
 
@@ -84,6 +85,8 @@ const nameErr = await page.locator('input[name=name]').getAttribute("aria-descri
 const nameErrText = nameErr ? await page.locator(`#${nameErr.split(" ")[0]}`).textContent() : "";
 check("empty submit → name field aria-invalid with a readable error", nameInvalid === "true" && /name/i.test(nameErrText ?? ""), nameErrText ?? "");
 check("empty submit → no API call made (client validation)", apiCalls.length === 0);
+await wait(300);
+check("empty submit → focus moves to the first invalid field", await page.evaluate(() => document.activeElement?.getAttribute("name") === "name"), await page.evaluate(() => document.activeElement?.getAttribute("name") ?? document.activeElement?.tagName));
 
 // b) fill, then fail the network on first attempt; input must survive; retry succeeds once
 await page.fill('input[name=name]', "QA Browser Test");
