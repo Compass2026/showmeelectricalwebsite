@@ -82,11 +82,18 @@ export const site = {
   phone: "314-571-9756",
   phoneHref: "tel:+13145719756",
   email: "info@showmeelectrical.com",
+  /**
+   * SERVICE-AREA BUSINESSES: `street` and `zip` are nullable. A business that
+   * goes to the customer has no public street address, and inventing one is a
+   * false claim. Leave them null and the footer, the contact page and the
+   * LocalBusiness JSON-LD omit the street line and keep "City, ST" — the same
+   * shape the locations registry already uses for its optional street.
+   */
   address: {
-    street: "5602 Heege Rd",
+    street: "5602 Heege Rd" as string | null,
     city: "Affton",
     state: "MO",
-    zip: "63123",
+    zip: "63123" as string | null,
     country: "US",
   },
   /**

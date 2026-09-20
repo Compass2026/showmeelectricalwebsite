@@ -73,10 +73,10 @@ export function jobPostingJsonLd(job: Job) {
       "@type": "Place",
       address: {
         "@type": "PostalAddress",
-        streetAddress: ADDRESS.street,
+        ...(ADDRESS.street ? { streetAddress: ADDRESS.street } : {}),
         addressLocality: ADDRESS.city,
         addressRegion: ADDRESS.state,
-        postalCode: ADDRESS.zip,
+        ...(ADDRESS.zip ? { postalCode: ADDRESS.zip } : {}),
         addressCountry: "US",
       },
     },
