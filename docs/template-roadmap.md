@@ -1,5 +1,7 @@
 # Compass Website System — Template Roadmap
 
+**Current status, 2026-09-20:** Foundation v1 is accepted at `94014af35316c94616dadb3f8d606a4b68577fb0`. See [the accepted handoff](foundation-v1-handoff.md). The dated implementation/review entries below are historical; their pending-review statements are superseded by this acceptance. The final provider suite contains 17 assertions, independently reproduced by the reviewer. Client launch and CRM integration remain separate workstreams.
+
 Show Me Electrical is the **first implementation** of a reusable Compass
 Marketing website system. This document tracks what is already reusable, what
 is still client-specific, what a second client would have to change, and what

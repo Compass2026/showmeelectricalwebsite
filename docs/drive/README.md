@@ -10,12 +10,6 @@ current consolidated set (the reviewer's v1.1 originals, edited on
 | 02 | Compass Page Template Library v1.1 | https://docs.google.com/document/d/1CsSsey-3KO830-u3XPOY1L2AVOfX7XDrr7qFg_1st_8/edit |
 | 03 | Compass Website Foundation v1: Review and Completion Brief | https://docs.google.com/document/d/1exdtCcFvmH0kn5pEPc9cjAJDhnv7WgqfOieO7NTnxcc/edit |
 
-The build session's Drive access can read these documents and rename or
-move files, but cannot edit document content. The earlier "v1.1 (2026-09-20
-update)" companion copies are historical ("Superseded draft") and are no
-longer mirrored here.
+The three original documents have been updated and verified to record acceptance of code `94014af35316c94616dadb3f8d606a4b68577fb0`. They are the governing originals; historical copies labelled "Superseded draft" are not current instructions.
 
-`proposed-updates-c1-c2.md` holds the **exact text** to paste into each
-original once the C1/C2 correction pass and the C1 simplification are
-accepted, so the Drive set and the repository say the same thing. No other copy of the documents is kept
-in the repository; the originals are the source of truth.
+See [the accepted repository handoff](../foundation-v1-handoff.md). The former proposed-update file is superseded and must not be pasted over the accepted originals.

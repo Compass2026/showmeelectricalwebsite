@@ -1,5 +1,7 @@
 # Show Me Electrical — Website
 
+**Compass Website Foundation v1 is accepted at `94014af35316c94616dadb3f8d606a4b68577fb0`.** See the [accepted handoff](docs/foundation-v1-handoff.md) for the starting point, evidence limits and separate CRM integration work. Client launch remains a separate checklist.
+
 Next.js (App Router) + TypeScript + Tailwind CSS v4. Two properties share this
 codebase:
 
@@ -487,12 +489,8 @@ star ratings, project totals, guarantees or licence numbers.
 
 ## Reusing this for another client
 
-1. Rewrite `config/site.config.ts` — identity, contact, service area, nav.
-2. Replace the `@theme` values in `app/globals.css`.
-3. Replace `content/home.ts` and `public/photos/`.
-4. Adjust `config/theme.config.ts` if the motion feel should differ.
-5. Replace `content/blog/`, `content/legal/` and `config/redirects.ts` with
-   the client's own (or empty registries and an empty map).
+Start with the accepted source SHA in the [handoff](docs/foundation-v1-handoff.md), then follow [docs/starter-checklist.md](docs/starter-checklist.md). Create and register `brands/<client>/`; replace all demonstration identity, content, assets, routes and inquiry configuration. Shared proxy files under `config/` and `content/` are not the place to hard-code the next client's identity.
 
-Components, the motion system, SEO helpers and the section primitives carry
-over unchanged.
+For an existing site, first inspect its framework, content contract, routes and integrations. Adopt compatible modules on a preview branch and record the source version. Do not overwrite the existing site wholesale.
+
+The [CRM onboarding review](docs/compass-crm-onboarding-review.md) records the integration still needed before onboarding automatically chooses this foundation.

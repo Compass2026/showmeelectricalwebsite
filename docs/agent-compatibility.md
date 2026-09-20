@@ -1,5 +1,7 @@
 # AI-agent compatibility report — Compass website system
 
+Current acceptance: Foundation v1 accepted at `94014af35316c94616dadb3f8d606a4b68577fb0`. The reviewer independently reproduced the 17-assertion provider suite; full browser and agent results below remain builder-reported. See [handoff evidence limits](foundation-v1-handoff.md).
+
 Build Standard §12 and Page Template Library §15 require evidence that an
 actual AI agent can read, navigate and act on the rendered site — separate
 from scripted browser automation and raw-HTML checks. This report records
@@ -162,7 +164,7 @@ fields `aria-invalid` — accepted; the Next.js route announcer is harmless.
 | Suite | Show Me | Harbor Lane |
 |---|---|---|
 | `crawl.mjs` (raw HTML, canonical, sitemap, links, fragments, schema refs, orphans, 404) | PASS, 16 routes | PASS, 14 routes |
-| `provider.test.mjs` (provider adapter against the mock provider service: key contract, independent worker-thread handlers under one key, the reviewer's two-worker interleavings, conflict mapping, in-process mock) | 18 checks pass | 18 checks pass (brand-independent) |
+| `provider.test.mjs` (provider adapter against the mock provider service: key contract, independent worker-thread handlers under one key, the reviewer's two-worker interleavings, conflict mapping, in-process mock) | 17 assertions pass | 17 assertions pass (brand-independent) |
 | `forms.test.mjs` (API contract; provider-key idempotency: simultaneous requests, lost response, changed content, stale/corrupt former local records, fresh server instance sharing only the provider, concurrent requests split across two instances; browser: validation, focus order, failure recovery, unchanged vs. edited retry ids, server-validation focus, double-click) | 43 checks pass | 43 checks pass |
 | `browser.test.mjs` (no-JS content, reduced motion, 390px overflow, touch targets, tables, skip link, nav focus) | 46 checks pass (5 paths) | 40 checks pass (4 paths) |
 | Leak scan (reference-client strings in the second brand) | — | 0 matches |

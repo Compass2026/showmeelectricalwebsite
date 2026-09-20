@@ -3,8 +3,10 @@
 The Compass website system is the framework in this repository (`app/`,
 `components/`, `lib/`, `content/*/types.ts`, `scripts/qa/`) plus one brand
 directory per client under `brands/`. A new client is a new brand directory
-and nothing else. Nothing under `brands/showme/` (the reference client) or
+with client-specific configuration and validation. New motifs or integrations may need additional code. Nothing under `brands/showme/` (the reference client) or
 `brands/harbor-lane/` (the fictional demonstration) is reused as content.
+
+Start from the accepted source SHA in [foundation-v1-handoff.md](foundation-v1-handoff.md). Record that version in the client build brief. Existing-site upgrades require an inventory and adapter plan before copying files.
 
 ## 1. Create the brand
 
@@ -64,8 +66,7 @@ and nothing else. Nothing under `brands/showme/` (the reference client) or
 - [ ] `COMPASS_BRAND=<client> npm run build`, start it, then
       `COMPASS_BRAND=<client> npm run qa:manifest` and
       `node scripts/qa/crawl.mjs http://localhost:<port> --host <domain> --assets remap`.
-- [ ] `node scripts/qa/forms.test.mjs …` against a server started with
-      `INQUIRY_DELIVERY=mock`; `node scripts/qa/browser.test.mjs … --paths …`.
+- [ ] Run `npm run qa:provider`. For form tests, start the shared mock provider with `npm run qa:mock-provider`, then start the site with `INQUIRY_DELIVERY=mock` and `INQUIRY_MOCK_PROVIDER_URL=http://127.0.0.1:3999`. Pass the same provider URL to `node scripts/qa/forms.test.mjs …`. Run `node scripts/qa/browser.test.mjs … --paths …` with the documented Chromium setup. Use the README QA commands for the complete invocation; do not send real messages during these checks.
 - [ ] Desktop + mobile screenshots of every page family; Lighthouse mobile.
 - [ ] Agent trial: the reading/navigation/inquiry tasks in
       `docs/agent-compatibility.md` run by an actual AI agent against the
