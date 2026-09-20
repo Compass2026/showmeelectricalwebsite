@@ -1,5 +1,5 @@
 import { reviewerNotes, previewNotice } from "@/content/reviewer-notes";
-import { allowIndexing } from "@/lib/host";
+import { allowIndexing } from "@/lib/indexing";
 
 /**
  * Review-stage banner. One slim line so it costs the hero as little viewport
@@ -12,6 +12,16 @@ export default function PreviewNotice() {
   // the same switch that turns indexing on turns the review banner off, so
   // going live is a configuration change, not a code edit.
   if (allowIndexing) return null;
+  if (reviewerNotes.length === 0) {
+    return (
+      <div className="border-b-2 border-amber-400 bg-amber-50 text-amber-950">
+        <p className="mx-auto max-w-7xl px-4 py-2.5 text-xs sm:px-6">
+          <span className="font-bold uppercase tracking-wide">{previewNotice.title}</span>
+          <span className="hidden sm:inline"> — {previewNotice.intro}</span>
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="border-b-2 border-amber-400 bg-amber-50 text-amber-950">
       <details className="mx-auto max-w-7xl px-4 text-xs sm:px-6">

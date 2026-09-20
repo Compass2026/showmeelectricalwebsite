@@ -413,6 +413,29 @@ target) so reviewers can open the fixture; production has no such variable.
 
 **Still outstanding for template sign-off:** neutral branding, optional
 careers, starter, second brand, mocked action tests and an actual AI-agent
-trial (Batch C); GBP parity record (G7). City,
+trial (Batch C); GBP parity record (G7).
+
+### Template completion — Batch C (2026-09-20)
+
+Findings G3, G7, G8 and the action/agent half of G9; library §13–§15.
+
+| Item | What changed | Where |
+|---|---|---|
+| Panel-upgrade copy | Diagnosis and frequency claims removed ("probably undersized", "three usually end in a new panel"); the page now says the cause is assessed first and the appropriate work recommended; FAQ, directory summary and description made consistent. | `brands/showme/content/services/electrical-panel-upgrades.ts` |
+| G3 brand separation | All client-owned inputs moved to `brands/showme/`; framework imports `@brand/…` bound by `next.config.ts` from `COMPASS_BRAND` (tsconfig `paths` repointed at build). Colour utilities renamed to semantic roles (`primary`/`accent`/`surface`/`ink`) with values per brand in `theme.css`; fonts, decoration and motion literals per brand. Homepage, header, footer, 404, blog and contact strings that were hard-coded in components now come from the brand. Service hubs, child pages and legal documents are registry-driven dynamic routes. **Parity proven:** every route on both hosts snapshotted before the refactor and diffed after — careers markup identical; main-site visible text identical except the three pages carrying the intended panel-copy correction. | `brands/`, `next.config.ts`, `app/globals.css`, `app/services/[slug]`, `app/[doc]`, `lib/routes.ts` |
+| G3 optional careers | `site.careers` (`null` = no host rule, nav entry, sitemap entry, route or `/api/apply`). Verified on Harbor Lane: `/careers*` and `POST /api/apply` are 404. | `middleware.ts`, `lib/host.ts`, `lib/jobs.ts`, `app/careers/*`, `app/api/apply` |
+| G3/G8 second brand | **Harbor Lane Plumbing** (fictional): own identity, teal/amber palette, Manrope/Source Sans, no motif, own nav/footer/metadata/`Plumber` schema/contact details, two hubs + one child page, one served city, two branches + `/locations` index, two policies, no blog, no careers. Leak scan of every rendered page: zero Show Me strings, tokens or asset paths. Crawl PASS (14 routes). | `brands/harbor-lane/` |
+| Fictional protection | `site.fictional` → site-wide notice, `noindex` on every page, `Disallow: /`, `forceMock` delivery; `next.config.ts` throws on a production build of a fictional brand or with `COMPASS_DEMO=true` (demonstrated: both builds refused). Show Me's demo fixture stays behind `COMPASS_DEMO` and is never a published route. | `next.config.ts`, `app/layout.tsx`, `app/robots.ts`, `brands/harbor-lane/inquiry.config.ts` |
+| G9 actions | Duplicate-safe inquiries: one `submissionId` per message, reused on retry, remembered server-side for 10 min → a retry after a network failure delivers once. Scripted tests (`forms.test.mjs`, 21 checks, both brands): validation codes, honeypot, cross-origin, rate limit, error focus and field association, input preserved on failure, retry succeeds once with the same id, double-click sends once, success only on `{ok:true}`. | `lib/inquiry.ts`, `app/api/inquiry/route.ts`, `components/site/InquiryForm.tsx`, `scripts/qa/forms.test.mjs` |
+| G9 agent trials | Actual AI-agent trials (a Claude agent operating the bundled Chromium through Playwright, no source access) on both brands: business identity, service lookup, served city vs. physical office, unknown hours/availability, contact options, navigating to and submitting the mocked inquiry form, error recovery. Results, prompts, versions and exceptions: `docs/agent-compatibility.md`. Scripted automation is reported separately from the agent trials. | `docs/agent-compatibility.md` |
+| G8 QA | `npm run lint` (ESLint, non-interactive, zero warnings), `npm run typecheck`, `typecheck-brand`, brand-aware `qa:manifest`, `browser.test.mjs` (no-JS content, reduced motion, keyboard/skip link, 390px overflow, touch targets, table captions/scopes/scroll — 46 checks Show Me, 40 Harbor Lane), `scripts/qa/verify.sh` (clean clone → both brands → guards). Skip link is now the first tab stop ahead of the review banner. | `scripts/qa/*`, `package.json`, `.eslintrc.json` |
+| G7 GBP parity | Field-by-field record from the website, the public listing data and the GBP spec; unavailable facts marked unverified; nothing changed on the live listing. | `docs/gbp-parity.md` |
+| Starter | `brands/harbor-lane` is the neutral shape to copy; `docs/starter-checklist.md` is the next-client checklist. | `docs/starter-checklist.md` |
+
+**Not done / limits:** the three visual presets named in library §13 remain
+proposals (two brands are proven, not three). Agent trials cover one agent
+family (Claude) with one browser; they do not prove universal compatibility.
+The template is **not marked certified** — that is the reviewer's call after
+this batch. City,
 branch and individual-service templates (G2) are Batch B; neutral branding,
 optional careers, starter and agent trials (G3, G8 remainder, G9) are Batch C.

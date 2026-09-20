@@ -296,15 +296,53 @@ CSS handles simple hover and focus states; GSAP is only used for scroll work.
 
 ---
 
+## Brands: the framework and the client are separate
+
+Everything client-owned lives under `brands/<brand>/` — identity
+(`site.config.ts`), palette and fonts (`theme.css`, `fonts.ts`), motion
+literals and decoration (`theme.config.ts`), inquiry delivery, redirects,
+careers, and every content registry (`content/…`). The framework (`app/`,
+`components/`, `lib/`, the `content/*/types.ts` contracts, `scripts/qa/`)
+never names a client: it imports `@brand/…`, which `next.config.ts` binds to
+`brands/<COMPASS_BRAND>/` at build time (default `showme`). Colour utilities
+use the semantic roles `primary`, `accent`, `surface` and `ink`; each brand
+sets their values in its `theme.css`.
+
+| Brand | What it is | Build |
+|---|---|---|
+| `showme` | Show Me Electrical — the reference client (real facts, live careers property) | `npm run build` |
+| `harbor-lane` | **Fictional** second-brand demonstration: own identity, palette, fonts, nav, footer, metadata, `Plumber` schema, contact details, two branches with a `/locations` index, a served city, no careers | `COMPASS_BRAND=harbor-lane npm run build` (output in `.next-harbor-lane`) |
+
+Careers is optional: with `site.careers = null` there is no careers host
+rule, nav entry, sitemap entry, route (`/careers*` → 404) or application
+endpoint (`/api/apply` → 404).
+
+Protection for fictional content: `site.fictional` renders a site-wide
+notice, forces `noindex` and `Disallow: /`, and `next.config.ts` refuses a
+production build (`VERCEL_ENV=production`) of a fictional brand or of
+`COMPASS_DEMO=true`. `inquiry.config.forceMock` keeps a demo brand from ever
+delivering a message. To start the next client, follow
+`docs/starter-checklist.md`.
+
 ## QA commands
 
 ```bash
+npm run typecheck                         # tsc against the default brand
+node scripts/qa/typecheck-brand.mjs harbor-lane   # tsc against another brand
+npm run lint                              # next lint, non-interactive, zero warnings allowed
 npm run qa:crawl:test                     # negative fixtures: proves the crawl fails on a wrong canonical/sitemap origin,
                                           # an orphan or self-linked page, a missing fragment, a missing Twitter image
-npm run qa:manifest                       # docs/route-manifest.md + .qa/routes.json from the registries; fails on unresolved content links
-npm run build && npm start &              # production build on :3000
+npm run qa:manifest                       # docs/route-manifest.md + .qa/routes.json for COMPASS_BRAND (default showme)
+npm run build && INQUIRY_DELIVERY=mock npm start &   # production build on :3000, provider mocked
 npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap
+node scripts/qa/forms.test.mjs http://localhost:3000 --host showmeelectrical.com   # mocked inquiry: validation, failure recovery, duplicate-safe retry
+node scripts/qa/browser.test.mjs http://localhost:3000 --host showmeelectrical.com --paths /,/contact  # no-JS, reduced motion, keyboard, tables, 390px
+npm run verify                            # all of the above for BOTH brands + the production guards (FRESH=1 clones first)
 ```
+
+`forms.test` and `browser.test` are scripted browser automation. They are
+not AI-agent trials; those are recorded separately in
+`docs/agent-compatibility.md`.
 
 What the crawl asserts, per published route, from the raw server HTML (no
 browser):

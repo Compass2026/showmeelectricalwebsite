@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
-import PreviewNotice from "@/components/site/PreviewNotice";
 import PageHero from "@/components/site/PageHero";
 import Section from "@/components/site/Section";
 import Reveal from "@/components/motion/Reveal";
@@ -58,7 +57,6 @@ export default function BlogIndexPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PreviewNotice />
       <SiteHeader />
 
       <main id="main">

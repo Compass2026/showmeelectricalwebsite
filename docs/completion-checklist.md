@@ -33,14 +33,14 @@ new blog posts. The live site has none of these today.
 |---|---|---|---|
 | B1 | Semantic colour tokens | ⬜ | `navy-*`/`lime-*` in component classes → `surface`, `accent`, `ink`, `paper`; done once against the finished page set |
 | B2 | Remaining homepage content separation | ⬜ | `Hero` still imports `content/home.ts`; `AboutSection`, `Testimonials`, `ServicePathways`, `TrustBar` already take props |
-| B3 | Optional careers support | ⬜ | Middleware, host resolution, sitemap and config assume a careers host — make its absence a config omission (roadmap §5.3) |
+| B3 | Optional careers support | ✅ (Batch C) | Middleware, host resolution, sitemap and config assume a careers host — make its absence a config omission (roadmap §5.3) |
 | B4 | Sitemap fully from registries | ✅ | `lib/routes.ts` builds the published-route list from `content/pages.ts` + services + blog + legal; `app/sitemap.ts` emits it with truthful `lastModified` only (Batch A) |
-| B5 | Enquiry-form route in the starter | ✅ shape · ⬜ starter | `InquiryForm` + `lib/inquiry.ts` + `config/inquiry.config.ts` are already generic; the starter ships the config with empty recipients |
-| B6 | Redirects as per-client data | ✅ shape · ⬜ starter | `config/redirects.ts` is the per-client map already; the starter ships it empty |
-| B7 | Starter scaffolding | ⬜ | Empty typed `site.config.ts`, placeholder tokens, `content/` skeleton, the `docs/` templates, the §3 change list as a checklist |
-| B8 | Validation gate script | 🟡 | `npm run qa:crawl:test` + `npm run qa:manifest` + `npm run qa:crawl` committed (negative fixtures; route manifest; raw-HTML crawl: single canonical on the production origin, sitemap as full URLs, rendered-only incoming links, fragment resolution, OG + Twitter images with explicit local asset validation, JSON-LD references, 404). Browser/form/agent checks follow in Batch C |
+| B5 | Enquiry-form route in the starter | ✅ (Batch C: per-brand `inquiry.config.ts`, `forceMock` for demos) | `InquiryForm` + `lib/inquiry.ts` + `config/inquiry.config.ts` are already generic; the starter ships the config with empty recipients |
+| B6 | Redirects as per-client data | ✅ (Batch C: `brands/<brand>/redirects.ts` incl. `gone`) | `config/redirects.ts` is the per-client map already; the starter ships it empty |
+| B7 | Starter scaffolding | ✅ (Batch C: `brands/harbor-lane` as the neutral shape + `docs/starter-checklist.md`) | Empty typed `site.config.ts`, placeholder tokens, `content/` skeleton, the `docs/` templates, the §3 change list as a checklist |
+| B8 | Validation gate script | ✅ (Batch C: `npm run verify` — both brands, forms, browser, guards) | `npm run qa:crawl:test` + `npm run qa:manifest` + `npm run qa:crawl` committed (negative fixtures; route manifest; raw-HTML crawl: single canonical on the production origin, sitemap as full URLs, rendered-only incoming links, fragment resolution, OG + Twitter images with explicit local asset validation, JSON-LD references, 404). Browser/form/agent checks follow in Batch C |
 | B10 | Service-detail, city and branch templates | ✅ shape · 🟡 fixture-only branch | One representative page each (Batch B): `/services/residential/electrical-panel-upgrades`, `/service-area/edwardsville-il`, and the fictional `/locations/westfield-demo` (COMPASS_DEMO builds only, noindex). See `docs/template-inventory.md` |
-| B9 | **Check with a different brand** | ⬜ | Swap `site.config.ts`, `@theme` values, fonts, `decoration: "none"/"line"`, one service content file — and confirm nothing electrical, navy, lime or Show Me leaks through. The proof the starter is a starter. |
+| B9 | **Check with a different brand** | ✅ (Batch C: Harbor Lane builds with zero Show Me strings in output; careers disabled) | Swap `site.config.ts`, `@theme` values, fonts, `decoration: "none"/"line"`, one service content file — and confirm nothing electrical, navy, lime or Show Me leaks through. The proof the starter is a starter. |
 
 Detail and rationale for each: `docs/template-roadmap.md` §5.
 

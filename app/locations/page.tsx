@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
-import PreviewNotice from "@/components/site/PreviewNotice";
 import PageHero from "@/components/site/PageHero";
 import Section from "@/components/site/Section";
 import RelatedLinks from "@/components/services/RelatedLinks";
@@ -38,7 +37,6 @@ export default function LocationsIndexPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <PreviewNotice />
       <SiteHeader />
       <main id="main">
         <PageHero hero={locationsIndex.hero} breadcrumbs={locationsIndex.breadcrumbs} />

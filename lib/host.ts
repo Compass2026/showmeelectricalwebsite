@@ -27,12 +27,4 @@ export async function resolveProperty(): Promise<{
   return { property: "main", origin: site.productionUrl };
 }
 
-/**
- * Indexing is opt-in per environment and applies to BOTH hostnames.
- *
- * Preview deployments leave NEXT_PUBLIC_ALLOW_INDEXING unset, so the main site
- * and the careers routes are equally non-indexable. Production sets it to
- * "true", and both become indexable — which is correct, because the careers
- * site is a real, live property that should stay in the index.
- */
-export const allowIndexing = process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
+export { allowIndexing } from "./indexing";

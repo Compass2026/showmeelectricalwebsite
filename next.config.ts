@@ -31,6 +31,12 @@ if (process.env.VERCEL_ENV === "production") {
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   /**
+   * Build output per brand (`.next` for the default brand, `.next-<brand>`
+   * otherwise) so two brands can be built and served side by side. Set the
+   * same COMPASS_BRAND for `next start`.
+   */
+  distDir: brandName === "showme" ? ".next" : `.next-${brandName}`,
+  /**
    * Settled once, before launch: no trailing slashes. Every WordPress URL
    * ends in one, so Next's own 308 (`/about/` → `/about`) covers each page
    * that keeps its path; only renamed paths need an explicit entry.

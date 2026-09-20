@@ -2,7 +2,6 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/site/Breadcrumbs";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
-import PreviewNotice from "@/components/site/PreviewNotice";
 import DemoNotice from "@/components/site/DemoNotice";
 import Section from "@/components/site/Section";
 import Blocks from "@/components/site/Blocks";
@@ -178,7 +177,6 @@ export default function LocationPage({ content }: { content: BranchLocationConte
       {content.fictional && (
         <DemoNotice what={`${content.parent.name.replace(/ \(fictional demo brand\)$/, "")}, this branch, its address, hours and people do not exist.`} />
       )}
-      <PreviewNotice />
       <SiteHeader />
       <main id="main">{content.sections.map(render)}</main>
       <SiteFooter />

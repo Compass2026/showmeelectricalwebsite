@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
-import PreviewNotice from "@/components/site/PreviewNotice";
 import Section from "@/components/site/Section";
 import Button from "@/components/site/Button";
 import Reveal from "@/components/motion/Reveal";
@@ -42,7 +41,6 @@ export default function HomePage() {
           __html: JSON.stringify([localBusinessJsonLd(), websiteJsonLd()]),
         }}
       />
-      <PreviewNotice />
       <SiteHeader />
 
       <main id="main">

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
-import PreviewNotice from "@/components/site/PreviewNotice";
 import Reveal from "@/components/motion/Reveal";
 import InquiryForm from "@/components/site/InquiryForm";
 import { site } from "@/config/site.config";
@@ -43,7 +42,6 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PreviewNotice />
       <SiteHeader />
 
       <main id="main">

@@ -1,6 +1,5 @@
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
-import PreviewNotice from "@/components/site/PreviewNotice";
 import Section from "@/components/site/Section";
 import TrustBar from "@/components/home/TrustBar";
 import PageHero from "@/components/site/PageHero";
@@ -173,7 +172,6 @@ export default function ServicePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PreviewNotice />
       <SiteHeader />
       <main id="main">{content.sections.map(render)}</main>
       <SiteFooter />

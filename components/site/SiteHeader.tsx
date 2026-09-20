@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Logo from "@/components/Logo";
 import { site } from "@/config/site.config";
+import PreviewNotice from "@/components/site/PreviewNotice";
 
 /**
  * Main-site header. Carries the careers site's structure — utility bar above a
@@ -14,13 +15,17 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 shadow-lg shadow-primary-950/20">
+    <>
+      {/* The skip link is the page's first tab stop — ahead of the review
+          banner (whose reviewer-notes disclosure is focusable) and the nav. */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-accent-500 focus:px-4 focus:py-2 focus:font-bold focus:text-primary-950"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-accent-500 focus:px-4 focus:py-2 focus:font-bold focus:text-primary-950"
       >
         Skip to content
       </a>
+      <PreviewNotice />
+    <header className="sticky top-0 z-50 shadow-lg shadow-primary-950/20">
 
       {/* Utility bar */}
       <div className="bg-primary-950 text-white">
@@ -141,5 +146,6 @@ export default function SiteHeader() {
         )}
       </div>
     </header>
+    </>
   );
 }

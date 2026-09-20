@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
-import PreviewNotice from "@/components/site/PreviewNotice";
 import LegalLayout from "@/components/site/LegalLayout";
 import { site } from "@/config/site.config";
 import { pageMetadata } from "@/lib/metadata";
@@ -55,7 +54,6 @@ export default async function LegalPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PreviewNotice />
       <SiteHeader />
       <LegalLayout doc={doc} breadcrumbs={breadcrumbs} contact={legal.contact} />
       <SiteFooter />
