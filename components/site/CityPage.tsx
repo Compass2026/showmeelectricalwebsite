@@ -58,7 +58,7 @@ export default function CityPage({ content }: { content: CityPageContent }) {
         return <PageHero key={key} hero={content.hero} breadcrumbs={content.breadcrumbs} />;
       case "facts":
         return (
-          <Section key={key} id="facts" tone="cream" eyebrow={content.facts.eyebrow} headingId="facts-heading" heading={content.facts.heading} intro={content.facts.intro}>
+          <Section key={key} id="facts" tone="surface" eyebrow={content.facts.eyebrow} headingId="facts-heading" heading={content.facts.heading} intro={content.facts.intro}>
             <FactList items={content.facts.items} />
           </Section>
         );
@@ -70,7 +70,7 @@ export default function CityPage({ content }: { content: CityPageContent }) {
         ) : null;
       case "context":
         return content.context ? (
-          <Section key={key} id="context" tone="cream" eyebrow={content.context.eyebrow} headingId="context-heading" heading={content.context.heading}>
+          <Section key={key} id="context" tone="surface" eyebrow={content.context.eyebrow} headingId="context-heading" heading={content.context.heading}>
             <Reveal className="mt-8 max-w-3xl">
               <Blocks blocks={content.context.body} />
             </Reveal>
@@ -90,7 +90,7 @@ export default function CityPage({ content }: { content: CityPageContent }) {
         ) : null;
       case "related":
         return content.related ? (
-          <Section key={key} id="related" tone="cream" headingId="related-heading" heading={content.related.heading}>
+          <Section key={key} id="related" tone="surface" headingId="related-heading" heading={content.related.heading}>
             <RelatedLinks links={content.related.links} />
           </Section>
         ) : null;

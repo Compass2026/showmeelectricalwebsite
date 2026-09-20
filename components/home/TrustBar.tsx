@@ -8,13 +8,13 @@ import type { TrustPoint } from "@/content/services/types";
  */
 export default function TrustBar({ points }: { points: TrustPoint[] }) {
   return (
-    <section className="border-b border-navy-900/10 bg-cream py-10">
+    <section className="border-b border-primary-900/10 bg-surface py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {points.map((point) => (
             <div key={point.label} className="flex items-start gap-3">
               <svg
-                className="mt-0.5 h-5 w-5 shrink-0 text-lime-700"
+                className="mt-0.5 h-5 w-5 shrink-0 text-accent-700"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -28,8 +28,8 @@ export default function TrustBar({ points }: { points: TrustPoint[] }) {
                 />
               </svg>
               <div>
-                <p className="font-bold text-navy-900">{point.label}</p>
-                <p className="mt-0.5 text-sm leading-relaxed text-charcoal/70">
+                <p className="font-bold text-primary-900">{point.label}</p>
+                <p className="mt-0.5 text-sm leading-relaxed text-ink/70">
                   {point.detail}
                 </p>
               </div>

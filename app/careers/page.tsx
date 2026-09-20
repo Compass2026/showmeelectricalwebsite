@@ -5,6 +5,8 @@ import CareerTimeline from "@/components/CareerTimeline";
 import JobCard from "@/components/JobCard";
 import ApplicationForm from "@/components/ApplicationForm";
 import Reveal from "@/components/Reveal";
+import { notFound } from "next/navigation";
+import { site } from "@/config/site.config";
 import { jobs, jobPostingJsonLd, SERVICE_AREA } from "@/lib/jobs";
 
 export const dynamic = "force-static";
@@ -37,6 +39,8 @@ const whyCards = [
 ] as const;
 
 export default function HomePage() {
+  // Careers is an optional property: without it this route does not exist.
+  if (!site.careers) notFound();
   return (
     <>
       <script
@@ -48,25 +52,25 @@ export default function HomePage() {
       <Header />
       <main id="main">
         {/* ---------- Hero ---------- */}
-        <section className="relative overflow-hidden bg-navy-950">
+        <section className="relative overflow-hidden bg-primary-950">
           <CircuitBackground />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-950/40 to-navy-950"
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-950/40 to-primary-950"
           />
           <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:py-40">
             <div className="max-w-3xl">
-              <p className="inline-flex items-center gap-2 rounded-full border border-lime-500/40 bg-lime-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-lime-400">
+              <p className="inline-flex items-center gap-2 rounded-full border border-accent-500/40 bg-accent-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent-400">
                 <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-lime-500 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-lime-500" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-500 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-500" />
                 </span>
                 Now hiring — {jobs.length} open roles
               </p>
               <h1 className="mt-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
                 Build Your Career.
                 <br />
-                <span className="text-lime-500">Power Missouri.</span>
+                <span className="text-accent-500">Power Missouri.</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
                 Join a family-owned electrical contractor serving the greater
@@ -76,13 +80,13 @@ export default function HomePage() {
               <div className="mt-10 flex flex-wrap gap-4">
                 <a
                   href="#open-roles"
-                  className="rounded-lg bg-lime-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-navy-950 shadow-lg shadow-lime-500/25 transition hover:bg-lime-400"
+                  className="rounded-lg bg-accent-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-primary-950 shadow-lg shadow-accent-500/25 transition hover:bg-accent-400"
                 >
                   See Open Roles
                 </a>
                 <a
                   href="#career-path"
-                  className="rounded-lg border border-white/25 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:border-lime-500 hover:text-lime-400"
+                  className="rounded-lg border border-white/25 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:border-accent-500 hover:text-accent-400"
                 >
                   Your Career Path
                 </a>
@@ -92,16 +96,16 @@ export default function HomePage() {
         </section>
 
         {/* ---------- Why Show Me Electrical ---------- */}
-        <section className="bg-cream py-20 sm:py-28" aria-labelledby="why-heading">
+        <section className="bg-surface py-20 sm:py-28" aria-labelledby="why-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <Reveal className="max-w-2xl">
-              <p className="text-sm font-bold uppercase tracking-widest text-lime-700">
+              <p className="text-sm font-bold uppercase tracking-widest text-accent-700">
                 Why Show Me Electrical
               </p>
-              <h2 id="why-heading" className="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">
+              <h2 id="why-heading" className="mt-3 text-3xl font-extrabold text-primary-900 sm:text-4xl">
                 A trade career that actually goes somewhere
               </h2>
-              <p className="mt-4 text-lg text-navy-900/70">
+              <p className="mt-4 text-lg text-primary-900/70">
                 We don&apos;t just hire electricians — we build them. Here&apos;s
                 what you get when you join the team.
               </p>
@@ -111,13 +115,13 @@ export default function HomePage() {
                 <Reveal
                   key={card.title}
                   delay={i * 120}
-                  className="rounded-xl border border-navy-900/8 bg-white p-7 shadow-sm transition-shadow hover:shadow-lg"
+                  className="rounded-xl border border-primary-900/8 bg-white p-7 shadow-sm transition-shadow hover:shadow-lg"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-navy-900">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-900">
                     <CardIcon name={card.icon} />
                   </div>
-                  <h3 className="mt-5 text-lg font-bold text-navy-900">{card.title}</h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-navy-900/70">
+                  <h3 className="mt-5 text-lg font-bold text-primary-900">{card.title}</h3>
+                  <p className="mt-2.5 text-sm leading-relaxed text-primary-900/70">
                     {card.description}
                   </p>
                 </Reveal>
@@ -129,16 +133,16 @@ export default function HomePage() {
         {/* ---------- Career path timeline ---------- */}
         <section
           id="career-path"
-          className="relative overflow-hidden bg-navy-950 py-20 sm:py-28"
+          className="relative overflow-hidden bg-primary-950 py-20 sm:py-28"
           aria-labelledby="path-heading"
         >
           <div
             aria-hidden="true"
-            className="absolute left-1/2 top-0 h-72 w-[800px] -translate-x-1/2 rounded-full bg-lime-500/10 blur-3xl"
+            className="absolute left-1/2 top-0 h-72 w-[800px] -translate-x-1/2 rounded-full bg-accent-500/10 blur-3xl"
           />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             <Reveal className="mx-auto max-w-2xl text-center">
-              <p className="text-sm font-bold uppercase tracking-widest text-lime-500">
+              <p className="text-sm font-bold uppercase tracking-widest text-accent-500">
                 Your Career Path
               </p>
               <h2 id="path-heading" className="mt-3 text-3xl font-extrabold text-white sm:text-4xl">
@@ -157,13 +161,13 @@ export default function HomePage() {
         <section id="open-roles" className="scroll-mt-24 bg-white py-20 sm:py-28" aria-labelledby="roles-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <Reveal className="max-w-2xl">
-              <p className="text-sm font-bold uppercase tracking-widest text-lime-700">
+              <p className="text-sm font-bold uppercase tracking-widest text-accent-700">
                 Open Roles
               </p>
-              <h2 id="roles-heading" className="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl">
+              <h2 id="roles-heading" className="mt-3 text-3xl font-extrabold text-primary-900 sm:text-4xl">
                 Four ways to join the team
               </h2>
-              <p className="mt-4 text-lg text-navy-900/70">
+              <p className="mt-4 text-lg text-primary-900/70">
                 Serving the {SERVICE_AREA} — from our home base in
                 Affton, MO.
               </p>
@@ -181,12 +185,12 @@ export default function HomePage() {
         {/* ---------- Application form ---------- */}
         <section
           id="apply"
-          className="scroll-mt-24 bg-gradient-to-b from-navy-900 to-navy-950 py-20 sm:py-28"
+          className="scroll-mt-24 bg-gradient-to-b from-primary-900 to-primary-950 py-20 sm:py-28"
           aria-labelledby="apply-heading"
         >
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
             <Reveal className="text-center">
-              <p className="text-sm font-bold uppercase tracking-widest text-lime-500">
+              <p className="text-sm font-bold uppercase tracking-widest text-accent-500">
                 Apply Now
               </p>
               <h2 id="apply-heading" className="mt-3 text-3xl font-extrabold text-white sm:text-4xl">
@@ -209,7 +213,7 @@ export default function HomePage() {
 }
 
 function CardIcon({ name }: { name: string }) {
-  const cls = "h-6 w-6 text-lime-500";
+  const cls = "h-6 w-6 text-accent-500";
   switch (name) {
     case "graduation":
       return (

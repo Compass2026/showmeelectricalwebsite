@@ -97,7 +97,7 @@ export default function ServicesDirectoryPage() {
 
         <Section
           id="catalog"
-          tone="cream"
+          tone="surface"
           eyebrow={catalog.eyebrow}
           headingId="catalog-heading"
           heading={catalog.heading}
@@ -106,23 +106,23 @@ export default function ServicesDirectoryPage() {
           <Reveal stagger className="mt-12 grid gap-8 lg:grid-cols-3">
             {servicePages.map((page) => (
               <div key={page.slug}>
-                <h3 className="text-lg font-bold text-navy-900">
-                  <Link href={page.path} className="hover:text-lime-700">
+                <h3 className="text-lg font-bold text-primary-900">
+                  <Link href={page.path} className="hover:text-accent-700">
                     {page.directory?.title ?? page.schema.name}
                   </Link>
                 </h3>
-                <ol className="mt-4 space-y-2 border-t border-navy-900/10 pt-4">
+                <ol className="mt-4 space-y-2 border-t border-primary-900/10 pt-4">
                   {page.services.items.map((s) => (
                     <li
                       key={s.name}
-                      className="flex items-start gap-2 text-sm text-charcoal/80"
+                      className="flex items-start gap-2 text-sm text-ink/80"
                     >
                       <span
                         aria-hidden="true"
-                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-lime-500"
+                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500"
                       />
                       {s.href ? (
-                        <Link href={s.href} className="hover:text-lime-700">
+                        <Link href={s.href} className="hover:text-accent-700">
                           {s.name}
                         </Link>
                       ) : (
@@ -159,7 +159,7 @@ export default function ServicesDirectoryPage() {
 
         <Section
           id="related"
-          tone="cream"
+          tone="surface"
           headingId="related-heading"
           heading={related.heading}
         >

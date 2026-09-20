@@ -70,7 +70,7 @@ export default function ServicePage({
           <Section
             key={key}
             id="services"
-            tone="cream"
+            tone="surface"
             eyebrow={content.services.eyebrow}
             headingId="services-heading"
             heading={content.services.heading}
@@ -100,7 +100,7 @@ export default function ServicePage({
           <Section
             key={key}
             id="trust"
-            tone="cream"
+            tone="surface"
             eyebrow={content.trust.eyebrow}
             headingId="trust-heading"
             heading={content.trust.heading}
@@ -148,7 +148,7 @@ export default function ServicePage({
           <Section
             key={key}
             id="related"
-            tone="cream"
+            tone="surface"
             headingId="related-heading"
             heading={content.related.heading}
           >

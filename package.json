@@ -6,11 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "qa:manifest": "tsx scripts/qa/route-manifest.ts",
+    "lint": "next lint --max-warnings 0",
+    "qa:manifest": "node scripts/qa/manifest.mjs",
     "qa:crawl": "node scripts/qa/crawl.mjs",
     "qa:crawl:test": "node scripts/qa/crawl.test.mjs",
-    "qa": "npm run qa:crawl:test && npm run qa:manifest && npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap"
+    "qa": "npm run qa:crawl:test && npm run qa:manifest && npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap",
+    "typecheck": "tsc --noEmit",
+    "typecheck:brand": "node scripts/qa/typecheck-brand.mjs",
+    "qa:forms": "node scripts/qa/forms.test.mjs",
+    "verify": "bash scripts/qa/verify.sh"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -25,6 +29,9 @@
     "@types/node": "^22.10.0",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.24",
+    "playwright-core": "^1.56.1",
     "tailwindcss": "^4.1.11",
     "tsx": "^4.23.13",
     "typescript": "^5.7.0"

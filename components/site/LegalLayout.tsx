@@ -29,7 +29,7 @@ export default function LegalLayout({
 
   return (
     <>
-      <header className="bg-navy-950 text-white">
+      <header className="bg-primary-950 text-white">
         <div className="mx-auto max-w-3xl px-4 pb-12 pt-6 sm:px-6">
           <Reveal immediate>
             <Breadcrumbs crumbs={breadcrumbs} />
@@ -50,11 +50,11 @@ export default function LegalLayout({
       <main id="main" className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <Blocks blocks={doc.body} />
-          <p className="mt-12 border-t border-navy-900/10 pt-6 text-sm text-charcoal/65">
+          <p className="mt-12 border-t border-primary-900/10 pt-6 text-sm text-ink/65">
             {contact.text}{" "}
             <a
               href={contact.href}
-              className="-my-1 inline-block py-1 font-semibold text-lime-700 underline underline-offset-2"
+              className="-my-1 inline-block py-1 font-semibold text-accent-700 underline underline-offset-2"
             >
               {contact.label}
             </a>

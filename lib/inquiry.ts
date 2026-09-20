@@ -1,4 +1,5 @@
 import { servicePages } from "@/content/services";
+import { contact } from "@/content/contact";
 
 /**
  * INQUIRY FORM — shared model and validation.
@@ -15,6 +16,22 @@ export const INQUIRY_LIMITS = {
   service: 120,
   details: 3000,
 } as const;
+
+/**
+ * DUPLICATE-SAFE SUBMISSIONS. The form mints one `submissionId` per
+ * message (a UUID) and sends it with every attempt of that message —
+ * including a retry after a network error, when the first attempt may in
+ * fact have reached the server. The route remembers accepted ids for
+ * `SUBMISSION_ID_TTL_MS` and answers a repeat with `{ ok: true,
+ * duplicate: true }` WITHOUT delivering again. A new message (after
+ * "send another") gets a new id. Per instance, like the rate limit.
+ */
+export const SUBMISSION_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+export const SUBMISSION_ID_TTL_MS = 10 * 60 * 1000;
+
+export function readSubmissionId(raw: unknown): string | null {
+  return typeof raw === "string" && SUBMISSION_ID_RE.test(raw) ? raw.toLowerCase() : null;
+}
 
 export interface InquiryInput {
   name: string;
@@ -90,14 +107,14 @@ export interface ServiceOptionGroup {
   options: string[];
 }
 
-export const OTHER_SERVICE = "Not sure yet / something else";
+export const OTHER_SERVICE = contact.otherService;
 
 export const inquiryServiceGroups: ServiceOptionGroup[] = [
   ...servicePages.map((page) => ({
     label: page.schema.name,
     options: page.services.items.map((item) => item.name),
   })),
-  { label: "Other", options: [OTHER_SERVICE] },
+  { label: contact.otherGroup, options: [OTHER_SERVICE] },
 ];
 
 const knownServices = new Set(inquiryServiceGroups.flatMap((g) => g.options));

@@ -71,7 +71,7 @@ export default function StaggerText({
             data-word
             className={
               accents.has(word.toLowerCase().replace(/[^a-z]/g, ""))
-                ? "inline-block text-lime-500"
+                ? "inline-block text-accent-500"
                 : "inline-block"
             }
           >

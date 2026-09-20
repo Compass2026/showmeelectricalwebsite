@@ -63,12 +63,16 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const { pathname, search } = request.nextUrl;
 
+  // No careers property configured: every host is the main site and the
+  // /careers routes answer 404 on their own (see app/careers/page.tsx).
+  if (!site.careers) return NextResponse.next();
+
   if (!isCareersHost(host)) {
     // Rule 4 — careers pages are not served on the main host.
     const careersPath = mainHostCareersPath(pathname);
     if (careersPath !== null) {
       return NextResponse.redirect(
-        `${site.careersUrl}${careersPath}${search}`,
+        `${site.careers.url}${careersPath}${search}`,
         308
       );
     }

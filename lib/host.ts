@@ -21,8 +21,8 @@ export async function resolveProperty(): Promise<{
 }> {
   const host = (await headers()).get("host") ?? "";
 
-  if (host.startsWith(CAREERS_HOST_PREFIX)) {
-    return { property: "careers", origin: site.careersUrl };
+  if (site.careers && host.startsWith(CAREERS_HOST_PREFIX)) {
+    return { property: "careers", origin: site.careers.url };
   }
   return { property: "main", origin: site.productionUrl };
 }

@@ -29,19 +29,19 @@ export default function AboutSection({
     <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
       <Reveal from="left">
         {eyebrow && (
-          <p className="text-sm font-bold uppercase tracking-widest text-lime-700">
+          <p className="text-sm font-bold uppercase tracking-widest text-accent-700">
             {eyebrow}
           </p>
         )}
         <h2
           id={headingId}
-          className="mt-3 text-3xl font-extrabold text-navy-900 sm:text-4xl"
+          className="mt-3 text-3xl font-extrabold text-primary-900 sm:text-4xl"
         >
           {heading}
         </h2>
         <div className="mt-6 space-y-4">
           {paragraphs.map((p) => (
-            <p key={p.slice(0, 24)} className="leading-relaxed text-charcoal/75">
+            <p key={p.slice(0, 24)} className="leading-relaxed text-ink/75">
               {p}
             </p>
           ))}
@@ -57,7 +57,7 @@ export default function AboutSection({
 
       <Reveal from="right" delay={0.1}>
         <figure>
-          <Parallax className="aspect-[4/5] rounded-2xl border border-navy-900/10 shadow-xl">
+          <Parallax className="aspect-[4/5] rounded-2xl border border-primary-900/10 shadow-xl">
             <div className="relative h-full w-full">
               <Image
                 src={image.src}

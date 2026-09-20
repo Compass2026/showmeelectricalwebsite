@@ -34,7 +34,7 @@ export default function CircuitBackground() {
         <path
           key={i}
           d={t.d}
-          stroke="var(--color-lime-500)"
+          stroke="var(--color-accent-500)"
           strokeWidth="1.5"
           strokeLinecap="round"
           className="circuit-path"
@@ -52,7 +52,7 @@ export default function CircuitBackground() {
           cx={n.cx}
           cy={n.cy}
           r="3.5"
-          fill="var(--color-lime-500)"
+          fill="var(--color-accent-500)"
           className="circuit-node"
           style={{ animationDelay: n.delay }}
         />

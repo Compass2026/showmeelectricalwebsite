@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import "@brand/theme.css";
+import { fontClassNames } from "@brand/fonts";
 import { site } from "@/config/site.config";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-poppins",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
+import DemoNotice from "@/components/site/DemoNotice";
 
 /**
  * Indexing switch.
@@ -33,18 +22,18 @@ const allowIndexing = process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
 export const metadata: Metadata = {
   metadataBase: new URL(site.productionUrl),
   title: {
-    default: `${site.name} — Electrician in St. Louis, MO`,
-    template: `%s | ${site.name}`,
+    default: site.metadata.defaultTitle,
+    template: site.metadata.titleTemplate,
   },
-  description:
-    "Owner-led electrical contractor serving the Greater St. Louis area with residential, commercial and industrial electrical work.",
+  description: site.metadata.description,
   openGraph: {
     type: "website",
     siteName: site.name,
     images: [{ url: site.shareImage, width: 1200, height: 630, alt: site.name }],
   },
   twitter: { card: "summary_large_image", images: [site.shareImage] },
-  robots: allowIndexing
+  // A fictional demonstration brand is never indexable, whatever the env.
+  robots: allowIndexing && !site.fictional
     ? { index: true, follow: true }
     : { index: false, follow: false, nocache: true },
 };
@@ -53,8 +42,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={fontClassNames}>
+      <body>
+        {site.fictional && (
+          <DemoNotice what={`${site.name}, its people, addresses, phone numbers and services do not exist.`} />
+        )}
+        {children}
+      </body>
     </html>
   );
 }

@@ -7,11 +7,11 @@ import type { LabeledFact } from "@/content/cities/types";
  */
 export default function FactList({ items }: { items: LabeledFact[] }) {
   return (
-    <dl className="mt-10 grid gap-px overflow-hidden rounded-xl border border-navy-900/10 bg-navy-900/10 sm:grid-cols-2">
+    <dl className="mt-10 grid gap-px overflow-hidden rounded-xl border border-primary-900/10 bg-primary-900/10 sm:grid-cols-2">
       {items.map((f) => (
         <div key={f.label} className="bg-white px-6 py-5">
-          <dt className="text-sm font-bold uppercase tracking-wide text-charcoal/55">{f.label}</dt>
-          <dd className="mt-1.5 font-medium leading-relaxed text-navy-900">{f.value}</dd>
+          <dt className="text-sm font-bold uppercase tracking-wide text-ink/55">{f.label}</dt>
+          <dd className="mt-1.5 font-medium leading-relaxed text-primary-900">{f.value}</dd>
         </div>
       ))}
     </dl>

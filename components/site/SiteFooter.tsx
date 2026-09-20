@@ -5,19 +5,18 @@ import { site } from "@/config/site.config";
 /** Main-site footer, mirroring the careers footer structure. */
 export default function SiteFooter() {
   return (
-    <footer className="bg-navy-900 text-white">
+    <footer className="bg-primary-900 text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo className="h-14 sm:h-20" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
-            Owner-led electrical contractor serving the {site.serviceArea} with
-            residential, commercial and industrial expertise.
+            {site.footer.blurb}
           </p>
         </div>
 
         <nav aria-label="Services and company">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-lime-500">
-            Explore
+          <h2 className="text-sm font-bold uppercase tracking-widest text-accent-500">
+            {site.footer.exploreHeading}
           </h2>
           <ul className="mt-4 space-y-2.5">
             {site.footerLinks.map((item) => (
@@ -25,14 +24,14 @@ export default function SiteFooter() {
                 {item.external ? (
                   <a
                     href={item.href}
-                    className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-lime-400"
+                    className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-accent-400"
                   >
                     {item.label}
                   </a>
                 ) : (
                   <Link
                     href={item.href}
-                    className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-lime-400"
+                    className="-my-1 inline-block py-1 text-sm text-white/80 transition-colors hover:text-accent-400"
                   >
                     {item.label}
                   </Link>
@@ -43,23 +42,23 @@ export default function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="text-sm font-bold uppercase tracking-widest text-lime-500">
-            Areas Served
+          <h2 className="text-sm font-bold uppercase tracking-widest text-accent-500">
+            {site.footer.areasHeading}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-white/80">
-            Proudly serving the {site.serviceArea} and surrounding communities.
+            {site.footer.areasText}
           </p>
         </div>
 
         <div>
-          <h2 className="text-sm font-bold uppercase tracking-widest text-lime-500">
-            Contact
+          <h2 className="text-sm font-bold uppercase tracking-widest text-accent-500">
+            {site.footer.contactHeading}
           </h2>
           <ul className="mt-4 space-y-3 text-sm text-white/80">
             <li>
               <a
                 href={`mailto:${site.email}`}
-                className="-my-1 inline-block py-1 break-all hover:text-lime-400"
+                className="-my-1 inline-block py-1 break-all hover:text-accent-400"
               >
                 {site.email}
               </a>
@@ -67,7 +66,7 @@ export default function SiteFooter() {
             <li>
               <a
                 href={site.phoneHref}
-                className="-my-1 inline-block py-1 hover:text-lime-400"
+                className="-my-1 inline-block py-1 hover:text-accent-400"
               >
                 {site.phone}
               </a>
@@ -92,7 +91,7 @@ export default function SiteFooter() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="-my-1.5 inline-block py-1.5 hover:text-lime-400"
+                    className="-my-1.5 inline-block py-1.5 hover:text-accent-400"
                   >
                     {item.label}
                   </Link>

@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { getJob } from "@/lib/jobs";
+import { site } from "@/config/site.config";
+import { careers } from "@brand/careers";
 
 export const runtime = "nodejs";
 
 /** Verified Resend sending domain. Override with RESEND_FROM. */
-const FROM = "Show Me Electrical Careers <careers@send.compassmarketing.ai>";
+const FROM = careers.apply.from;
 /** Override with APPLICATION_RECIPIENT (comma-separated for multiple). */
-const TO = ["info@showmeelectrical.com", "thomas@compassmarketing.ai"];
+const TO = careers.apply.recipients;
 
 const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 const RESUME_TYPES: Record<string, string> = {
@@ -83,6 +85,7 @@ function describeSecret(name: string): string {
 }
 
 export async function POST(request: NextRequest) {
+  if (!site.careers) return NextResponse.json({ ok: false, error: "Not found." }, { status: 404 });
   const apiKey = readEnv("RESEND_API_KEY");
   if (!apiKey) {
     console.error(

@@ -4,15 +4,15 @@ import type { ReactNode } from "react";
 type Variant = "primary" | "secondary" | "ghost";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-lg px-7 py-3.5 text-sm font-bold uppercase tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500";
+  "inline-flex items-center justify-center gap-2 rounded-lg px-7 py-3.5 text-sm font-bold uppercase tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-lime-500 text-navy-950 shadow-lg shadow-lime-500/20 hover:bg-lime-400",
+    "bg-accent-500 text-primary-950 shadow-lg shadow-accent-500/20 hover:bg-accent-400",
   secondary:
-    "border border-white/25 text-white hover:border-lime-500 hover:text-lime-400",
+    "border border-white/25 text-white hover:border-accent-500 hover:text-accent-400",
   ghost:
-    "border border-navy-900/20 text-navy-900 hover:border-navy-900/50 hover:bg-navy-900/5",
+    "border border-primary-900/20 text-primary-900 hover:border-primary-900/50 hover:bg-primary-900/5",
 };
 
 /** Shared call-to-action button. Renders an anchor for tel:/mailto:/external. */

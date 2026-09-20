@@ -5,6 +5,8 @@ import {
   normaliseInquiry,
   validateInquiry,
   isValidEmail,
+  readSubmissionId,
+  SUBMISSION_ID_TTL_MS,
   type InquiryErrors,
 } from "@/lib/inquiry";
 
@@ -56,6 +58,25 @@ function rateLimited(ip: string): boolean {
     }
   }
   return false;
+}
+
+/* ---------- Duplicate guard — PER INSTANCE, same caveat as the rate limit.
+ * Accepted submission ids are remembered for SUBMISSION_ID_TTL_MS. A retry
+ * carrying an id already delivered is answered as a success WITHOUT a second
+ * delivery, so a visitor whose first attempt timed out on the wire cannot
+ * send the same message twice. */
+const accepted = new Map<string, number>();
+function alreadyAccepted(id: string): boolean {
+  const now = Date.now();
+  const at = accepted.get(id);
+  if (at !== undefined && now - at < SUBMISSION_ID_TTL_MS) return true;
+  if (accepted.size > 5000) {
+    for (const [key, t] of accepted) if (now - t >= SUBMISSION_ID_TTL_MS) accepted.delete(key);
+  }
+  return false;
+}
+function markAccepted(id: string | null) {
+  if (id) accepted.set(id, Date.now());
 }
 
 /* ---------- Helpers ---------- */
@@ -128,8 +149,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, errors }, { status: 400 });
   }
 
+  // Duplicate-safe: a repeat of an already-delivered message is a success
+  // with nothing sent. (Checked after validation so an id cannot be used
+  // to make an invalid message look accepted.)
+  const submissionId = readSubmissionId(raw.submissionId);
+  if (submissionId && alreadyAccepted(submissionId)) {
+    return NextResponse.json({ ok: true, duplicate: true });
+  }
+
   /* ---------- Delivery ---------- */
-  const mode = isProduction ? "" : readEnv(inquiryConfig.env.delivery);
+  const mode = isProduction ? "" : inquiryConfig.forceMock ? "mock" : readEnv(inquiryConfig.env.delivery);
   if (mode === "fail") {
     console.error("[inquiry] simulated provider failure (INQUIRY_DELIVERY=fail)");
     return failure("The message could not be handed to our email service.", 502);
@@ -188,6 +217,7 @@ export async function POST(request: NextRequest) {
       replyTo: data.email || undefined,
       subject,
     });
+    markAccepted(submissionId);
     return NextResponse.json({ ok: true, delivery: "mock" });
   }
 
@@ -211,6 +241,7 @@ export async function POST(request: NextRequest) {
       console.error("[inquiry] Resend send failed:", error);
       return failure("The message could not be handed to our email service.", 502);
     }
+    markAccepted(submissionId);
     return NextResponse.json({ ok: true, id: sent?.id ?? null });
   } catch (err) {
     console.error("[inquiry] Resend threw:", err);

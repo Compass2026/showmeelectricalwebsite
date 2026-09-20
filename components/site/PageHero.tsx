@@ -31,11 +31,11 @@ export default function PageHero({
   breadcrumbs: Crumb[];
 }) {
   return (
-    <section className="relative overflow-hidden bg-navy-950">
+    <section className="relative overflow-hidden bg-primary-950">
       <HeroBackdrop />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-950/40 to-navy-950"
+        className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-950/40 to-primary-950"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 pt-6 sm:px-6">
@@ -47,7 +47,7 @@ export default function PageHero({
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-8 sm:px-6 sm:pb-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
         <div>
           <Reveal immediate>
-            <p className="inline-flex items-center gap-2 rounded-full border border-lime-500/40 bg-lime-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-lime-400">
+            <p className="inline-flex items-center gap-2 rounded-full border border-accent-500/40 bg-accent-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent-400">
               {hero.eyebrow}
             </p>
           </Reveal>
@@ -73,7 +73,7 @@ export default function PageHero({
         </div>
 
         <Reveal from="right" delay={0.2} immediate>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-navy-950/60 lg:aspect-auto lg:h-[420px] xl:h-[460px]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-primary-950/60 lg:aspect-auto lg:h-[420px] xl:h-[460px]">
             <Image
               src={hero.image.src}
               alt={hero.image.alt}

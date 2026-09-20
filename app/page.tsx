@@ -14,6 +14,7 @@ import Testimonials from "@/components/home/Testimonials";
 import { site } from "@/config/site.config";
 import { pageMetadata } from "@/lib/metadata";
 import {
+  homePage,
   storyStages,
   emergencyCallout,
   about,
@@ -25,16 +26,10 @@ import { localBusinessJsonLd, websiteJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-/**
- * Primary keyword from the approved taxonomy: "electrician st louis" (260/mo).
- * Supporting: st louis electrician, electrical contractor st louis,
- * emergency electrician st louis (owner-confirmed as offered — decisions
- * D-001; no availability claim anywhere on the page).
- */
+/** Every string on this page comes from the brand's content/home.ts. */
 export const metadata: Metadata = pageMetadata({
-  title: "Electrician in St. Louis, MO | Show Me Electrical",
-  description:
-    "Owner-led by a Master Electrician serving the Greater St. Louis area: residential, commercial, industrial and emergency electrical work. Free consultation.",
+  title: homePage.seo.title,
+  description: homePage.seo.description,
   path: "/",
 });
 
@@ -58,28 +53,28 @@ export default function HomePage() {
         <Section
           id="services"
           tone="light"
-          eyebrow="What we do"
+          eyebrow={homePage.services.eyebrow}
           headingId="services-heading"
-          heading="Electrical work for every kind of space"
-          intro={`Three pathways, one standard of work. Serving the ${site.serviceArea} from our shop in ${site.address.city}.`}
+          heading={homePage.services.heading}
+          intro={homePage.services.intro}
         >
           <ServicePathways items={servicePathways} />
 
           {/*
             Emergency repairs — owner-confirmed service (docs/decisions.md
             D-001), kept visually secondary to the three pathways: a quiet
-            cream strip, not a banner. Hours and response times are
+            surface strip, not a banner. Hours and response times are
             unconfirmed, so there is deliberately no 24/7, after-hours or
             arrival-time wording here.
           */}
           {site.offersEmergencyService && (
             <Reveal delay={0.15} className="mt-8">
-              <div className="flex flex-col gap-4 rounded-xl border border-navy-900/10 bg-cream px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-4 rounded-xl border border-primary-900/10 bg-surface px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-navy-900">
+                  <h3 className="text-base font-bold text-primary-900">
                     {emergencyCallout.heading}
                   </h3>
-                  <p className="mt-1 text-sm text-charcoal/70">
+                  <p className="mt-1 text-sm text-ink/70">
                     {emergencyCallout.body}
                   </p>
                 </div>
@@ -88,15 +83,15 @@ export default function HomePage() {
                   variant="ghost"
                   className="shrink-0 self-start sm:self-auto"
                 >
-                  Call {site.phone}
+                  {homePage.services.callLabel} {site.phone}
                 </Button>
               </div>
             </Reveal>
           )}
 
           <Reveal delay={0.2} className="mt-8">
-            <Button href="/services" variant="ghost">
-              See every service
+            <Button href={homePage.services.more.href} variant="ghost">
+              {homePage.services.more.label}
             </Button>
           </Reveal>
         </Section>
@@ -104,27 +99,26 @@ export default function HomePage() {
         {/* ---------- Signature scroll story ---------- */}
         <section
           id="process"
-          className="relative overflow-hidden bg-navy-950 py-16 sm:py-20"
+          className="relative overflow-hidden bg-primary-950 py-16 sm:py-20"
           aria-labelledby="process-heading"
         >
           <div
             aria-hidden="true"
-            className="absolute left-1/2 top-0 h-72 w-[800px] -translate-x-1/2 rounded-full bg-lime-500/10 blur-3xl"
+            className="absolute left-1/2 top-0 h-72 w-[800px] -translate-x-1/2 rounded-full bg-accent-500/10 blur-3xl"
           />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             <Reveal className="mx-auto max-w-2xl text-center">
-              <p className="text-sm font-bold uppercase tracking-widest text-lime-500">
-                Our process
+              <p className="text-sm font-bold uppercase tracking-widest text-accent-500">
+                {homePage.process.eyebrow}
               </p>
               <h2
                 id="process-heading"
                 className="mt-3 text-3xl font-extrabold text-white sm:text-4xl"
               >
-                Powering your project
+                {homePage.process.heading}
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-white/70">
-                From the first free consultation to the moment the power comes
-                on — here is how the work runs.
+                {homePage.process.intro}
               </p>
             </Reveal>
             <ScrollStory stages={storyStages} />
@@ -132,62 +126,64 @@ export default function HomePage() {
         </section>
 
         {/* ---------- About ---------- */}
-        <Section id="about" tone="cream" headingId="about-heading">
+        <Section id="about" tone="surface" headingId="about-heading">
           <AboutSection
-            eyebrow="Meet the owner"
+            eyebrow={homePage.about.eyebrow}
             heading={about.heading}
             paragraphs={about.paragraphs}
             image={about.image}
-            cta={{ label: "More about Dan", href: "/about" }}
+            cta={homePage.about.cta}
           />
         </Section>
 
         {/* ---------- Testimonials ---------- */}
-        <Section
-          id="testimonials"
-          tone="navy"
-          eyebrow="Client feedback"
-          headingId="testimonials-heading"
-          heading="What our customers say"
-          intro="Reviews published by our customers on the Show Me Electrical website."
-          center
-        >
-          <Testimonials items={testimonials} />
-        </Section>
+        {testimonials.length > 0 && (
+          <Section
+            id="testimonials"
+            tone="primary"
+            eyebrow={homePage.testimonials.eyebrow}
+            headingId="testimonials-heading"
+            heading={homePage.testimonials.heading}
+            intro={homePage.testimonials.intro}
+            center
+          >
+            <Testimonials items={testimonials} />
+          </Section>
+        )}
 
         {/* ---------- Service area ---------- */}
         <Section
           id="service-area"
           tone="light"
-          eyebrow="Where we work"
+          eyebrow={homePage.area.eyebrow}
           headingId="area-heading"
-          heading={`Serving the ${site.serviceArea}`}
-          intro="Based in Affton and working across the metro — from St. Louis City and County out through St. Charles, Jefferson and the surrounding communities, and across the river to Edwardsville and Belleville."
+          heading={homePage.area.heading}
+          intro={homePage.area.intro}
         >
           <Reveal stagger className="mt-10 flex flex-wrap gap-3">
             {[...site.counties, ...site.confirmedCities].map((county) => (
               <span
                 key={county}
-                className="rounded-full border border-navy-900/15 bg-cream px-4 py-2 text-sm font-semibold text-navy-900"
+                className="rounded-full border border-primary-900/15 bg-surface px-4 py-2 text-sm font-semibold text-primary-900"
               >
                 {county}
               </span>
             ))}
           </Reveal>
           <Reveal delay={0.2} className="mt-8">
-            <p className="text-sm text-charcoal/60">
-              Not sure if you&apos;re in range?{" "}
+            <p className="text-sm text-ink/60">
+              {homePage.area.fallback.text}{" "}
               <a
                 href={site.phoneHref}
-                className="-my-1 inline-block py-1 font-semibold text-lime-700 underline underline-offset-2"
+                className="-my-1 inline-block py-1 font-semibold text-accent-700 underline underline-offset-2"
               >
-                Call {site.phone}
+                {homePage.area.fallback.callLabel} {site.phone}
               </a>{" "}
-              and we&apos;ll tell you straight.
+              {homePage.area.fallback.action}
             </p>
             <div className="mt-6">
-              <Button href="/service-area" variant="ghost">
-                Full service area
+              <Button href={homePage.area.more.href} variant="ghost">
+                {homePage.area.more.label}
               </Button>
             </div>
           </Reveal>
@@ -195,7 +191,7 @@ export default function HomePage() {
 
         {/* ---------- Final CTA ---------- */}
         <section
-          className="bg-gradient-to-b from-navy-900 to-navy-950 py-20 sm:py-28"
+          className="bg-gradient-to-b from-primary-900 to-primary-950 py-20 sm:py-28"
           aria-labelledby="cta-heading"
         >
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
@@ -204,12 +200,10 @@ export default function HomePage() {
                 id="cta-heading"
                 className="text-3xl font-extrabold text-white sm:text-4xl"
               >
-                Let&apos;s talk about your project
+                {homePage.finalCta.heading}
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-white/70">
-                Free consultation, straight answers and a clear scope before any
-                work starts. Tell us what you need and we&apos;ll get you on the
-                schedule.
+                {homePage.finalCta.body}
               </p>
               <div className="mt-9 flex flex-wrap justify-center gap-4">
                 <Button href={site.primaryCta.href}>
@@ -219,15 +213,17 @@ export default function HomePage() {
                   {site.phone}
                 </Button>
               </div>
-              <p className="mt-10 text-sm text-white/60">
-                Looking to join the team instead?{" "}
-                <a
-                  href={site.careersUrl}
-                  className="-my-1 inline-block py-1 font-semibold text-lime-400 underline underline-offset-2"
-                >
-                  See our open roles
-                </a>
-              </p>
+              {site.careers && homePage.finalCta.careers && (
+                <p className="mt-10 text-sm text-white/60">
+                  {homePage.finalCta.careers.text}{" "}
+                  <a
+                    href={site.careers.url}
+                    className="-my-1 inline-block py-1 font-semibold text-accent-400 underline underline-offset-2"
+                  >
+                    {homePage.finalCta.careers.label}
+                  </a>
+                </p>
+              )}
             </Reveal>
           </div>
         </section>

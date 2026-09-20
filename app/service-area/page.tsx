@@ -60,7 +60,7 @@ export default function ServiceAreaPage() {
 
         <Section
           id="coverage"
-          tone="cream"
+          tone="surface"
           eyebrow={coverage.eyebrow}
           headingId="coverage-heading"
           heading={coverage.heading}
@@ -68,11 +68,11 @@ export default function ServiceAreaPage() {
         >
           <CoverageGroups groups={coverage.groups} />
           <Reveal delay={0.2} className="mt-8">
-            <p className="text-sm text-charcoal/60">
+            <p className="text-sm text-ink/60">
               {coverage.fallback.text}{" "}
               <a
                 href={site.phoneHref}
-                className="-my-1 inline-block py-1 font-semibold text-lime-700 underline underline-offset-2"
+                className="-my-1 inline-block py-1 font-semibold text-accent-700 underline underline-offset-2"
               >
                 Call {site.phone}
               </a>{" "}
@@ -94,7 +94,7 @@ export default function ServiceAreaPage() {
 
         <Section
           id="faqs"
-          tone="cream"
+          tone="surface"
           eyebrow={faqs.eyebrow}
           headingId="faqs-heading"
           heading={faqs.heading}

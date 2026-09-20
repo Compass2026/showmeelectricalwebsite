@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import Reveal from "@/components/motion/Reveal";
 
-type Tone = "light" | "cream" | "navy" | "deep";
+type Tone = "light" | "surface" | "primary" | "deep";
 
 const tones: Record<Tone, string> = {
-  light: "bg-white text-charcoal",
-  cream: "bg-cream text-charcoal",
-  navy: "bg-navy-900 text-white",
-  deep: "bg-navy-950 text-white",
+  light: "bg-white text-ink",
+  surface: "bg-surface text-ink",
+  primary: "bg-primary-900 text-white",
+  deep: "bg-primary-950 text-white",
 };
 
 /**
@@ -35,7 +35,7 @@ export default function Section({
   headingId?: string;
   center?: boolean;
 }) {
-  const dark = tone === "navy" || tone === "deep";
+  const dark = tone === "primary" || tone === "deep";
 
   return (
     <section
@@ -51,7 +51,7 @@ export default function Section({
             {eyebrow && (
               <p
                 className={`text-sm font-bold uppercase tracking-widest ${
-                  dark ? "text-lime-500" : "text-lime-700"
+                  dark ? "text-accent-500" : "text-accent-700"
                 }`}
               >
                 {eyebrow}
@@ -61,7 +61,7 @@ export default function Section({
               <h2
                 id={headingId}
                 className={`mt-3 text-3xl font-extrabold sm:text-4xl ${
-                  dark ? "text-white" : "text-navy-900"
+                  dark ? "text-white" : "text-primary-900"
                 }`}
               >
                 {heading}
@@ -70,7 +70,7 @@ export default function Section({
             {intro && (
               <p
                 className={`mt-4 text-lg leading-relaxed ${
-                  dark ? "text-white/70" : "text-charcoal/70"
+                  dark ? "text-white/70" : "text-ink/70"
                 }`}
               >
                 {intro}

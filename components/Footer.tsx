@@ -18,7 +18,7 @@ const quickLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-navy-900 text-white">
+    <footer className="bg-primary-900 text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo className="h-14 sm:h-20" />
@@ -29,7 +29,7 @@ export default function Footer() {
         </div>
 
         <nav aria-label="Quick links">
-          <h3 className="text-sm font-bold uppercase tracking-widest text-lime-500">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-accent-500">
             Quick Links
           </h3>
           <ul className="mt-4 space-y-2.5">
@@ -37,7 +37,7 @@ export default function Footer() {
               <li key={link.label}>
                 <a
                   href={link.href}
-                  className="text-sm text-white/80 transition-colors hover:text-lime-400"
+                  className="text-sm text-white/80 transition-colors hover:text-accent-400"
                 >
                   {link.label}
                 </a>
@@ -47,7 +47,7 @@ export default function Footer() {
         </nav>
 
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-widest text-lime-500">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-accent-500">
             Areas Served
           </h3>
           <ul className="mt-4 space-y-2.5">
@@ -58,17 +58,17 @@ export default function Footer() {
         </div>
 
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-widest text-lime-500">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-accent-500">
             Contact
           </h3>
           <ul className="mt-4 space-y-3 text-sm text-white/80">
             <li>
-              <a href={`mailto:${EMAIL}`} className="hover:text-lime-400">
+              <a href={`mailto:${EMAIL}`} className="hover:text-accent-400">
                 {EMAIL}
               </a>
             </li>
             <li>
-              <a href={PHONE_HREF} className="hover:text-lime-400">
+              <a href={PHONE_HREF} className="hover:text-accent-400">
                 {PHONE}
               </a>
             </li>
@@ -87,7 +87,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Show Me Electrical Services. All
             rights reserved.
           </p>
-          <a href={`${WP_URL}/`} className="hover:text-lime-400">
+          <a href={`${WP_URL}/`} className="hover:text-accent-400">
             showmeelectrical.com
           </a>
         </div>

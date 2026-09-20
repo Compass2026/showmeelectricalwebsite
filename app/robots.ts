@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { resolveProperty, allowIndexing } from "@/lib/host";
+import { site } from "@/config/site.config";
 
 /**
  * Host-aware robots.txt.
@@ -15,7 +16,7 @@ import { resolveProperty, allowIndexing } from "@/lib/host";
 export const dynamic = "force-dynamic";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  if (!allowIndexing) {
+  if (!allowIndexing || site.fictional) {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
 

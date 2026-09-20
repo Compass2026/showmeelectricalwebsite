@@ -59,10 +59,10 @@ export default async function JobPage({
       <Header />
       <main id="main">
         {/* Job hero */}
-        <section className="bg-navy-950 py-16 sm:py-20">
+        <section className="bg-primary-950 py-16 sm:py-20">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <nav aria-label="Breadcrumb" className="text-sm text-white/60">
-              <Link href="/careers" className="hover:text-lime-400">
+              <Link href="/careers" className="hover:text-accent-400">
                 Careers
               </Link>
               <span aria-hidden="true" className="mx-2">
@@ -74,7 +74,7 @@ export default async function JobPage({
               {job.title}
             </h1>
             <div className="mt-5 flex flex-wrap items-center gap-3 text-sm">
-              <span className="rounded-full bg-lime-500/15 px-3.5 py-1.5 font-bold uppercase tracking-wide text-lime-400">
+              <span className="rounded-full bg-accent-500/15 px-3.5 py-1.5 font-bold uppercase tracking-wide text-accent-400">
                 {job.category}
               </span>
               <span className="rounded-full bg-white/10 px-3.5 py-1.5 font-semibold text-white/85">
@@ -89,7 +89,7 @@ export default async function JobPage({
             </p>
             <Link
               href={`/careers?role=${job.slug}#apply`}
-              className="mt-8 inline-block rounded-lg bg-lime-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-navy-950 shadow-lg shadow-lime-500/25 transition hover:bg-lime-400"
+              className="mt-8 inline-block rounded-lg bg-accent-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-primary-950 shadow-lg shadow-accent-500/25 transition hover:bg-accent-400"
             >
               Apply for this role
             </Link>
@@ -101,12 +101,12 @@ export default async function JobPage({
           <div className="mx-auto max-w-4xl space-y-12 px-4 sm:px-6">
             {job.sections.map((section, i) => (
               <Reveal key={section.heading} delay={Math.min(i, 2) * 100}>
-                <h2 className="flex items-center gap-3 text-2xl font-bold text-navy-900">
-                  <span aria-hidden="true" className="h-6 w-1.5 rounded-full bg-lime-500" />
+                <h2 className="flex items-center gap-3 text-2xl font-bold text-primary-900">
+                  <span aria-hidden="true" className="h-6 w-1.5 rounded-full bg-accent-500" />
                   {section.heading}
                 </h2>
                 {section.body && (
-                  <p className="mt-4 leading-relaxed text-navy-900/75">
+                  <p className="mt-4 leading-relaxed text-primary-900/75">
                     {section.body}
                   </p>
                 )}
@@ -115,10 +115,10 @@ export default async function JobPage({
                     {section.items.map((item) => (
                       <li
                         key={item}
-                        className="flex items-start gap-2.5 rounded-lg bg-cream px-4 py-3 text-sm leading-relaxed text-navy-900/85"
+                        className="flex items-start gap-2.5 rounded-lg bg-surface px-4 py-3 text-sm leading-relaxed text-primary-900/85"
                       >
                         <svg
-                          className="mt-0.5 h-4 w-4 shrink-0 text-lime-700"
+                          className="mt-0.5 h-4 w-4 shrink-0 text-accent-700"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -136,7 +136,7 @@ export default async function JobPage({
             ))}
 
             {/* Bottom CTA */}
-            <Reveal className="rounded-2xl bg-navy-950 p-8 text-center sm:p-12">
+            <Reveal className="rounded-2xl bg-primary-950 p-8 text-center sm:p-12">
               <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
                 Ready to join the team?
               </h2>
@@ -146,12 +146,12 @@ export default async function JobPage({
               </p>
               <Link
                 href={`/careers?role=${job.slug}#apply`}
-                className="mt-7 inline-block rounded-lg bg-lime-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-lime-400"
+                className="mt-7 inline-block rounded-lg bg-accent-500 px-8 py-4 text-sm font-bold uppercase tracking-wide text-primary-950 transition hover:bg-accent-400"
               >
                 Apply for this role
               </Link>
               <p className="mt-6 text-sm text-white/50">
-                <Link href="/careers#open-roles" className="underline hover:text-lime-400">
+                <Link href="/careers#open-roles" className="underline hover:text-accent-400">
                   ← Back to all open roles
                 </Link>
               </p>

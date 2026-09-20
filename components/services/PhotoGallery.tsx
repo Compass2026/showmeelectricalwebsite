@@ -15,7 +15,7 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
     <Reveal stagger className={`mt-12 grid gap-6 ${cols}`}>
       {photos.map((photo) => (
         <figure key={photo.src}>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-navy-900/10 shadow-sm">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-primary-900/10 shadow-sm">
             <Image
               src={photo.src}
               alt={photo.alt}
@@ -25,7 +25,7 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
             />
           </div>
           {photo.caption && (
-            <figcaption className="mt-3 text-sm text-charcoal/65">
+            <figcaption className="mt-3 text-sm text-ink/65">
               {photo.caption}
             </figcaption>
           )}

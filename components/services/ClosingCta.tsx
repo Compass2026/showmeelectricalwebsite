@@ -12,7 +12,7 @@ export default function ClosingCta({
 }) {
   return (
     <section
-      className="bg-gradient-to-b from-navy-900 to-navy-950 py-20 sm:py-24"
+      className="bg-gradient-to-b from-primary-900 to-primary-950 py-20 sm:py-24"
       aria-labelledby="closing-cta-heading"
     >
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">

@@ -19,10 +19,10 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
     <div className="mt-12 grid gap-6 lg:grid-cols-3">
       {items.map((t, i) => (
         <Reveal key={i} delay={i * 0.1} className="h-full">
-          <figure className="flex h-full flex-col rounded-xl border border-white/10 bg-navy-800/60 p-7 backdrop-blur">
+          <figure className="flex h-full flex-col rounded-xl border border-white/10 bg-primary-800/60 p-7 backdrop-blur">
             <svg
               aria-hidden="true"
-              className="h-7 w-7 text-lime-500"
+              className="h-7 w-7 text-accent-500"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -32,7 +32,7 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
               {t.quote}
             </blockquote>
             <figcaption className="mt-6 flex items-baseline justify-between gap-3 border-t border-white/10 pt-4 text-sm">
-              <span className="font-bold text-lime-500">{t.name}</span>
+              <span className="font-bold text-accent-500">{t.name}</span>
               {t.excerpt && (
                 <span className="text-xs text-white/50">Excerpt</span>
               )}

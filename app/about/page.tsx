@@ -63,7 +63,7 @@ export default function AboutPage() {
       <main id="main">
         <PageHero hero={about.hero} breadcrumbs={about.breadcrumbs} />
 
-        <Section id="story" tone="cream" headingId="story-heading">
+        <Section id="story" tone="surface" headingId="story-heading">
           <AboutSection
             eyebrow={about.story.eyebrow}
             heading={about.story.heading}
@@ -86,7 +86,7 @@ export default function AboutPage() {
 
         <Section
           id="trust"
-          tone="cream"
+          tone="surface"
           eyebrow={about.trust.eyebrow}
           headingId="trust-heading"
           heading={about.trust.heading}
@@ -97,17 +97,19 @@ export default function AboutPage() {
           </div>
         </Section>
 
-        <Section
-          id="testimonials"
-          tone="navy"
-          eyebrow={about.testimonials.eyebrow}
-          headingId="testimonials-heading"
-          heading={about.testimonials.heading}
-          intro={about.testimonials.intro}
-          center
-        >
-          <Testimonials items={testimonials} />
-        </Section>
+        {testimonials.length > 0 && (
+          <Section
+            id="testimonials"
+            tone="primary"
+            eyebrow={about.testimonials.eyebrow}
+            headingId="testimonials-heading"
+            heading={about.testimonials.heading}
+            intro={about.testimonials.intro}
+            center
+          >
+            <Testimonials items={testimonials} />
+          </Section>
+        )}
 
         <Section
           id="services"
@@ -121,7 +123,7 @@ export default function AboutPage() {
 
         <Section
           id="faqs"
-          tone="cream"
+          tone="surface"
           eyebrow={about.faqs.eyebrow}
           headingId="faqs-heading"
           heading={about.faqs.heading}

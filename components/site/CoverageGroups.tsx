@@ -21,11 +21,11 @@ export default function CoverageGroups({ groups }: { groups: CoverageGroup[] }) 
       {groups.map((g) => (
         <div
           key={g.name}
-          className="rounded-xl border border-navy-900/10 bg-white p-6 shadow-sm"
+          className="rounded-xl border border-primary-900/10 bg-white p-6 shadow-sm"
         >
-          <h3 className="text-lg font-bold text-navy-900">{g.name}</h3>
+          <h3 className="text-lg font-bold text-primary-900">{g.name}</h3>
           {g.note && (
-            <p className="mt-1 text-sm text-charcoal/60">{g.note}</p>
+            <p className="mt-1 text-sm text-ink/60">{g.note}</p>
           )}
           {g.communities.length > 0 && (
             <ul className="mt-4 flex flex-wrap gap-2">
@@ -33,13 +33,13 @@ export default function CoverageGroups({ groups }: { groups: CoverageGroup[] }) 
                 const name = typeof c === "string" ? c : c.name;
                 const href = typeof c === "string" ? undefined : cityHref(c.page);
                 const pill =
-                  "rounded-full border border-navy-900/15 bg-cream px-3 py-1 text-sm font-medium text-navy-900";
+                  "rounded-full border border-primary-900/15 bg-surface px-3 py-1 text-sm font-medium text-primary-900";
                 return (
                   <li key={name}>
                     {href ? (
                       <Link
                         href={href}
-                        className={`${pill} inline-block underline decoration-lime-700/50 underline-offset-2 hover:border-lime-500 hover:text-lime-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500`}
+                        className={`${pill} inline-block underline decoration-accent-700/50 underline-offset-2 hover:border-accent-500 hover:text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500`}
                       >
                         {name}
                       </Link>

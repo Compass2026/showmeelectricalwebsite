@@ -103,7 +103,7 @@ export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
             <div className="row-span-2 flex flex-col items-center lg:col-start-2 lg:row-span-1">
               <div
                 data-node
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-white/20 bg-navy-950 font-(family-name:--font-heading) text-sm font-bold text-lime-500"
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-white/20 bg-primary-950 font-(family-name:--font-heading) text-sm font-bold text-accent-500"
               >
                 {stage.step}
               </div>
@@ -128,7 +128,7 @@ export default function ScrollStory({ stages }: { stages: StoryStage[] }) {
                   <path
                     data-circuit
                     d={rail}
-                    stroke="var(--color-lime-500)"
+                    stroke="var(--color-accent-500)"
                     strokeWidth="2"
                     strokeLinecap="round"
                   />

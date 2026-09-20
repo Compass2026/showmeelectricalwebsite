@@ -87,15 +87,18 @@ export function publishedRoutes(): PublishedRoute[] {
     incoming: ["/service-area"],
   }));
 
-  const locations: PublishedRoute[] = locationPages
-    .filter((l) => !l.fictional && !l.noindex)
+  const publishedLocations = locationPages.filter((l) => !l.fictional && !l.noindex);
+  const locationsIndex: PublishedRoute[] = publishedLocations.length
+    ? [{ path: "/locations", kind: "core", title: "Locations", links: { parent: "/", related: publishedLocations.map((l) => l.path) }, incoming: ["nav"] }]
+    : [];
+  const locations: PublishedRoute[] = publishedLocations
     .map((l) => ({
       path: l.path,
       kind: "location",
       title: l.seo.title,
       ...(l.modifiedAt ? { lastModified: l.modifiedAt } : {}),
-      links: { parent: "/", related: (l.related?.links ?? []).map((x) => x.href).filter(isInternal) },
-      incoming: [],
+      links: { parent: "/locations", related: (l.related?.links ?? []).map((x) => x.href).filter(isInternal) },
+      incoming: ["/locations"],
     }));
 
   const posts: PublishedRoute[] = articles.map((a) => ({
@@ -119,7 +122,7 @@ export function publishedRoutes(): PublishedRoute[] {
     incoming: ["footer"],
   }));
 
-  return [...core, ...services, ...details, ...cities, ...locations, ...posts, ...legal];
+  return [...core, ...services, ...details, ...cities, ...locationsIndex, ...locations, ...posts, ...legal];
 }
 
 export function publishedPaths(): Set<string> {

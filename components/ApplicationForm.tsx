@@ -217,16 +217,16 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
 
   if (status === "success") {
     return (
-      <div ref={topRef} className="rounded-2xl border border-lime-500/40 bg-white p-10 text-center shadow-xl">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-lime-500/15">
-          <svg className="h-8 w-8 text-lime-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+      <div ref={topRef} className="rounded-2xl border border-accent-500/40 bg-white p-10 text-center shadow-xl">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent-500/15">
+          <svg className="h-8 w-8 text-accent-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="mt-5 text-2xl font-bold text-navy-900">
+        <h3 className="mt-5 text-2xl font-bold text-primary-900">
           Thanks — we&apos;ll be in touch!
         </h3>
-        <p className="mx-auto mt-3 max-w-md text-navy-900/70">
+        <p className="mx-auto mt-3 max-w-md text-primary-900/70">
           Your application for <strong>{roleTitle}</strong> has been sent to our
           hiring team. We review every application and will reach out soon.
         </p>
@@ -235,8 +235,8 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
   }
 
   const inputClass = (field: string) =>
-    `w-full rounded-lg border bg-white px-4 py-3 text-navy-900 outline-none transition placeholder:text-navy-900/40 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/30 ${
-      errors[field] ? "border-red-500" : "border-navy-900/15"
+    `w-full rounded-lg border bg-white px-4 py-3 text-primary-900 outline-none transition placeholder:text-primary-900/40 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/30 ${
+      errors[field] ? "border-red-500" : "border-primary-900/15"
     }`;
 
   return (
@@ -253,15 +253,15 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
               aria-current={step === s.n ? "step" : undefined}
               className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
                 step >= s.n
-                  ? "bg-lime-500 text-navy-950"
-                  : "bg-navy-900/10 text-navy-900/50"
+                  ? "bg-accent-500 text-primary-950"
+                  : "bg-primary-900/10 text-primary-900/50"
               }`}
             >
               {s.n}
             </span>
             <span
               className={`hidden text-xs font-semibold uppercase tracking-wide sm:block ${
-                step >= s.n ? "text-navy-900" : "text-navy-900/40"
+                step >= s.n ? "text-primary-900" : "text-primary-900/40"
               }`}
             >
               {s.label}
@@ -269,7 +269,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
             {i < 2 && (
               <span
                 aria-hidden="true"
-                className={`h-0.5 flex-1 rounded ${step > s.n ? "bg-lime-500" : "bg-navy-900/10"}`}
+                className={`h-0.5 flex-1 rounded ${step > s.n ? "bg-accent-500" : "bg-primary-900/10"}`}
               />
             )}
           </li>
@@ -519,8 +519,8 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
 
         {step === 3 && (
           <div>
-            <h3 className="text-lg font-bold text-navy-900">Review your application</h3>
-            <dl className="mt-5 divide-y divide-navy-900/10 rounded-lg border border-navy-900/10">
+            <h3 className="text-lg font-bold text-primary-900">Review your application</h3>
+            <dl className="mt-5 divide-y divide-primary-900/10 rounded-lg border border-primary-900/10">
               <ReviewRow label="Name" value={`${form.firstName} ${form.lastName}`} />
               <ReviewRow label="Email" value={form.email} />
               <ReviewRow label="Phone" value={form.phone} />
@@ -575,7 +575,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
                 setStep((s) => (s === 3 ? 2 : 1));
                 scrollTop();
               }}
-              className="rounded-lg border border-navy-900/20 px-6 py-3 text-sm font-bold text-navy-900 transition hover:border-navy-900/40"
+              className="rounded-lg border border-primary-900/20 px-6 py-3 text-sm font-bold text-primary-900 transition hover:border-primary-900/40"
             >
               Back
             </button>
@@ -595,7 +595,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
                   scrollTop();
                 }
               }}
-              className="rounded-lg bg-navy-900 px-8 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-navy-800"
+              className="rounded-lg bg-primary-900 px-8 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-primary-800"
             >
               Continue
             </button>
@@ -603,7 +603,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
             <button
               type="submit"
               disabled={status === "submitting"}
-              className="rounded-lg bg-lime-500 px-8 py-3 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-lime-400 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-lg bg-accent-500 px-8 py-3 text-sm font-bold uppercase tracking-wide text-primary-950 transition hover:bg-accent-400 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {status === "submitting" ? "Sending…" : "Submit Application"}
             </button>
@@ -627,7 +627,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold text-navy-900">
+      <span className="mb-1.5 block text-sm font-semibold text-primary-900">
         {label}
         {required && <span className="text-red-500"> *</span>}
       </span>
@@ -654,7 +654,7 @@ function YesNoField({
 }) {
   return (
     <fieldset>
-      <legend className="mb-2 text-sm font-semibold text-navy-900">
+      <legend className="mb-2 text-sm font-semibold text-primary-900">
         {label}
         <span className="text-red-500"> *</span>
       </legend>
@@ -664,8 +664,8 @@ function YesNoField({
             key={v}
             className={`cursor-pointer rounded-lg border px-6 py-2.5 text-sm font-bold capitalize transition ${
               value === v
-                ? "border-lime-500 bg-lime-500/15 text-navy-900"
-                : "border-navy-900/15 text-navy-900/60 hover:border-navy-900/35"
+                ? "border-accent-500 bg-accent-500/15 text-primary-900"
+                : "border-primary-900/15 text-primary-900/60 hover:border-primary-900/35"
             }`}
           >
             <input
@@ -704,10 +704,10 @@ function ResumeField({
         type="file"
         accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         onChange={(e) => onChange(e.target.files?.[0] ?? null)}
-        className="block w-full cursor-pointer rounded-lg border border-dashed border-navy-900/25 px-4 py-3 text-sm text-navy-900/70 file:mr-4 file:rounded-md file:border-0 file:bg-navy-900 file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:text-white hover:border-lime-500"
+        className="block w-full cursor-pointer rounded-lg border border-dashed border-primary-900/25 px-4 py-3 text-sm text-primary-900/70 file:mr-4 file:rounded-md file:border-0 file:bg-primary-900 file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:text-white hover:border-accent-500"
       />
       {resume && (
-        <span className="mt-1.5 block text-sm text-navy-900/70">
+        <span className="mt-1.5 block text-sm text-primary-900/70">
           Attached: <strong>{resume.name}</strong> (
           {(resume.size / 1024 / 1024).toFixed(1)}MB)
         </span>
@@ -719,8 +719,8 @@ function ResumeField({
 function ReviewRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid gap-1 px-4 py-3 sm:grid-cols-[180px_1fr] sm:gap-4">
-      <dt className="text-sm font-semibold text-navy-900/60">{label}</dt>
-      <dd className="text-sm break-words text-navy-900">{value || "—"}</dd>
+      <dt className="text-sm font-semibold text-primary-900/60">{label}</dt>
+      <dd className="text-sm break-words text-primary-900">{value || "—"}</dd>
     </div>
   );
 }

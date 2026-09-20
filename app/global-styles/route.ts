@@ -1,13 +1,15 @@
+import { gone } from "@/config/redirects";
+
 /**
- * /global-styles — an Elementor artifact on the WordPress site that was
- * publicly reachable and in its sitemap. It was never content, so it is not
- * redirected anywhere: 410 Gone tells search engines to drop it.
+ * 410 Gone for a legacy path the brand lists in `redirects.ts` `gone`. A
+ * brand that does not list "/global-styles" gets a 404 here instead.
  */
 export const dynamic = "force-static";
 
 export function GET() {
-  return new Response("Gone", {
-    status: 410,
+  const isGone = gone.includes("/global-styles");
+  return new Response(isGone ? "Gone" : "Not found", {
+    status: isGone ? 410 : 404,
     headers: { "content-type": "text/plain; charset=utf-8" },
   });
 }

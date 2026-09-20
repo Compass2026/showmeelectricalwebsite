@@ -1,14 +1,6 @@
 /**
- * CORE PAGE REGISTRY — the site's non-collection pages, as data.
- *
- * Together with the service, article and legal registries this is the
- * complete list of published routes (lib/routes.ts). Each entry records the
- * page's parent, the relationships it links out to, and where it is linked
- * from — the "page manifest" the Build Standard asks for (§6). Paths here
- * must exist as routes; the QA crawl verifies that.
- *
- * `modifiedAt` is set only for a significant content change with a known
- * date; it is never touched by a build.
+ * CORE PAGE — the record shape every brand's page registry uses (the
+ * "page manifest" of Build Standard §6). The active brand supplies the list.
  */
 export interface CorePage {
   path: string;
@@ -16,51 +8,10 @@ export interface CorePage {
   parent?: string;
   /** Outgoing relationships the page renders as links. */
   related?: string[];
-  /** Incoming link sources: paths, or "nav" / "footer" for site chrome. */
+  /** Incoming link sources: paths, or "nav" / "footer" for site chrome (manifest only; the crawl counts rendered anchors). */
   incoming: string[];
   modifiedAt?: string;
 }
 
-export const corePages: CorePage[] = [
-  {
-    path: "/",
-    title: "Home",
-    related: ["/services", "/services/residential", "/services/commercial", "/services/industrial", "/service-area", "/about", "/contact"],
-    incoming: ["nav", "footer"],
-  },
-  {
-    path: "/about",
-    title: "About",
-    parent: "/",
-    related: ["/services/residential", "/services/commercial", "/services/industrial", "/contact"],
-    incoming: ["nav", "footer", "/"],
-  },
-  {
-    path: "/services",
-    title: "Services",
-    parent: "/",
-    related: ["/services/residential", "/services/commercial", "/services/industrial", "/contact"],
-    incoming: ["nav", "footer", "/"],
-  },
-  {
-    path: "/service-area",
-    title: "Service area",
-    parent: "/",
-    related: ["/services/residential", "/services/commercial", "/services/industrial", "/contact"],
-    incoming: ["nav", "footer", "/"],
-  },
-  {
-    path: "/blog",
-    title: "Blog",
-    parent: "/",
-    related: [],
-    incoming: ["nav", "footer"],
-  },
-  {
-    path: "/contact",
-    title: "Contact",
-    parent: "/",
-    related: [],
-    incoming: ["nav", "footer", "/", "every page's closing call to action"],
-  },
-];
+/** Resolved from the active brand (COMPASS_BRAND → brands/<brand>). Client core pages. */
+export { corePages } from "@brand/content/pages";

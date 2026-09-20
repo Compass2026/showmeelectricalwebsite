@@ -14,30 +14,30 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 shadow-lg shadow-navy-950/20">
+    <header className="sticky top-0 z-50 shadow-lg shadow-primary-950/20">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-lime-500 focus:px-4 focus:py-2 focus:font-bold focus:text-navy-950"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-accent-500 focus:px-4 focus:py-2 focus:font-bold focus:text-primary-950"
       >
         Skip to content
       </a>
 
       {/* Utility bar */}
-      <div className="bg-navy-950 text-white">
+      <div className="bg-primary-950 text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2 text-xs sm:px-6 sm:text-sm">
-          <p className="font-semibold uppercase tracking-widest text-lime-500">
-            Contact Us Today
+          <p className="font-semibold uppercase tracking-widest text-accent-500">
+            {site.header.utilityLabel}
           </p>
           <div className="flex items-center gap-4 sm:gap-6">
             <a
               href={site.phoneHref}
-              className="-my-1.5 inline-block py-1.5 font-medium hover:text-lime-400"
+              className="-my-1.5 inline-block py-1.5 font-medium hover:text-accent-400"
             >
               {site.phone}
             </a>
             <a
               href={`mailto:${site.email}`}
-              className="-my-1.5 hidden py-1.5 font-medium hover:text-lime-400 sm:inline-block"
+              className="-my-1.5 hidden py-1.5 font-medium hover:text-accent-400 sm:inline-block"
             >
               {site.email}
             </a>
@@ -46,7 +46,7 @@ export default function SiteHeader() {
       </div>
 
       {/* Main nav */}
-      <div className="bg-navy-900">
+      <div className="bg-primary-900">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6">
           <Link href="/" aria-label={`${site.name} — home`}>
             <Logo className="h-12 sm:h-20" />
@@ -58,7 +58,7 @@ export default function SiteHeader() {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-lime-400"
+                  className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-accent-400"
                 >
                   {item.label}
                 </a>
@@ -66,7 +66,7 @@ export default function SiteHeader() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-lime-400"
+                  className="-my-1 inline-block py-1 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:text-accent-400"
                 >
                   {item.label}
                 </Link>
@@ -74,7 +74,7 @@ export default function SiteHeader() {
             )}
             <a
               href={site.primaryCta.href}
-              className="rounded-md bg-lime-500 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-lime-400"
+              className="rounded-md bg-accent-500 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-primary-950 transition hover:bg-accent-400"
             >
               {site.primaryCta.label}
             </a>
@@ -82,7 +82,7 @@ export default function SiteHeader() {
 
           <button
             type="button"
-            className="rounded-md p-2 text-white hover:bg-navy-800 lg:hidden"
+            className="rounded-md p-2 text-white hover:bg-primary-800 lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -108,14 +108,14 @@ export default function SiteHeader() {
           <nav
             id="mobile-nav"
             aria-label="Mobile"
-            className="border-t border-navy-800 bg-navy-900 px-4 pb-6 pt-2 lg:hidden"
+            className="border-t border-primary-800 bg-primary-900 px-4 pb-6 pt-2 lg:hidden"
           >
             {site.nav.map((item) =>
               item.external ? (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="block border-b border-navy-800 py-3 text-sm font-semibold uppercase tracking-wide text-white"
+                  className="block border-b border-primary-800 py-3 text-sm font-semibold uppercase tracking-wide text-white"
                 >
                   {item.label}
                 </a>
@@ -124,7 +124,7 @@ export default function SiteHeader() {
                   key={item.label}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block border-b border-navy-800 py-3 text-sm font-semibold uppercase tracking-wide text-white"
+                  className="block border-b border-primary-800 py-3 text-sm font-semibold uppercase tracking-wide text-white"
                 >
                   {item.label}
                 </Link>
@@ -133,7 +133,7 @@ export default function SiteHeader() {
             <a
               href={site.primaryCta.href}
               onClick={() => setOpen(false)}
-              className="mt-4 block rounded-md bg-lime-500 px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-navy-950"
+              className="mt-4 block rounded-md bg-accent-500 px-5 py-3 text-center text-sm font-bold uppercase tracking-wide text-primary-950"
             >
               {site.primaryCta.label}
             </a>

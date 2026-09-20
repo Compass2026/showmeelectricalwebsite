@@ -17,12 +17,12 @@ export default function RelatedLinks({ links }: { links: RelatedLink[] }) {
         <Link
           key={l.href}
           href={l.href}
-          className="group rounded-xl border border-navy-900/10 bg-white p-5 shadow-sm hover:border-lime-500/60 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500"
+          className="group rounded-xl border border-primary-900/10 bg-white p-5 shadow-sm hover:border-accent-500/60 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500"
         >
-          <p className="font-bold text-navy-900 transition-colors group-hover:text-lime-700">
+          <p className="font-bold text-primary-900 transition-colors group-hover:text-accent-700">
             {l.label} <span aria-hidden="true">→</span>
           </p>
-          <p className="mt-1 text-sm leading-relaxed text-charcoal/70">
+          <p className="mt-1 text-sm leading-relaxed text-ink/70">
             {l.description}
           </p>
         </Link>

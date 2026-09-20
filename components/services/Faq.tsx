@@ -10,14 +10,14 @@ import type { Faq as FaqItem } from "@/content/services/types";
  */
 export default function Faq({ items }: { items: FaqItem[] }) {
   return (
-    <div className="mt-10 divide-y divide-navy-900/10 rounded-xl border border-navy-900/10 bg-white">
+    <div className="mt-10 divide-y divide-primary-900/10 rounded-xl border border-primary-900/10 bg-white">
       {items.map((item) => (
         <details key={item.q} className="group px-6 py-1">
-          <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-4 text-left font-bold text-navy-900 marker:hidden [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-4 text-left font-bold text-primary-900 marker:hidden [&::-webkit-details-marker]:hidden">
             <span>{item.q}</span>
             <svg
               aria-hidden="true"
-              className="mt-1 h-5 w-5 shrink-0 text-lime-700 transition-transform group-open:rotate-45"
+              className="mt-1 h-5 w-5 shrink-0 text-accent-700 transition-transform group-open:rotate-45"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -26,7 +26,7 @@ export default function Faq({ items }: { items: FaqItem[] }) {
               <path strokeLinecap="round" d="M12 5v14M5 12h14" />
             </svg>
           </summary>
-          <p className="pb-5 pr-11 leading-relaxed text-charcoal/80">{item.a}</p>
+          <p className="pb-5 pr-11 leading-relaxed text-ink/80">{item.a}</p>
         </details>
       ))}
     </div>

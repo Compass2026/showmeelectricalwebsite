@@ -19,17 +19,17 @@ import { hero } from "@/content/home";
  */
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-navy-950">
+    <section className="relative overflow-hidden bg-primary-950">
       <HeroBackdrop />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-950/40 to-navy-950"
+        className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-950/40 to-primary-950"
       />
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 lg:py-16">
         <div>
           <Reveal immediate>
-            <p className="inline-flex items-center gap-2 rounded-full border border-lime-500/40 bg-lime-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-lime-400">
+            <p className="inline-flex items-center gap-2 rounded-full border border-accent-500/40 bg-accent-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent-400">
               {hero.eyebrow}
             </p>
           </Reveal>
@@ -44,7 +44,7 @@ export default function Hero() {
             <StaggerText
               as="span"
               text={hero.headlineAccent}
-              className="mt-1 block text-lime-500"
+              className="mt-1 block text-accent-500"
               delay={0.12}
               immediate
             />
@@ -65,7 +65,7 @@ export default function Hero() {
         </div>
 
         <Reveal from="right" delay={0.2} immediate>
-          <Parallax className="aspect-[4/3] rounded-2xl border border-white/10 shadow-2xl shadow-navy-950/60 lg:aspect-auto lg:h-[440px] xl:h-[480px]">
+          <Parallax className="aspect-[4/3] rounded-2xl border border-white/10 shadow-2xl shadow-primary-950/60 lg:aspect-auto lg:h-[440px] xl:h-[480px]">
             <div className="relative h-full w-full">
               <Image
                 src={hero.image.src}

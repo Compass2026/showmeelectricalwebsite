@@ -1,5 +1,6 @@
 import type { BranchLocationContent } from "./types";
 import { demoLocations } from "@/content/demo";
+import { clientLocations } from "./client";
 
 /**
  * REGISTRY OF PHYSICAL LOCATION PAGES.
@@ -17,8 +18,6 @@ import { demoLocations } from "@/content/demo";
  * a demo build.
  */
 export const demoEnabled = process.env.COMPASS_DEMO === "true";
-
-const clientLocations: readonly BranchLocationContent[] = [];
 
 export const locationPages: readonly BranchLocationContent[] = [
   ...clientLocations,

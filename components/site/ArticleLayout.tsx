@@ -51,13 +51,13 @@ export default function ArticleLayout({
 
   return (
     <>
-      <header className="bg-navy-950 text-white">
+      <header className="bg-primary-950 text-white">
         <div className="mx-auto max-w-3xl px-4 pb-14 pt-6 sm:px-6 sm:pb-16">
           <Reveal immediate>
             <Breadcrumbs crumbs={breadcrumbs} />
           </Reveal>
           <Reveal immediate delay={0.08}>
-            <p className="mt-8 text-sm font-bold uppercase tracking-widest text-lime-500">
+            <p className="mt-8 text-sm font-bold uppercase tracking-widest text-accent-500">
               {eyebrow}
             </p>
             <h1 className="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
@@ -93,7 +93,7 @@ export default function ArticleLayout({
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           {article.image && (
             <figure className="mb-10">
-              <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-navy-900/10">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-primary-900/10">
                 <Image
                   src={article.image.src}
                   alt={article.image.alt}
@@ -104,7 +104,7 @@ export default function ArticleLayout({
                 />
               </div>
               {article.image.caption && (
-                <figcaption className="mt-3 text-sm text-charcoal/60">
+                <figcaption className="mt-3 text-sm text-ink/60">
                   {article.image.caption}
                 </figcaption>
               )}
@@ -113,7 +113,7 @@ export default function ArticleLayout({
           <Blocks blocks={article.body} />
 
           {(relatedServices.length > 0 || relatedArticles.length > 0) && (
-            <div className="mt-14 grid gap-8 border-t border-navy-900/10 pt-10 sm:grid-cols-2">
+            <div className="mt-14 grid gap-8 border-t border-primary-900/10 pt-10 sm:grid-cols-2">
               {relatedServices.length > 0 && (
                 <RelatedList id="related-services" heading={labels.relatedServices} links={relatedServices} />
               )}
@@ -133,7 +133,7 @@ export default function ArticleLayout({
 function RelatedList({ id, heading, links }: { id: string; heading: string; links: RelatedLink[] }) {
   return (
     <nav aria-labelledby={`${id}-heading`}>
-      <h2 id={`${id}-heading`} className="text-sm font-bold uppercase tracking-widest text-charcoal/60">
+      <h2 id={`${id}-heading`} className="text-sm font-bold uppercase tracking-widest text-ink/60">
         {heading}
       </h2>
       <ul className="mt-4 space-y-3">
@@ -141,12 +141,12 @@ function RelatedList({ id, heading, links }: { id: string; heading: string; link
           <li key={link.href}>
             <Link
               href={link.href}
-              className="-my-1 inline-block py-1 font-bold text-navy-900 underline decoration-lime-700/40 underline-offset-4 hover:decoration-lime-700"
+              className="-my-1 inline-block py-1 font-bold text-primary-900 underline decoration-accent-700/40 underline-offset-4 hover:decoration-accent-700"
             >
               {link.label}
             </Link>
             {link.description && (
-              <p className="mt-0.5 text-sm text-charcoal/70">{link.description}</p>
+              <p className="mt-0.5 text-sm text-ink/70">{link.description}</p>
             )}
           </li>
         ))}

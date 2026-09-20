@@ -1,0 +1,18 @@
+/* HARBOR LANE (fictional demo) — deep teal + amber, warm off-white surface. */
+:root {
+  --brand-primary-950: #06201f;
+  --brand-primary-900: #0f3d3e;
+  --brand-primary-800: #155152;
+  --brand-primary-700: #1f6a6b;
+  --brand-primary-600: #2a8384;
+  --brand-accent-300: #f9d98a;
+  --brand-accent-400: #f6c65c;
+  --brand-accent-500: #f2b134;
+  --brand-accent-600: #d59a1d;
+  --brand-accent-700: #7a5608; /* text-safe on white/surface */
+  --brand-surface: #f7f4ec;
+  --brand-ink: #1f1d1a;
+
+  --brand-font-heading: var(--font-manrope), "Manrope", "Segoe UI", system-ui, sans-serif;
+  --brand-font-body: var(--font-source-sans), "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}

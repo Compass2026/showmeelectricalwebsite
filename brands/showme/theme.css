@@ -1,0 +1,25 @@
+/*
+ * SHOW ME ELECTRICAL — brand values for the semantic tokens in
+ * app/globals.css. --brand-accent-500 is sampled directly from the brand
+ * logo artwork (rgb 192,214,52); the rest of the accent scale is derived from
+ * it. accent-700 is the only shade that meets 4.5:1 for text on white/surface —
+ * use accent-500 on primary surfaces and accent-700 on light backgrounds.
+ * Palette reconciliation notes: theme.config.ts.
+ */
+:root {
+  --brand-primary-950: #06101f;
+  --brand-primary-900: #0a1b33;
+  --brand-primary-800: #0f2647;
+  --brand-primary-700: #04345c; /* brand board navy, reconciled into the scale */
+  --brand-primary-600: #22457a;
+  --brand-accent-300: #d9e878;
+  --brand-accent-400: #cde04f;
+  --brand-accent-500: #c0d634; /* brand accent, sampled from the logo */
+  --brand-accent-600: #a3b62a;
+  --brand-accent-700: #667512;
+  --brand-surface: #f6f8f3;
+  --brand-ink: #121217; /* brand board body text */
+
+  --brand-font-heading: var(--font-poppins), "Poppins", "Segoe UI", system-ui, sans-serif;
+  --brand-font-body: var(--font-inter), "Inter", "Segoe UI", system-ui, sans-serif;
+}

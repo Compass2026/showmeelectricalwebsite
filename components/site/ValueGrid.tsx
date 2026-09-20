@@ -16,10 +16,10 @@ export default function ValueGrid({ items }: { items: ValueItem[] }) {
       {items.map((v) => (
         <div
           key={v.title}
-          className="rounded-xl border border-navy-900/10 bg-white p-7 shadow-sm"
+          className="rounded-xl border border-primary-900/10 bg-white p-7 shadow-sm"
         >
-          <h3 className="text-lg font-bold text-navy-900">{v.title}</h3>
-          <p className="mt-2 leading-relaxed text-charcoal/75">{v.body}</p>
+          <h3 className="text-lg font-bold text-primary-900">{v.title}</h3>
+          <p className="mt-2 leading-relaxed text-ink/75">{v.body}</p>
         </div>
       ))}
     </Reveal>

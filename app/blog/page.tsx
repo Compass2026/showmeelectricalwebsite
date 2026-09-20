@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import PreviewNotice from "@/components/site/PreviewNotice";
@@ -42,6 +43,8 @@ function formatDate(iso: string) {
  * are shown only when the post carries them.
  */
 export default function BlogIndexPage() {
+  // A brand that publishes no articles has no blog: the route is a real 404.
+  if (articles.length === 0) notFound();
   const jsonLd = [
     localBusinessJsonLd(),
     websiteJsonLd(),
@@ -61,37 +64,37 @@ export default function BlogIndexPage() {
       <main id="main">
         <PageHero hero={blog.hero} breadcrumbs={blog.breadcrumbs} />
 
-        <Section id="posts" tone="light" headingId="posts-heading" heading="Latest posts">
+        <Section id="posts" tone="light" headingId="posts-heading" heading={blog.labels.latest}>
           <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {articles.map((post, i) => (
               <li key={post.slug} className="flex">
                 <Reveal delay={i * 0.08} className="flex w-full">
-                  <article className="flex w-full flex-col rounded-xl border border-navy-900/10 bg-white p-6 shadow-sm">
+                  <article className="flex w-full flex-col rounded-xl border border-primary-900/10 bg-white p-6 shadow-sm">
                     {post.publishedAt && (
-                      <p className="text-xs font-semibold uppercase tracking-widest text-charcoal/55">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-ink/55">
                         <time dateTime={post.publishedAt}>
                           {formatDate(post.publishedAt)}
                         </time>
                       </p>
                     )}
-                    <h3 className="mt-3 text-xl font-bold leading-snug text-navy-900">
+                    <h3 className="mt-3 text-xl font-bold leading-snug text-primary-900">
                       <Link
                         href={post.path}
-                        className="-my-1 inline-block py-1 hover:text-lime-700"
+                        className="-my-1 inline-block py-1 hover:text-accent-700"
                       >
                         {post.title}
                       </Link>
                     </h3>
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-charcoal/75">
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/75">
                       {post.excerpt}
                     </p>
                     <p className="mt-5">
                       <Link
                         href={post.path}
-                        className="-my-1 inline-block py-1 text-sm font-bold text-lime-700 underline underline-offset-4"
-                        aria-label={`Read: ${post.title}`}
+                        className="-my-1 inline-block py-1 text-sm font-bold text-accent-700 underline underline-offset-4"
+                        aria-label={`${blog.labels.readPrefix} ${post.title}`}
                       >
-                        Read the post
+                        {blog.labels.readPost}
                       </Link>
                     </p>
                   </article>

@@ -53,14 +53,14 @@ export default function LocationPage({ content }: { content: BranchLocationConte
     switch (key) {
       case "header":
         return (
-          <header key={key} className="bg-navy-950 text-white">
+          <header key={key} className="bg-primary-950 text-white">
             <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-14 pt-6 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
               <div>
                 <Reveal immediate>
                   <Breadcrumbs crumbs={content.breadcrumbs} />
                 </Reveal>
                 <Reveal immediate delay={0.08}>
-                  <p className="mt-8 text-sm font-bold uppercase tracking-widest text-lime-500">{content.header.eyebrow}</p>
+                  <p className="mt-8 text-sm font-bold uppercase tracking-widest text-accent-500">{content.header.eyebrow}</p>
                   <h1 className="mt-3 text-4xl font-extrabold leading-[1.08] sm:text-5xl">{content.header.headline}</h1>
                   <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/75">{content.header.intro}</p>
                 </Reveal>
@@ -85,7 +85,7 @@ export default function LocationPage({ content }: { content: BranchLocationConte
         );
       case "visit":
         return (
-          <Section key={key} id="visit" tone="cream" headingId="visit-heading" heading="Visit or contact this location">
+          <Section key={key} id="visit" tone="surface" headingId="visit-heading" heading="Visit or contact this location">
             <FactList items={visitFacts} />
           </Section>
         );
@@ -99,7 +99,7 @@ export default function LocationPage({ content }: { content: BranchLocationConte
         ) : null;
       case "services":
         return content.services ? (
-          <Section key={key} id="services" tone="cream" headingId="services-heading" heading={content.services.heading} intro={content.services.intro}>
+          <Section key={key} id="services" tone="surface" headingId="services-heading" heading={content.services.heading} intro={content.services.intro}>
             <div className="mt-8">
               <Blocks
                 blocks={[
@@ -120,17 +120,17 @@ export default function LocationPage({ content }: { content: BranchLocationConte
           <Section key={key} id="team" tone="light" headingId="team-heading" heading={content.team.heading}>
             <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {content.team.people.map((p) => (
-                <li key={p.name} className="flex items-center gap-4 rounded-xl border border-navy-900/10 bg-white p-5">
+                <li key={p.name} className="flex items-center gap-4 rounded-xl border border-primary-900/10 bg-white p-5">
                   {p.photo ? (
                     <Image src={p.photo.src} alt={p.photo.alt} width={64} height={64} className="h-16 w-16 rounded-full object-cover" />
                   ) : (
-                    <span aria-hidden="true" className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-cream text-xl font-bold text-navy-900">
+                    <span aria-hidden="true" className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-surface text-xl font-bold text-primary-900">
                       {p.name.charAt(0)}
                     </span>
                   )}
                   <div>
-                    <p className="font-bold text-navy-900">{p.name}</p>
-                    <p className="text-sm text-charcoal/70">{p.role}</p>
+                    <p className="font-bold text-primary-900">{p.name}</p>
+                    <p className="text-sm text-ink/70">{p.role}</p>
                   </div>
                 </li>
               ))}
@@ -139,7 +139,7 @@ export default function LocationPage({ content }: { content: BranchLocationConte
         ) : null;
       case "body":
         return content.body ? (
-          <Section key={key} id="about" tone="cream" headingId="about-heading" heading={content.body.heading}>
+          <Section key={key} id="about" tone="surface" headingId="about-heading" heading={content.body.heading}>
             <div className="mt-8 max-w-3xl">
               <Blocks blocks={content.body.blocks} />
             </div>
@@ -153,13 +153,13 @@ export default function LocationPage({ content }: { content: BranchLocationConte
         ) : null;
       case "related":
         return content.related ? (
-          <Section key={key} id="related" tone="cream" headingId="related-heading" heading={content.related.heading}>
+          <Section key={key} id="related" tone="surface" headingId="related-heading" heading={content.related.heading}>
             <RelatedLinks links={content.related.links} />
           </Section>
         ) : null;
       case "cta":
         return (
-          <section key={key} className="bg-gradient-to-b from-navy-900 to-navy-950 py-20 sm:py-24" aria-labelledby="closing-cta-heading">
+          <section key={key} className="bg-gradient-to-b from-primary-900 to-primary-950 py-20 sm:py-24" aria-labelledby="closing-cta-heading">
             <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
               <h2 id="closing-cta-heading" className="text-3xl font-extrabold text-white sm:text-4xl">{content.cta.heading}</h2>
               <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-white/70">{content.cta.body}</p>

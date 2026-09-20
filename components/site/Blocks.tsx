@@ -13,7 +13,7 @@ import { isInternalHref } from "@/content/blocks";
  */
 export default function Blocks({ blocks }: { blocks: Block[] }) {
   return (
-    <div className="space-y-5 text-[1.0625rem] leading-relaxed text-charcoal/85">
+    <div className="space-y-5 text-[1.0625rem] leading-relaxed text-ink/85">
       {blocks.map((b, i) => {
         switch (b.type) {
           case "h2":
@@ -21,14 +21,14 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
               <h2
                 key={i}
                 id={b.id}
-                className="scroll-mt-32 pt-6 text-2xl font-extrabold text-navy-900 sm:text-3xl"
+                className="scroll-mt-32 pt-6 text-2xl font-extrabold text-primary-900 sm:text-3xl"
               >
                 {b.text}
               </h2>
             );
           case "h3":
             return (
-              <h3 key={i} id={b.id} className="scroll-mt-32 pt-3 text-xl font-bold text-navy-900">
+              <h3 key={i} id={b.id} className="scroll-mt-32 pt-3 text-xl font-bold text-primary-900">
                 {b.text}
               </h3>
             );
@@ -50,7 +50,7 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
             );
           case "ul":
             return (
-              <ul key={i} className="list-disc space-y-2 pl-6 marker:text-lime-700">
+              <ul key={i} className="list-disc space-y-2 pl-6 marker:text-accent-700">
                 {b.items.map((it, j) => (
                   <li key={j}>
                     <Rich text={it} />
@@ -60,7 +60,7 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
             );
           case "ol":
             return (
-              <ol key={i} className="list-decimal space-y-2 pl-6 marker:font-bold marker:text-navy-900">
+              <ol key={i} className="list-decimal space-y-2 pl-6 marker:font-bold marker:text-primary-900">
                 {b.items.map((it, j) => (
                   <li key={j}>
                     <Rich text={it} />
@@ -73,25 +73,25 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
               <blockquote
                 key={i}
                 cite={b.cite}
-                className="border-l-4 border-lime-500 pl-5 italic text-charcoal/75"
+                className="border-l-4 border-accent-500 pl-5 italic text-ink/75"
               >
                 <Rich text={b.text} />
               </blockquote>
             );
           case "table":
             return (
-              <div key={i} className="overflow-x-auto rounded-lg border border-navy-900/10">
+              <div key={i} className="overflow-x-auto rounded-lg border border-primary-900/10">
                 <table className="w-full min-w-[32rem] border-collapse text-left text-base">
-                  <caption className="px-4 py-3 text-left text-sm font-semibold text-charcoal/70">
+                  <caption className="px-4 py-3 text-left text-sm font-semibold text-ink/70">
                     {b.caption}
                   </caption>
-                  <thead className="bg-cream">
+                  <thead className="bg-surface">
                     <tr>
                       {b.header.map((h) => (
                         <th
                           key={h}
                           scope="col"
-                          className="border-b border-navy-900/10 px-4 py-2.5 font-bold text-navy-900"
+                          className="border-b border-primary-900/10 px-4 py-2.5 font-bold text-primary-900"
                         >
                           {h}
                         </th>
@@ -100,18 +100,18 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
                   </thead>
                   <tbody>
                     {b.rows.map((row, r) => (
-                      <tr key={r} className="odd:bg-white even:bg-cream/50">
+                      <tr key={r} className="odd:bg-white even:bg-surface/50">
                         {row.map((cell, c) =>
                           b.rowHeader && c === 0 ? (
                             <th
                               key={c}
                               scope="row"
-                              className="border-b border-navy-900/10 px-4 py-2.5 font-semibold text-navy-900"
+                              className="border-b border-primary-900/10 px-4 py-2.5 font-semibold text-primary-900"
                             >
                               <Rich text={cell} />
                             </th>
                           ) : (
-                            <td key={c} className="border-b border-navy-900/10 px-4 py-2.5 align-top">
+                            <td key={c} className="border-b border-primary-900/10 px-4 py-2.5 align-top">
                               <Rich text={cell} />
                             </td>
                           )
@@ -124,15 +124,15 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
             );
           case "sources":
             return (
-              <section key={i} aria-labelledby={`sources-${i}`} className="border-t border-navy-900/10 pt-5">
-                <h2 id={`sources-${i}`} className="text-base font-bold uppercase tracking-widest text-charcoal/60">
+              <section key={i} aria-labelledby={`sources-${i}`} className="border-t border-primary-900/10 pt-5">
+                <h2 id={`sources-${i}`} className="text-base font-bold uppercase tracking-widest text-ink/60">
                   {b.heading ?? "Sources"}
                 </h2>
                 <ol className="mt-3 list-decimal space-y-1.5 pl-6 text-sm">
                   {b.items.map((s) => (
                     <li key={s.href}>
                       <Anchor href={s.href}>{s.label}</Anchor>
-                      {s.note && <span className="text-charcoal/65"> — {s.note}</span>}
+                      {s.note && <span className="text-ink/65"> — {s.note}</span>}
                     </li>
                   ))}
                 </ol>
@@ -159,7 +159,7 @@ function Run({ run }: { run: Inline }) {
   if (typeof run === "string") return <>{run}</>;
   switch (run.type) {
     case "strong":
-      return <strong className="font-semibold text-navy-900">{run.text}</strong>;
+      return <strong className="font-semibold text-primary-900">{run.text}</strong>;
     case "em":
       return <em>{run.text}</em>;
     case "link":
@@ -176,7 +176,7 @@ function Run({ run }: { run: Inline }) {
 // area, so each link is at least 28px tall on touch screens (WCAG 2.2 target
 // size) without breaking the sentence.
 const anchorClass =
-  "py-1 font-semibold text-lime-700 underline decoration-lime-700/40 underline-offset-[3px] hover:decoration-lime-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500";
+  "py-1 font-semibold text-accent-700 underline decoration-accent-700/40 underline-offset-[3px] hover:decoration-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500";
 
 function Anchor({ href, title, children }: { href: string; title?: string; children: React.ReactNode }) {
   if (isInternalHref(href)) {

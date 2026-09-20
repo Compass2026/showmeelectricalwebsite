@@ -64,8 +64,8 @@ type Status = "idle" | "submitting" | "success" | "error";
 const empty: InquiryInput = { name: "", email: "", phone: "", service: "", details: "" };
 
 const inputBase =
-  "mt-1.5 block w-full rounded-lg border bg-white px-4 py-3 text-base text-charcoal shadow-sm outline-none transition-colors placeholder:text-charcoal/40 focus:border-lime-700 focus:ring-2 focus:ring-lime-500/40";
-const inputOk = "border-navy-900/20";
+  "mt-1.5 block w-full rounded-lg border bg-white px-4 py-3 text-base text-ink shadow-sm outline-none transition-colors placeholder:text-ink/40 focus:border-accent-700 focus:ring-2 focus:ring-accent-500/40";
+const inputOk = "border-primary-900/20";
 const inputBad = "border-red-500 focus:border-red-500 focus:ring-red-200";
 
 export default function InquiryForm({
@@ -87,6 +87,15 @@ export default function InquiryForm({
   /** False in server HTML and until React has attached the submit handler. */
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
+  /**
+   * One id per message, minted on the client after hydration and reused for
+   * every attempt of that message (so a retry after a network error can
+   * never deliver twice — the server recognises the id). Reset with the form.
+   */
+  const submissionId = useRef<string>("");
+  useEffect(() => {
+    if (!submissionId.current) submissionId.current = newSubmissionId();
+  }, []);
   const alertRef = useRef<HTMLDivElement>(null);
 
   // Move focus to the failure notice once it has rendered.
@@ -135,7 +144,7 @@ export default function InquiryForm({
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...data, website: honeypot }),
+        body: JSON.stringify({ ...data, website: honeypot, submissionId: submissionId.current }),
         signal: controller.signal,
       });
       clearTimeout(timer);
@@ -170,14 +179,14 @@ export default function InquiryForm({
       <div
         role="status"
         aria-live="polite"
-        className="rounded-xl border border-lime-700/30 bg-lime-500/10 p-8"
+        className="rounded-xl border border-accent-700/30 bg-accent-500/10 p-8"
       >
-        <p className="text-xl font-extrabold text-navy-900">{labels.success.heading}</p>
-        <p className="mt-3 leading-relaxed text-charcoal/80">{labels.success.body}</p>
+        <p className="text-xl font-extrabold text-primary-900">{labels.success.heading}</p>
+        <p className="mt-3 leading-relaxed text-ink/80">{labels.success.body}</p>
         <p className="mt-3">
           <a
             href={fallback.phoneHref}
-            className="-my-1 inline-block py-1 text-lg font-extrabold text-navy-900 underline underline-offset-4 hover:text-lime-700"
+            className="-my-1 inline-block py-1 text-lg font-extrabold text-primary-900 underline underline-offset-4 hover:text-accent-700"
           >
             {fallback.phone}
           </a>
@@ -188,8 +197,9 @@ export default function InquiryForm({
             setValues(empty);
             setErrors({});
             setStatus("idle");
+            submissionId.current = newSubmissionId();
           }}
-          className="mt-6 text-sm font-bold text-lime-700 underline underline-offset-4"
+          className="mt-6 text-sm font-bold text-accent-700 underline underline-offset-4"
         >
           {labels.success.again}
         </button>
@@ -294,7 +304,7 @@ export default function InquiryForm({
               {labels.errors.contact}
             </p>
           ) : (
-            <p id={contactHintId} className="text-sm text-charcoal/60">
+            <p id={contactHintId} className="text-sm text-ink/60">
               {labels.contactHint}
             </p>
           )}
@@ -314,7 +324,7 @@ export default function InquiryForm({
             onChange={(e) => set("service")(e.target.value)}
             aria-invalid={!!errors.service || undefined}
             aria-describedby={describedBy("service")}
-            className={`${inputBase} ${errors.service ? inputBad : inputOk} ${values.service ? "" : "text-charcoal/60"}`}
+            className={`${inputBase} ${errors.service ? inputBad : inputOk} ${values.service ? "" : "text-ink/60"}`}
           >
             <option value="">{labels.servicePlaceholder}</option>
             {groups.map((g) => (
@@ -388,12 +398,12 @@ export default function InquiryForm({
           type="submit"
           disabled={!ready || status === "submitting"}
           aria-disabled={!ready || undefined}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-navy-950 shadow-lg shadow-lime-500/20 transition-colors hover:bg-lime-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-500 disabled:cursor-wait disabled:opacity-70"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-primary-950 shadow-lg shadow-accent-500/20 transition-colors hover:bg-accent-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:cursor-wait disabled:opacity-70"
         >
           {status === "submitting" && (
             <span
               aria-hidden="true"
-              className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-navy-950/30 border-t-navy-950"
+              className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-primary-950/30 border-t-primary-950"
             />
           )}
           {status === "submitting" ? labels.submitting : labels.submit}
@@ -406,6 +416,15 @@ export default function InquiryForm({
       </div>
     </form>
   );
+}
+
+function newSubmissionId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  // Very old browsers: still a well-formed UUID v4 shape.
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
 }
 
 function Field({
@@ -429,12 +448,12 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <label htmlFor={id} className="block text-sm font-bold text-navy-900">
+      <label htmlFor={id} className="block text-sm font-bold text-primary-900">
         {label}
       </label>
       {children}
       {hint && !error && (
-        <p id={hintId} className="mt-1.5 text-sm text-charcoal/60">
+        <p id={hintId} className="mt-1.5 text-sm text-ink/60">
           {hint}
         </p>
       )}

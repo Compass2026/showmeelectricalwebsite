@@ -12,12 +12,12 @@ export default function Breadcrumbs({
   crumbs: Crumb[];
   tone?: "dark" | "light";
 }) {
-  const muted = tone === "dark" ? "text-white/55" : "text-charcoal/55";
+  const muted = tone === "dark" ? "text-white/55" : "text-ink/55";
   const link =
     tone === "dark"
-      ? "text-white/80 hover:text-lime-400"
-      : "text-navy-900 hover:text-lime-700";
-  const current = tone === "dark" ? "text-white" : "text-navy-900";
+      ? "text-white/80 hover:text-accent-400"
+      : "text-primary-900 hover:text-accent-700";
+  const current = tone === "dark" ? "text-white" : "text-primary-900";
 
   return (
     <nav aria-label="Breadcrumb" className="text-sm">

@@ -24,7 +24,7 @@ export default function ServicePathways({ items }: { items: PathwayCard[] }) {
     <div className="mt-12 grid gap-6 lg:grid-cols-3">
       {items.map((service, i) => (
         <Reveal key={service.slug} delay={i * 0.1} className="h-full">
-          <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-navy-900/10 bg-white shadow-sm transition-all duration-300 hover:border-lime-500/60 hover:shadow-lg focus-within:border-lime-500 focus-within:shadow-lg">
+          <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-primary-900/10 bg-white shadow-sm transition-all duration-300 hover:border-accent-500/60 hover:shadow-lg focus-within:border-accent-500 focus-within:shadow-lg">
             <div className="relative aspect-[16/10] overflow-hidden">
               <Image
                 src={service.image.src}
@@ -36,7 +36,7 @@ export default function ServicePathways({ items }: { items: PathwayCard[] }) {
             </div>
 
             <div className="flex flex-1 flex-col p-7">
-              <h3 className="text-xl font-bold text-navy-900">
+              <h3 className="text-xl font-bold text-primary-900">
                 {service.href ? (
                   <Link
                     href={service.href}
@@ -48,20 +48,20 @@ export default function ServicePathways({ items }: { items: PathwayCard[] }) {
                   service.title
                 )}
               </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-charcoal/70">
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/70">
                 {service.summary}
               </p>
 
               {service.examples.length > 0 && (
-                <ul className="mt-5 space-y-2 border-t border-navy-900/10 pt-5">
+                <ul className="mt-5 space-y-2 border-t border-primary-900/10 pt-5">
                   {service.examples.map((example) => (
                     <li
                       key={example}
-                      className="flex items-start gap-2 text-sm text-charcoal/80"
+                      className="flex items-start gap-2 text-sm text-ink/80"
                     >
                       <span
                         aria-hidden="true"
-                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-lime-500"
+                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500"
                       />
                       {example}
                     </li>
@@ -72,7 +72,7 @@ export default function ServicePathways({ items }: { items: PathwayCard[] }) {
               {service.href && (
                 <p
                   aria-hidden="true"
-                  className="mt-6 text-sm font-bold uppercase tracking-wide text-lime-700 transition-colors group-hover:text-navy-900"
+                  className="mt-6 text-sm font-bold uppercase tracking-wide text-accent-700 transition-colors group-hover:text-primary-900"
                 >
                   {service.title} services →
                 </p>
