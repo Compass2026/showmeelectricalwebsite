@@ -6,9 +6,10 @@ import {
   validateInquiry,
   isValidEmail,
   readSubmissionId,
-  SUBMISSION_ID_TTL_MS,
   type InquiryErrors,
+  type InquiryConflictCode,
 } from "@/lib/inquiry";
+import { claim, complete, release, contentFingerprint } from "@/lib/idempotency";
 
 export const runtime = "nodejs";
 
@@ -60,23 +61,22 @@ function rateLimited(ip: string): boolean {
   return false;
 }
 
-/* ---------- Duplicate guard — PER INSTANCE, same caveat as the rate limit.
- * Accepted submission ids are remembered for SUBMISSION_ID_TTL_MS. A retry
- * carrying an id already delivered is answered as a success WITHOUT a second
- * delivery, so a visitor whose first attempt timed out on the wire cannot
- * send the same message twice. */
-const accepted = new Map<string, number>();
-function alreadyAccepted(id: string): boolean {
-  const now = Date.now();
-  const at = accepted.get(id);
-  if (at !== undefined && now - at < SUBMISSION_ID_TTL_MS) return true;
-  if (accepted.size > 5000) {
-    for (const [key, t] of accepted) if (now - t >= SUBMISSION_ID_TTL_MS) accepted.delete(key);
-  }
-  return false;
-}
-function markAccepted(id: string | null) {
-  if (id) accepted.set(id, Date.now());
+/* ---------- Duplicate guard — see lib/idempotency.ts and lib/inquiry.ts.
+ * Two layers: the durable store (atomic claim per submission id + content
+ * fingerprint; shared by every handler instance on a shared disk) and the
+ * provider's Idempotency-Key on the real send (the guard across serverless
+ * instances). Outcomes are explicit — duplicate, changed, in progress —
+ * and success is only ever reported after a completed delivery. */
+const conflict = (code: InquiryConflictCode, message: string) =>
+  NextResponse.json({ ok: false, code, error: message }, { status: 409 });
+const CHANGED_MESSAGE = "This message changed since the first attempt, so it was not sent. Please send it again.";
+const IN_PROGRESS_MESSAGE = "This message is still being sent. Please wait a moment before trying again.";
+
+/** Classify a provider error as an idempotency conflict, if it is one. */
+function providerConflict(error: { name?: string; message?: string } | null | undefined): InquiryConflictCode | null {
+  const text = `${error?.name ?? ""} ${error?.message ?? ""}`.toLowerCase();
+  if (!text.includes("idempoten")) return null;
+  return text.includes("concurrent") ? "in_progress" : "submission_changed";
 }
 
 /* ---------- Helpers ---------- */
@@ -149,18 +149,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, errors }, { status: 400 });
   }
 
-  // Duplicate-safe: a repeat of an already-delivered message is a success
-  // with nothing sent. (Checked after validation so an id cannot be used
-  // to make an invalid message look accepted.)
+  // Duplicate-safe: claim the submission id for THIS content. (After
+  // validation, so an id can never make an invalid message look accepted.)
   const submissionId = readSubmissionId(raw.submissionId);
-  if (submissionId && alreadyAccepted(submissionId)) {
-    return NextResponse.json({ ok: true, duplicate: true });
+  const fingerprint = contentFingerprint(data);
+  if (submissionId) {
+    const outcome = await claim(submissionId, fingerprint);
+    if (outcome.state === "done") return NextResponse.json({ ok: true, duplicate: true });
+    if (outcome.state === "mismatch") return conflict("submission_changed", CHANGED_MESSAGE);
+    if (outcome.state === "pending") return conflict("in_progress", IN_PROGRESS_MESSAGE);
   }
 
   /* ---------- Delivery ---------- */
   const mode = isProduction ? "" : inquiryConfig.forceMock ? "mock" : readEnv(inquiryConfig.env.delivery);
   if (mode === "fail") {
     console.error("[inquiry] simulated provider failure (INQUIRY_DELIVERY=fail)");
+    if (submissionId) release(submissionId);
     return failure("The message could not be handed to our email service.", 502);
   }
 
@@ -217,33 +221,45 @@ export async function POST(request: NextRequest) {
       replyTo: data.email || undefined,
       subject,
     });
-    markAccepted(submissionId);
+    if (submissionId) complete(submissionId, { delivery: "mock" });
     return NextResponse.json({ ok: true, delivery: "mock" });
   }
 
   const apiKey = readEnv(inquiryConfig.env.apiKey);
   if (!apiKey) {
     console.error(`[inquiry] ${inquiryConfig.env.apiKey} is not set in this environment.`);
+    if (submissionId) release(submissionId);
     return failure("The contact form is not configured on this server.", 500);
   }
 
   try {
     const resend = new Resend(apiKey);
-    const { data: sent, error } = await resend.emails.send({
-      from,
-      to: recipients,
-      ...(data.email && isValidEmail(data.email) ? { replyTo: data.email } : {}),
-      subject,
-      html,
-      text,
-    });
+    // The provider's idempotency key is the cross-instance duplicate guard:
+    // the same key with the same payload returns the original send; the
+    // same key with a different payload or a concurrent send is refused
+    // by the provider, and mapped below to the same explicit conflicts.
+    const { data: sent, error } = await resend.emails.send(
+      {
+        from,
+        to: recipients,
+        ...(data.email && isValidEmail(data.email) ? { replyTo: data.email } : {}),
+        subject,
+        html,
+        text,
+      },
+      submissionId ? { idempotencyKey: `inquiry/${submissionId}` } : undefined
+    );
     if (error) {
+      const code = providerConflict(error);
+      if (submissionId) release(submissionId);
+      if (code) return conflict(code, code === "in_progress" ? IN_PROGRESS_MESSAGE : CHANGED_MESSAGE);
       console.error("[inquiry] Resend send failed:", error);
       return failure("The message could not be handed to our email service.", 502);
     }
-    markAccepted(submissionId);
+    if (submissionId) complete(submissionId, { id: sent?.id ?? null });
     return NextResponse.json({ ok: true, id: sent?.id ?? null });
   } catch (err) {
+    if (submissionId) release(submissionId);
     console.error("[inquiry] Resend threw:", err);
     return failure("The message could not be handed to our email service.", 502);
   }

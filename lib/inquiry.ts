@@ -18,16 +18,42 @@ export const INQUIRY_LIMITS = {
 } as const;
 
 /**
- * DUPLICATE-SAFE SUBMISSIONS. The form mints one `submissionId` per
- * message (a UUID) and sends it with every attempt of that message —
- * including a retry after a network error, when the first attempt may in
- * fact have reached the server. The route remembers accepted ids for
- * `SUBMISSION_ID_TTL_MS` and answers a repeat with `{ ok: true,
- * duplicate: true }` WITHOUT delivering again. A new message (after
- * "send another") gets a new id. Per instance, like the rate limit.
+ * DUPLICATE-SAFE SUBMISSIONS.
+ *
+ * The form mints one `submissionId` (UUID) per message and sends it with
+ * every attempt of that message. The id is bound to the message CONTENT:
+ * a retry of unchanged content reuses it; an edited message gets a new id
+ * (the form re-mints when the content differs from the last attempt).
+ *
+ * The route treats the id as an idempotency key with two layers:
+ *   - a durable store (lib/idempotency.ts) that records the content
+ *     fingerprint and completion per id, shared across handler instances
+ *     that share a disk, with atomic claims for simultaneous requests;
+ *   - the email provider's own idempotency key (Resend `Idempotency-Key`),
+ *     which is the guard across serverless instances that share nothing.
+ *
+ * Outcomes are explicit: unchanged repeat → `{ ok: true, duplicate: true }`
+ * with nothing sent; same id + different content → 409 `submission_changed`;
+ * same id while the first send is still in flight → 409 `in_progress`.
+ * Nothing is ever reported as success without a completed delivery.
+ *
+ * Retention: `SUBMISSION_ID_RETENTION_MS` (24 h), matching the provider's
+ * documented idempotency window, after which an id may be reused as new.
  */
 export const SUBMISSION_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-export const SUBMISSION_ID_TTL_MS = 10 * 60 * 1000;
+export const SUBMISSION_ID_RETENTION_MS = 24 * 60 * 60 * 1000;
+
+export type InquiryConflictCode = "submission_changed" | "in_progress";
+
+/** The response body shape the form understands. */
+export interface InquiryResponse {
+  ok?: boolean;
+  duplicate?: boolean;
+  delivery?: string;
+  error?: string;
+  code?: InquiryConflictCode;
+  errors?: InquiryErrors;
+}
 
 export function readSubmissionId(raw: unknown): string | null {
   return typeof raw === "string" && SUBMISSION_ID_RE.test(raw) ? raw.toLowerCase() : null;

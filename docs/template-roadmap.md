@@ -436,6 +436,24 @@ Findings G3, G7, G8 and the action/agent half of G9; library §13–§15.
 proposals (two brands are proven, not three). Agent trials cover one agent
 family (Claude) with one browser; they do not prove universal compatibility.
 The template is **not marked certified** — that is the reviewer's call after
-this batch. City,
+this batch.
+
+### Correction pass C1/C2 (2026-09-20)
+
+From the reviewer's *Review and Completion Brief* §5 (Drive), after the
+Batch C review at `f9aec93`.
+
+| Item | What changed | Where |
+|---|---|---|
+| C1 idempotency | The in-process map is gone. `lib/idempotency.ts` is a durable per-submission store (content fingerprint + completion, one JSON file per id under `INQUIRY_IDEMPOTENCY_DIR`, atomic `wx` claims, 24 h retention). The real send passes the id as Resend's `Idempotency-Key` (24 h at the provider) — the guard across serverless instances that share no disk. Outcomes are explicit: unchanged retry → `{ok:true, duplicate:true}`; same id + different content → 409 `submission_changed`; same id in flight → 409 `in_progress`; a provider idempotency error maps to the same codes. Success is only ever reported after a completed delivery. | `lib/idempotency.ts`, `lib/inquiry.ts`, `app/api/inquiry/route.ts` |
+| C1 form | The form element is captured before any `await`, so server-reported validation errors focus the right field. The submission id is bound to content: an unchanged retry reuses it, an edited message mints a new one, and a 409 `submission_changed` re-mints for the next click. | `components/site/InquiryForm.tsx` |
+| C1 tests | `scripts/qa/forms.test.mjs`: six simultaneous requests deliver once; delivery-accepted-but-response-lost retry is a duplicate; retry through a **fresh handler instance** (the script starts a second `next start` from the same build) is a duplicate and its own new message round-trips; edited content after an ambiguous network failure gets a new id and is delivered; the same id with edited content is refused; a server-returned validation error preserves input and focuses the reported field. Mocked delivery only. | `scripts/qa/forms.test.mjs` |
+| C2 portability | `scripts/qa/browser-launch.mjs` resolves Chromium (`CHROMIUM_PATH` → bundled → system) for both suites and prints setup instructions when none exists; README "Browser setup". | `scripts/qa/browser-launch.mjs`, README |
+| C2 verify | `verify.sh` runs the browser suite on representative pages for both brands, asserts each production guard's own error message (any other build failure fails the run), uses a clean idempotency store, and documents `FRESH=1` as the clean-checkout mode. | `scripts/qa/verify.sh` |
+| C2 docs | Completion checklist reconciled (no launch dependency; B1/B2/B10 accurate; B11/B12 added). `docs/drive/` now mirrors the reviewer's current consolidated Drive documents and carries the exact proposed C1/C2 status updates. Template inventory and agent report updated; inquiry agent task re-run. | `docs/completion-checklist.md`, `docs/drive/*`, `docs/template-inventory.md`, `docs/agent-compatibility.md` |
+
+Out of scope and untouched: production, DNS, live GBP, CRM integration,
+additional page batches, GA4, extra visual presets. Result: **ready for final
+review**, not finally approved. City,
 branch and individual-service templates (G2) are Batch B; neutral branding,
 optional careers, starter and agent trials (G3, G8 remainder, G9) are Batch C.

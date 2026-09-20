@@ -9,6 +9,7 @@ import {
   type InquiryErrors,
   type InquiryField,
   type InquiryInput,
+  type InquiryResponse,
   type ServiceOptionGroup,
 } from "@/lib/inquiry";
 
@@ -96,6 +97,13 @@ export default function InquiryForm({
   useEffect(() => {
     if (!submissionId.current) submissionId.current = newSubmissionId();
   }, []);
+  /**
+   * The content the current id was last attempted with. A retry of the
+   * same content keeps the id (so the server can recognise a duplicate); an
+   * edited message gets a NEW id before it is sent, so it can never be
+   * confused with the earlier attempt.
+   */
+  const attempted = useRef<string | null>(null);
   const alertRef = useRef<HTMLDivElement>(null);
 
   // Move focus to the failure notice once it has rendered.
@@ -125,19 +133,31 @@ export default function InquiryForm({
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (status === "submitting") return;
+    // Capture the element now: React's synthetic event is not reliable
+    // after an `await`, and server-reported errors must focus a real field.
+    const form = event.currentTarget;
 
     const data = normaliseInquiry(values);
     const found = validateInquiry(data);
     if (Object.keys(found).length) {
       setErrors(found);
       setStatus("idle");
-      focusFirstInvalid(event.currentTarget, found);
+      focusFirstInvalid(form, found);
       return;
     }
 
+    // Same content as the last attempt → same id (a retry). Different
+    // content → a fresh id, so an edited message is never mistaken for the
+    // earlier one by the server.
+    const fingerprint = JSON.stringify(data);
+    if (attempted.current !== null && attempted.current !== fingerprint) {
+      submissionId.current = newSubmissionId();
+    }
+    attempted.current = fingerprint;
+
     setStatus("submitting");
     setFailure("");
-    const honeypot = (event.currentTarget.elements.namedItem("website") as HTMLInputElement | null)?.value ?? "";
+    const honeypot = (form.elements.namedItem("website") as HTMLInputElement | null)?.value ?? "";
 
     try {
       const controller = new AbortController();
@@ -150,7 +170,7 @@ export default function InquiryForm({
       });
       clearTimeout(timer);
 
-      let body: { ok?: boolean; error?: string; errors?: InquiryErrors } = {};
+      let body: InquiryResponse = {};
       try {
         body = await res.json();
       } catch {
@@ -164,9 +184,18 @@ export default function InquiryForm({
       if (res.status === 400 && body.errors && Object.keys(body.errors).length) {
         setErrors(body.errors);
         setStatus("idle");
-        focusFirstInvalid(event.currentTarget, body.errors);
+        focusFirstInvalid(form, body.errors);
         return;
       }
+      if (res.status === 409 && body.code === "submission_changed") {
+        // The server holds a different message under this id (an earlier
+        // attempt reached it). Nothing was sent. Start a new id so the next
+        // click sends this message as itself.
+        submissionId.current = newSubmissionId();
+        attempted.current = null;
+      }
+      // 409 in_progress keeps the id: the next retry asks again and gets
+      // `duplicate` once the first send completes.
       setFailure(body.error ?? "");
       setStatus("error");
     } catch {
@@ -200,6 +229,7 @@ export default function InquiryForm({
             setErrors({});
             setStatus("idle");
             submissionId.current = newSubmissionId();
+            attempted.current = null;
           }}
           className="mt-6 text-sm font-bold text-accent-700 underline underline-offset-4"
         >

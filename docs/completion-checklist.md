@@ -1,10 +1,14 @@
 # Completion Checklist
 
 Three lists, kept separate on purpose. The first is the gate for replacing
-WordPress. The second is the gate for the Compass starter. The third is
-never a gate for anything — it is built on demand, measured page by page.
+WordPress with the Show Me site (client launch work). The second is the
+gate for the Compass Website Foundation (the reusable template) and does
+**not** depend on the first: the Foundation is verified on previews and
+accepted on its own commit. The third is never a gate for anything — it is
+built on demand, measured page by page.
 
-Status as of the contact-form milestone.
+Status as of the C1/C2 correction pass (2026-09-20). Foundation v1 is
+**ready for final review**, not finally approved.
 
 ---
 
@@ -27,22 +31,25 @@ Status as of the contact-form milestone.
 **Not required for launch:** any individual service page, any city page,
 new blog posts. The live site has none of these today.
 
-## B. Compass starter extraction — after the client site is live
+## B. Compass Website Foundation — independent of the client launch
 
 | # | Item | Status | Notes |
 |---|---|---|---|
-| B1 | Semantic colour tokens | ⬜ | `navy-*`/`lime-*` in component classes → `surface`, `accent`, `ink`, `paper`; done once against the finished page set |
-| B2 | Remaining homepage content separation | ⬜ | `Hero` still imports `content/home.ts`; `AboutSection`, `Testimonials`, `ServicePathways`, `TrustBar` already take props |
-| B3 | Optional careers support | ✅ (Batch C) | Middleware, host resolution, sitemap and config assume a careers host — make its absence a config omission (roadmap §5.3) |
+| B1 | Semantic colour tokens | ✅ (Batch C) | Components use `primary`, `accent`, `surface`, `ink`; values per brand in `brands/<brand>/theme.css` |
+| B2 | Remaining homepage content separation | ✅ (Batch C) | Every homepage, root-layout, chrome, 404, blog and contact string comes from the brand (`@brand/content/*`, `site.metadata`, `site.footer`, `site.notFound`); sections hide when a brand has no content for them |
+| B3 | Optional careers support | ✅ (Batch C) | `site.careers = null` removes host rules, nav/footer entries, sitemap entries, `/careers*` routes and `/api/apply` (Harbor Lane proves it). Enabled careers remains a Show Me-specific adapter; reuse for another hiring client needs its own review |
 | B4 | Sitemap fully from registries | ✅ | `lib/routes.ts` builds the published-route list from `content/pages.ts` + services + blog + legal; `app/sitemap.ts` emits it with truthful `lastModified` only (Batch A) |
-| B5 | Enquiry-form route in the starter | ✅ (Batch C: per-brand `inquiry.config.ts`, `forceMock` for demos) | `InquiryForm` + `lib/inquiry.ts` + `config/inquiry.config.ts` are already generic; the starter ships the config with empty recipients |
+| B5 | Enquiry-form route in the starter | ✅ (Batch C; C1) | Per-brand `inquiry.config.ts` (`forceMock` for demos). C1: durable idempotency store + provider `Idempotency-Key`, explicit `duplicate` / `submission_changed` / `in_progress` outcomes, content-bound submission ids, form captured before async work; `scripts/qa/forms.test.mjs` covers simultaneous requests, lost responses, a fresh handler instance, edited content and server-validation focus |
 | B6 | Redirects as per-client data | ✅ (Batch C: `brands/<brand>/redirects.ts` incl. `gone`) | `config/redirects.ts` is the per-client map already; the starter ships it empty |
 | B7 | Starter scaffolding | ✅ (Batch C: `brands/harbor-lane` as the neutral shape + `docs/starter-checklist.md`) | Empty typed `site.config.ts`, placeholder tokens, `content/` skeleton, the `docs/` templates, the §3 change list as a checklist |
-| B8 | Validation gate script | ✅ (Batch C: `npm run verify` — both brands, forms, browser, guards) | `npm run qa:crawl:test` + `npm run qa:manifest` + `npm run qa:crawl` committed (negative fixtures; route manifest; raw-HTML crawl: single canonical on the production origin, sitemap as full URLs, rendered-only incoming links, fragment resolution, OG + Twitter images with explicit local asset validation, JSON-LD references, 404). Browser/form/agent checks follow in Batch C |
-| B10 | Service-detail, city and branch templates | ✅ shape · 🟡 fixture-only branch | One representative page each (Batch B): `/services/residential/electrical-panel-upgrades`, `/service-area/edwardsville-il`, and the fictional `/locations/westfield-demo` (COMPASS_DEMO builds only, noindex). See `docs/template-inventory.md` |
-| B9 | **Check with a different brand** | ✅ (Batch C: Harbor Lane builds with zero Show Me strings in output; careers disabled) | Swap `site.config.ts`, `@theme` values, fonts, `decoration: "none"/"line"`, one service content file — and confirm nothing electrical, navy, lime or Show Me leaks through. The proof the starter is a starter. |
+| B8 | Validation gate script | ✅ (Batch C; C2) | `npm run verify` / `FRESH=1 npm run verify`: type checks for both brands, lint, crawl fixtures, per-brand build + manifest + crawl + mocked forms + browser suite on representative pages, and production guards that assert their own error messages. Chromium resolved through `CHROMIUM_PATH` (README "Browser setup") |
+| B10 | Service-detail, city and branch templates | ✅ (Batch B/C) | Show Me: `/services/residential/electrical-panel-upgrades`, `/service-area/edwardsville-il`; Harbor Lane: a child page, Northgate, two branches and `/locations`. Show Me's fictional fixture stays behind `COMPASS_DEMO`. See `docs/template-inventory.md` |
+| B9 | **Check with a different brand** | ✅ (Batch C) | Harbor Lane builds from the same framework with zero Show Me strings, tokens or asset paths in its output and careers disabled. The proof the starter is a starter. |
 
-Detail and rationale for each: `docs/template-roadmap.md` §5.
+| B11 | Agent-compatibility evidence | ✅ one agent family (Batch C; inquiry task re-run after C1) | `docs/agent-compatibility.md`: actual Claude-agent trials in Chromium on both brands, scripted checks kept separate; other agents, other browsers and the enabled careers workflow remain unverified |
+| B12 | Final review | 🟡 ready for review | Foundation v1 at the C1/C2 commit awaits ChatGPT's acceptance review; not finally approved |
+
+Detail and rationale for each: `docs/template-roadmap.md` §5 and the Batch A–C logs.
 
 ## C. Later SEO expansion — on demand, never a gate
 

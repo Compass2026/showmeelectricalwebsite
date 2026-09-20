@@ -8,7 +8,7 @@
  * targets ≥ 24px, and every comparison table has a caption, header scopes
  * and a horizontally scrollable wrapper on narrow screens.
  */
-import { chromium } from "playwright-core";
+import { launchChromium } from "./browser-launch.mjs";
 const args = process.argv.slice(2);
 const base = args[0];
 const host = args[args.indexOf("--host") + 1];
@@ -17,7 +17,7 @@ const pathsArg = args.indexOf("--paths");
 const paths = pathsArg > -1 ? args[pathsArg + 1].split(",") : ["/"];
 let failures = 0;
 const check = (name, ok, detail = "") => { console.log(`${ok ? "ok  " : "FAIL"} ${name}${detail ? ` — ${detail}` : ""}`); if (!ok) failures++; };
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH ?? "/opt/pw-browsers/chromium" });
+const browser = await launchChromium();
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 for (const p of paths) {

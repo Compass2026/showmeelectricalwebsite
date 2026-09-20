@@ -335,10 +335,39 @@ npm run qa:crawl:test                     # negative fixtures: proves the crawl 
 npm run qa:manifest                       # docs/route-manifest.md + .qa/routes.json for COMPASS_BRAND (default showme)
 npm run build && INQUIRY_DELIVERY=mock npm start &   # production build on :3000, provider mocked
 npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap
-node scripts/qa/forms.test.mjs http://localhost:3000 --host showmeelectrical.com   # mocked inquiry: validation, failure recovery, duplicate-safe retry
+node scripts/qa/forms.test.mjs http://localhost:3000 --host showmeelectrical.com   # mocked inquiry: validation, idempotent retries (incl. a second server instance), failure recovery
 node scripts/qa/browser.test.mjs http://localhost:3000 --host showmeelectrical.com --paths /,/contact  # no-JS, reduced motion, keyboard, tables, 390px
-npm run verify                            # all of the above for BOTH brands + the production guards (FRESH=1 clones first)
+npm run verify                            # all of the above for BOTH brands, incl. the browser suite, + the production guards
+FRESH=1 npm run verify                    # the same from a fresh clone of HEAD (git clone + npm ci in a temp dir) — the clean-checkout run
 ```
+
+### Browser setup
+
+The form and browser suites drive a real Chromium through
+`playwright-core` (a dev dependency; it does not download a browser).
+`scripts/qa/browser-launch.mjs` finds the executable in this order:
+`CHROMIUM_PATH`, the runner's bundled `/opt/pw-browsers/chromium`, then a
+system `chromium` / `google-chrome`. To set one up elsewhere:
+
+```bash
+npx playwright@1.56.1 install chromium         # downloads a matching Chromium; prints its location
+export CHROMIUM_PATH=/path/to/chrome-linux/chrome   # or /usr/bin/chromium, /Applications/Google Chrome.app/…
+node scripts/qa/browser-launch.mjs --check     # prints the executable and version that will be used
+```
+
+### Contact-form idempotency
+
+Every message carries a client-minted `submissionId` bound to its content.
+The API keeps a durable per-id record (content fingerprint + completion) in
+`INQUIRY_IDEMPOTENCY_DIR` (default `<tmpdir>/compass-inquiry-idempotency`,
+24-hour retention) with atomic claims, and passes the same id as the email
+provider's `Idempotency-Key` on every real send (Resend keeps keys for
+24 hours) — the provider is the guard across serverless instances that share
+no disk. Outcomes are explicit: an unchanged retry answers
+`{ ok: true, duplicate: true }` without sending; the same id with different
+content answers 409 `submission_changed`; a retry while the first send is
+still in flight answers 409 `in_progress`. The form reuses the id for an
+unchanged retry and mints a new one for an edited message.
 
 `forms.test` and `browser.test` are scripted browser automation. They are
 not AI-agent trials; those are recorded separately in
