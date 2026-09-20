@@ -13,6 +13,8 @@ export const inquiryConfig = {
     recipient: "INQUIRY_RECIPIENT",
     from: "INQUIRY_FROM",
     delivery: "INQUIRY_DELIVERY",
+    /** Base URL of the QA mock provider service (scripts/qa/mock-provider.mjs); used only in mock mode. */
+    mockProviderUrl: "INQUIRY_MOCK_PROVIDER_URL",
   },
   rateLimit: { windowMs: 10 * 60 * 1000, maxPerWindow: 5 },
   forceMock: true,

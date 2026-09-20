@@ -22,15 +22,18 @@ echo "== browser"; node scripts/qa/browser-launch.mjs --check
 echo "== type checks"; npm run -s typecheck; node scripts/qa/typecheck-brand.mjs harbor-lane
 echo "== lint"; npm run -s lint
 echo "== crawl fixtures"; npm run -s qa:crawl:test
-export INQUIRY_IDEMPOTENCY_DIR="$(mktemp -d)"   # a clean local idempotency store for this run
-export INQUIRY_MOCK_PROVIDER_DIR="$(mktemp -d)" # a clean mocked-provider ledger for this run
-echo "== idempotency (module-level lease, ownership and mocked-provider contract)"; npx tsx scripts/qa/idempotency.test.mjs
+echo "== provider (adapter + independent handlers against the mock provider service)"; npx tsx scripts/qa/provider.test.mjs
+# One mock provider SERVICE for the whole run: every server instance under
+# test shares it, the way real instances share the real provider. Nothing is sent.
+PORT_MOCK=3453; node scripts/qa/mock-provider.mjs --port $PORT_MOCK >/tmp/verify-mock-provider.log 2>&1 &
+MOCK_PID=$!; trap 'kill $MOCK_PID 2>/dev/null || true' EXIT; sleep 1
+export INQUIRY_MOCK_PROVIDER_URL=http://127.0.0.1:$PORT_MOCK
 PORT_A=3451; PORT_B=3452
 run_brand () { # brand host port paths
   local brand=$1 host=$2 port=$3 paths=$4 dist=.next-verify-$1
   echo "== build $brand"; COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist npx next build >/dev/null
   COMPASS_BRAND=$brand node scripts/qa/manifest.mjs
-  ( COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist INQUIRY_DELIVERY=mock npx next start -p $port >/tmp/verify-$brand.log 2>&1 & ); sleep 4
+  ( COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist INQUIRY_DELIVERY=mock npx next start -p $port >/tmp/verify-$brand.log 2>&1 & ); sleep 4   # inherits INQUIRY_MOCK_PROVIDER_URL
   echo "== crawl $brand";   node scripts/qa/crawl.mjs http://localhost:$port --host $host --assets remap
   echo "== forms $brand";   COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist node scripts/qa/forms.test.mjs http://localhost:$port --host $host
   echo "== browser $brand"; node scripts/qa/browser.test.mjs http://localhost:$port --host $host --paths "$paths"

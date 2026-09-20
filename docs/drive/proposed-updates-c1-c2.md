@@ -2,9 +2,9 @@
 
 Exact replacement text for the three current Drive originals. Each block
 names the document and the sentence(s) it replaces. Nothing else in the
-documents changes. Evidence commits: the C1/C2 commit and the C1 recovery commit on
-`claude/template-completion` recorded in the review package (referred to
-below as "the C1/C2 commit" and "the C1 recovery commit").
+documents changes. Evidence commits: the C1/C2 commit, the C1 recovery commit and the C1
+simplification commit on `claude/template-completion` recorded in the
+review package (referred to below by those names).
 
 ## 01 Compass Website Build Standard v1.1
 
@@ -21,27 +21,25 @@ companion audit." **with:**
 **§9 "Implemented" paragraph — replace** the two sentences beginning
 "Review correction C1:" and "Review correction C2:" **with:**
 
-> C1 (implemented): submission ids are idempotency keys with two layers — a
-> local per-id lease store (content fingerprint + completion, 24-hour
-> retention, shared by handler instances that share a disk) and the email
-> provider's `Idempotency-Key` on every send (24-hour retention at the
-> provider), which is the guard across serverless instances. A pending
-> claim is a 60-second lease held by an owner token: an interrupted sender's
-> abandoned lease is taken over by the next retry at once, acquisition is
-> atomic on every path (missing, unreadable, expired, abandoned or released
-> record) so exactly one retry owns a send, and completion and release are
-> honoured only for the current owner. Outcomes are explicit: an unchanged
-> retry answers `{ ok: true, duplicate: true }` without sending; the same id
-> with different content answers 409 `submission_changed`; a retry while a
-> live sender holds the lease answers 409 `in_progress`. The form binds the
-> id to the message content (unchanged retry keeps it, an edited message
-> gets a new one) and captures the form element before asynchronous work so
-> server-reported validation errors focus the reported field. Mocked
-> delivery goes through a mock provider that enforces the provider's key
-> contract on the same call path as a real send. Mocked tests cover
-> simultaneous requests, delivery accepted but response lost, an abandoned
-> claim, several waiters after a released claim, retry through a fresh
-> handler instance with isolated local storage, edited content after an
+> C1 (implemented): the submission id is the email provider's idempotency
+> key (`Idempotency-Key`, 24-hour retention at the provider) on every send,
+> and the provider is the only authority for acceptance, duplicates,
+> conflicts and retries. There is no local record, lock or lease in front
+> of it, so handler instances that share nothing still agree and nothing
+> local can synthesise a success or block a retry. Payloads are built only
+> from normalised input and configuration, so an unchanged retry is
+> byte-identical. Outcomes are explicit: an unchanged retry receives the
+> original accepted result with nothing sent again; the same id with
+> different content answers 409 `submission_changed`; a retry while the
+> first send is in flight answers 409 `in_progress`. The form binds the id
+> to the message content (unchanged retry keeps it, an edited message gets
+> a new one) and captures the form element before asynchronous work so
+> server-reported validation errors focus the reported field. All delivery
+> goes through one provider adapter; mocked delivery uses a mock provider
+> service that applies the same key contract on the same call path. Mocked
+> tests cover independent handlers under one key, concurrent requests,
+> delivery accepted but response lost, changed content, stale or corrupt
+> former local records, a fresh handler instance, edited content after an
 > ambiguous failure, and server validation with input preservation and
 > focus recovery.
 >
@@ -135,41 +133,45 @@ with:**
 
 **§3 G9 "Current evidence" — append:**
 
-> Corrected in C1: local idempotency lease store (60-second recoverable
-> leases, owner tokens, atomic acquisition on every retry path) plus
-> provider idempotency key with explicit same-id/different-content and
+> Corrected in C1: the provider idempotency key is authoritative on every
+> send (no local claim store), with explicit same-id/different-content and
 > in-progress outcomes and a 24-hour retention window; form element
 > captured before asynchronous work; mocked delivery exercises the
-> provider-call path. Mocked tests cover simultaneous requests, lost
-> responses, abandoned-claim recovery, waiters after a release, a fresh
-> handler instance with isolated storage, edited content and server
-> validation; the inquiry agent task was re-run on both brands.
+> provider-call path through a shared mock provider service. Mocked tests
+> cover independent handlers, simultaneous requests, lost responses,
+> changed content, stale former local records, a fresh handler instance,
+> edited content and server validation; the inquiry agent task was re-run
+> on both brands.
 
 **§6 "Code status" — replace** "Final template release remains conditional
 on C1/C2 and review of their focused results at the resulting SHA." **with:**
 
-> C1/C2 are implemented at the C1/C2 commit and the remaining C1 recovery
-> defect is corrected at the C1 recovery commit; final template release
-> depends on the reviewer's acceptance of the focused results at that
-> commit.
+> C1/C2 are implemented at the C1/C2 commit; the C1 local-claim layer was
+> removed at the C1 simplification commit, where the provider key is
+> authoritative; final template release depends on the reviewer's
+> acceptance of the focused results at that commit.
 
-**"Current correction review: one remaining C1 recovery defect" — append
+**"Current correction review: C1 cross-worker takeover race" — append
 to the section:**
 
-> Corrected at the C1 recovery commit: the local file-claim gate is
-> retained as a recoverable lease (60 seconds, owner token) with atomic
-> ownership acquisition on every retry path, including missing, unreadable,
-> expired, abandoned and released records; completion and release respect
-> ownership. The provider idempotency key, same-id/different-content
-> behaviour and content-bound browser ids are unchanged. Mocked delivery
-> now exercises the actual provider-call path through a mock provider that
-> enforces the key contract. Acceptance tests: an abandoned pending claim
-> recovers without waiting a day; several waiters after a failed sender
-> releases its claim cannot all acquire ownership; an unchanged retry from
-> a handler instance with isolated storage reaches the same mocked provider
-> key and sends once; a changed payload is rejected explicitly. Server
-> validation and focus regression checks pass. Status: ready for final
-> review, not finally approved.
+> Corrected at the C1 simplification commit: the custom filesystem
+> claim/lease layer is removed from the inquiry delivery path. The route
+> consults no local record; every send carries the submission id as the
+> provider idempotency key and the provider's answer is the outcome
+> (original accepted result on an unchanged retry, `submission_changed`
+> for a different payload under a used key, `in_progress` while a send is
+> in flight). Payloads are normalised and stable, submission ids remain
+> content-bound, and form error recovery is unchanged. Delivery goes
+> through one provider adapter; mocked delivery uses a shared mock provider
+> service that applies the same contract, with no file lock anywhere.
+> Acceptance tests: independent handlers with isolated state retry
+> unchanged content under one key and receive the original accepted result
+> with one send; concurrent same-key requests receive that result or an
+> explicit in-progress outcome; changed content under a used key is
+> rejected; a lost response is retried to the original result; stale,
+> "done" and corrupt former local records neither block nor fake a send.
+> Input preservation, focus recovery and edited-content/new-id checks
+> pass. Status: ready for final review, not finally approved.
 
 **§6 "Agent status" — replace** "Inquiry-action correctness remains open
 under C1." **with:**

@@ -31,6 +31,8 @@ export const inquiryConfig = {
     from: "INQUIRY_FROM",
     /** "mock" | "fail" — honoured only outside production. See route. */
     delivery: "INQUIRY_DELIVERY",
+    /** Base URL of the QA mock provider service (scripts/qa/mock-provider.mjs); used only in mock mode. */
+    mockProviderUrl: "INQUIRY_MOCK_PROVIDER_URL",
   },
   /**
    * PER-INSTANCE rate limit. The counter lives in the memory of one

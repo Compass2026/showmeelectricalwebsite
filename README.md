@@ -333,10 +333,11 @@ npm run lint                              # next lint, non-interactive, zero war
 npm run qa:crawl:test                     # negative fixtures: proves the crawl fails on a wrong canonical/sitemap origin,
                                           # an orphan or self-linked page, a missing fragment, a missing Twitter image
 npm run qa:manifest                       # docs/route-manifest.md + .qa/routes.json for COMPASS_BRAND (default showme)
-npm run build && INQUIRY_DELIVERY=mock npm start &   # production build on :3000, provider mocked
+npm run qa:provider                       # provider adapter + independent handlers (worker threads) against the mock provider service; no site server
+npm run qa:mock-provider &                # the mock provider SERVICE on :3999 (nothing is delivered)
+npm run build && INQUIRY_DELIVERY=mock INQUIRY_MOCK_PROVIDER_URL=http://127.0.0.1:3999 npm start &   # production build on :3000, provider mocked
 npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap
-npm run qa:idempotency                    # module-level lease/ownership recovery + mocked-provider key contract (no server)
-node scripts/qa/forms.test.mjs http://localhost:3000 --host showmeelectrical.com   # mocked inquiry: validation, idempotent retries (incl. a second instance with isolated storage), failure recovery
+INQUIRY_MOCK_PROVIDER_URL=http://127.0.0.1:3999 node scripts/qa/forms.test.mjs http://localhost:3000 --host showmeelectrical.com   # mocked inquiry: validation, provider-key retries (incl. a second server instance), failure recovery
 node scripts/qa/browser.test.mjs http://localhost:3000 --host showmeelectrical.com --paths /,/contact  # no-JS, reduced motion, keyboard, tables, 390px
 npm run verify                            # all of the above for BOTH brands, incl. the browser suite, + the production guards
 FRESH=1 npm run verify                    # the same from a fresh clone of HEAD (git clone + npm ci in a temp dir) — the clean-checkout run
@@ -358,33 +359,31 @@ node scripts/qa/browser-launch.mjs --check     # prints the executable and versi
 
 ### Contact-form idempotency
 
-Every message carries a client-minted `submissionId` bound to its content.
-The API keeps a durable per-id record (content fingerprint + completion) in
-`INQUIRY_IDEMPOTENCY_DIR` (default `<tmpdir>/compass-inquiry-idempotency`,
-24-hour retention) and passes the same id as the email provider's
-`Idempotency-Key` on every send (Resend keeps keys for 24 hours) — the
-provider is the guard across serverless instances that share no disk.
+Every message carries a client-minted `submissionId` bound to its content:
+the form reuses it for an unchanged retry and mints a new one for an edited
+message. The API passes the id as the email provider's `Idempotency-Key`
+(`inquiry/<id>`) on **every** send, and the provider is the only authority
+for acceptance, duplicates and conflicts (Resend keeps keys for 24 hours).
+There is no local record, lock or lease in front of the provider: handler
+instances share nothing and still agree, and nothing local can fake a
+success or block a retry. Outcomes are explicit: an unchanged retry
+receives the original accepted result (`{ ok: true, id }`, nothing sent
+again); the same id with different content answers 409
+`submission_changed`; a retry while the first send is still in flight
+answers 409 `in_progress`. The payload is built only from normalised input
+and configuration, so an unchanged retry is byte-identical.
 
-The local record is a **lease**: a claim holds an owner token and is valid
-for 60 seconds while pending. A sender that never finishes (crash, timeout)
-leaves an abandoned lease that the next retry takes over at once — never
-after the retention window — and takeover is atomic (exclusive create or
-rename), so of several retries exactly one owns the send on every path:
-missing, unreadable, expired or abandoned record, or a claim released by a
-failed sender. Completion and release are honoured only for the current
-owner. Outcomes are explicit: an unchanged retry answers
-`{ ok: true, duplicate: true }` without sending; the same id with different
-content answers 409 `submission_changed`; a retry while a live sender holds
-the lease answers 409 `in_progress`. The form reuses the id for an
-unchanged retry and mints a new one for an edited message.
-
-`INQUIRY_DELIVERY=mock` routes the send through `lib/mock-provider.ts`,
-which enforces the provider's own key contract (same key + same payload →
-the original id, different payload → `invalid_idempotent_request`, in
-flight → `concurrent_idempotent_requests`) on a ledger under
-`INQUIRY_MOCK_PROVIDER_DIR`. Mocked tests therefore exercise the same
-provider-call path as a real send, including a retry from a handler
-instance with isolated local storage. Nothing is delivered anywhere.
+All delivery goes through the adapter in `lib/email-provider.ts`.
+`INQUIRY_DELIVERY=mock` (ignored in production) swaps the real Resend
+adapter for a mock that applies the same key contract (same key + same
+payload → the original id, different payload → `invalid_idempotent_request`,
+in flight → `concurrent_idempotent_requests`). For tests the mock is a
+**service** (`npm run qa:mock-provider`, `scripts/qa/mock-provider.mjs`):
+one process with authoritative state that every server instance under test
+reaches through `INQUIRY_MOCK_PROVIDER_URL`, the way real instances reach
+the real provider. Without that URL an in-process mock is used (local
+development, the fictional preview brand). Nothing mocked is delivered
+anywhere.
 
 `forms.test` and `browser.test` are scripted browser automation. They are
 not AI-agent trials; those are recorded separately in

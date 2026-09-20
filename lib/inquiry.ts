@@ -25,20 +25,20 @@ export const INQUIRY_LIMITS = {
  * a retry of unchanged content reuses it; an edited message gets a new id
  * (the form re-mints when the content differs from the last attempt).
  *
- * The route treats the id as an idempotency key with two layers:
- *   - a durable store (lib/idempotency.ts) that records the content
- *     fingerprint and completion per id, shared across handler instances
- *     that share a disk, with atomic claims for simultaneous requests;
- *   - the email provider's own idempotency key (Resend `Idempotency-Key`),
- *     which is the guard across serverless instances that share nothing.
+ * The route passes the id as the email provider's idempotency key
+ * (Resend `Idempotency-Key`, `inquiry/<id>`) on EVERY send, and the
+ * provider is the only authority (lib/email-provider.ts): no local record
+ * is consulted before it, so handler instances that share nothing still
+ * agree, and nothing local can fake a success or block a retry.
  *
- * Outcomes are explicit: unchanged repeat → `{ ok: true, duplicate: true }`
- * with nothing sent; same id + different content → 409 `submission_changed`;
+ * Outcomes are explicit: an unchanged repeat receives the ORIGINAL accepted
+ * result (`{ ok: true, id }`, nothing sent again; the mocks also flag
+ * `duplicate: true`); same id + different content → 409 `submission_changed`;
  * same id while the first send is still in flight → 409 `in_progress`.
- * Nothing is ever reported as success without a completed delivery.
+ * Nothing is ever reported as success without the provider's acceptance.
  *
- * Retention: `SUBMISSION_ID_RETENTION_MS` (24 h), matching the provider's
- * documented idempotency window, after which an id may be reused as new.
+ * Retention: `SUBMISSION_ID_RETENTION_MS` (24 h), the provider's documented
+ * idempotency window, after which an id may be reused as new.
  */
 export const SUBMISSION_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const SUBMISSION_ID_RETENTION_MS = 24 * 60 * 60 * 1000;

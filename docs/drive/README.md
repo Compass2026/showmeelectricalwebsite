@@ -16,6 +16,6 @@ update)" companion copies are historical ("Superseded draft") and are no
 longer mirrored here.
 
 `proposed-updates-c1-c2.md` holds the **exact text** to paste into each
-original once the C1/C2 correction pass and the C1 recovery correction are
+original once the C1/C2 correction pass and the C1 simplification are
 accepted, so the Drive set and the repository say the same thing. No other copy of the documents is kept
 in the repository; the originals are the source of truth.

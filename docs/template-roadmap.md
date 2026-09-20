@@ -472,6 +472,24 @@ released its claim several waiters could all return `claimed`.
 
 Server-validation and focus regression checks are unchanged and pass. No
 template batch, CRM work, real email, production promotion or DNS change.
+
+### C1 simplification: provider key authoritative (2026-09-20)
+
+From the reviewer's "Current correction review: C1 cross-worker takeover
+race" (Drive Brief). At `c82b807` all 31 module checks passed
+independently, but two independent workers sharing a directory could both
+acquire the same expired lease: rename-over followed by a re-read is not an
+exclusive ownership operation. The reviewer's required fix is to remove the
+custom filesystem claim/lease layer and make the provider key authoritative.
+
+| Item | What changed | Where |
+|---|---|---|
+| Local gate removed | `lib/idempotency.ts` and `lib/mock-provider.ts` are deleted. The route consults no local record: it validates, builds the payload from normalised input and configuration only (so an unchanged retry is byte-identical), and sends with `Idempotency-Key: inquiry/<submissionId>`. The provider's answer is the outcome: accepted (original result on an unchanged retry), `invalid_idempotent_request` → 409 `submission_changed`, `concurrent_idempotent_requests` → 409 `in_progress`. Nothing local can synthesise a success or block a retry. | `app/api/inquiry/route.ts`, `lib/inquiry.ts` |
+| Provider adapter | `lib/email-provider.ts` defines one `send(payload, { idempotencyKey })` contract in Resend's shape with three implementations: the real Resend send; the HTTP mock **service** client; an in-process memory mock for local development and the fictional preview brand. Mock mode picks the service when `INQUIRY_MOCK_PROVIDER_URL` is set. | `lib/email-provider.ts`, `brands/*/inquiry.config.ts` |
+| Mock provider service | `scripts/qa/mock-provider.mjs` (`npm run qa:mock-provider`): one process, in-memory ledger, the provider's key contract (original result / 422 invalid / 409 concurrent, 24 h keys, 150 ms processing window), plus `/ledger/<key>` for tests. Every server instance under test shares it, like the real provider's key space. No file locks anywhere. | `scripts/qa/mock-provider.mjs` |
+| Tests | `scripts/qa/provider.test.mjs` (`npm run qa:provider`, 18 checks): adapter contract; four **independent worker-thread handlers** (own adapter, no shared state) under one key → one send, later unchanged retries all receive the original id, changed retries all refused; the reviewer's interleavings (second worker 50 ms into the first's send → in progress; 300 ms after → original result). `forms.test.mjs` (43 checks): lost response → original id; changed content → 409; six simultaneous → one delivery; stale pending / "done" / corrupt files from the former local store → every message delivered, none blocked or faked, no local record written; fresh server instance sharing only the provider → original result, and four requests split across both instances → one delivery. Browser regression checks unchanged. Both suites run in `verify.sh` with one shared mock service. | `scripts/qa/provider.test.mjs`, `scripts/qa/forms.test.mjs`, `scripts/qa/verify.sh` |
+
+No new template features, CRM work, real messages or production changes.
 Result: **ready for final review**, not finally approved.
 
 City,

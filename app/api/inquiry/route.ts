@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 import { inquiryConfig } from "@/config/inquiry.config";
 import {
   normaliseInquiry,
@@ -9,8 +8,14 @@ import {
   type InquiryErrors,
   type InquiryConflictCode,
 } from "@/lib/inquiry";
-import { claim, complete, release, contentFingerprint } from "@/lib/idempotency";
-import { mockSend } from "@/lib/mock-provider";
+import {
+  httpMockProvider,
+  memoryMockProvider,
+  providerConflict,
+  resendProvider,
+  type EmailPayload,
+  type EmailProvider,
+} from "@/lib/email-provider";
 
 export const runtime = "nodejs";
 
@@ -31,8 +36,9 @@ export const runtime = "nodejs";
  * passes every other check must never be silently discarded.
  *
  * Delivery: Resend, the same provider the live careers form uses; key from
- * the environment only. `INQUIRY_DELIVERY=mock|fail` short-circuits the
- * provider for local and preview testing and is IGNORED in production, so a
+ * the environment only, through the adapter in lib/email-provider.ts.
+ * `INQUIRY_DELIVERY=mock|fail` swaps in a mock provider (or a simulated
+ * failure) for local and preview testing and is IGNORED in production, so a
  * mocked success can never reach a real visitor.
  *
  * The careers `/api/apply` route is untouched by this file.
@@ -62,24 +68,20 @@ function rateLimited(ip: string): boolean {
   return false;
 }
 
-/* ---------- Duplicate guard — see lib/idempotency.ts and lib/inquiry.ts.
- * Two layers: the local lease store (owner-tokened claim per submission id
- * + content fingerprint, recoverable when a sender is interrupted; shared
- * by every handler instance on a shared disk) and the provider's
- * Idempotency-Key on every send — real or mocked — (the guard across
- * serverless instances). Outcomes are explicit — duplicate, changed, in
- * progress — and success is only ever reported after a completed delivery. */
+/* ---------- Duplicate guard — see lib/email-provider.ts and lib/inquiry.ts.
+ * The provider's Idempotency-Key is the ONE authority: every send, real or
+ * mocked, carries `inquiry/<submissionId>`, and the provider decides whether
+ * that is a first send, a repeat of the same message (the original result,
+ * nothing sent again), a different message under a used key (refused), or a
+ * send still in flight (refused). No local record is consulted before the
+ * provider, so nothing local can fake a success or block a retry. Outcomes
+ * are explicit — changed, in progress — and success is only ever reported
+ * from the provider's accepted result. */
 const conflict = (code: InquiryConflictCode, message: string) =>
   NextResponse.json({ ok: false, code, error: message }, { status: 409 });
 const CHANGED_MESSAGE = "This message changed since the first attempt, so it was not sent. Please send it again.";
 const IN_PROGRESS_MESSAGE = "This message is still being sent. Please wait a moment before trying again.";
-
-/** Classify a provider error as an idempotency conflict, if it is one. */
-function providerConflict(error: { name?: string; message?: string } | null | undefined): InquiryConflictCode | null {
-  const text = `${error?.name ?? ""} ${error?.message ?? ""}`.toLowerCase();
-  if (!text.includes("idempoten")) return null;
-  return text.includes("concurrent") ? "in_progress" : "submission_changed";
-}
+const conflictResponse = (code: InquiryConflictCode) => conflict(code, code === "in_progress" ? IN_PROGRESS_MESSAGE : CHANGED_MESSAGE);
 
 /* ---------- Helpers ---------- */
 function readEnv(name: string): string {
@@ -151,27 +153,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, errors }, { status: 400 });
   }
 
-  // Duplicate-safe: claim the submission id for THIS content. (After
-  // validation, so an id can never make an invalid message look accepted.)
+  // The submission id (validated UUID or nothing) becomes the provider's
+  // idempotency key below. It is read after validation, so an id can never
+  // make an invalid message look accepted.
   const submissionId = readSubmissionId(raw.submissionId);
-  const fingerprint = contentFingerprint(data);
-  /** Lease owner token; set only while this request holds the local lease. */
-  let owner: string | null = null;
-  if (submissionId) {
-    const outcome = await claim(submissionId, fingerprint);
-    if (outcome.state === "done") return NextResponse.json({ ok: true, duplicate: true });
-    if (outcome.state === "mismatch") return conflict("submission_changed", CHANGED_MESSAGE);
-    if (outcome.state === "pending") return conflict("in_progress", IN_PROGRESS_MESSAGE);
-    owner = outcome.owner;
-  }
-  const done = (result?: unknown) => { if (submissionId && owner) complete(submissionId, owner, result); };
-  const abandon = () => { if (submissionId && owner) release(submissionId, owner); };
 
   /* ---------- Delivery ---------- */
   const mode = isProduction ? "" : inquiryConfig.forceMock ? "mock" : readEnv(inquiryConfig.env.delivery);
   if (mode === "fail") {
     console.error("[inquiry] simulated provider failure (INQUIRY_DELIVERY=fail)");
-    abandon();
     return failure("The message could not be handed to our email service.", 502);
   }
 
@@ -221,13 +211,11 @@ export async function POST(request: NextRequest) {
     `Submitted via ${inquiryConfig.sourceLabel}`,
   ].join("\n");
 
-  // The provider's idempotency key is the cross-instance duplicate guard:
-  // the same key with the same payload returns the original send; the same
-  // key with a different payload or a concurrent send is refused by the
-  // provider, and mapped below to the same explicit conflicts. The mock
-  // provider (local/preview, never in production) enforces the same
-  // contract so mocked tests exercise this exact path.
-  const payload = {
+  // The payload is built ONLY from normalised data and configuration, so an
+  // unchanged retry produces byte-identical content and the provider
+  // recognises it under the same key; an edited message differs and is
+  // refused under a used key.
+  const payload: EmailPayload = {
     from,
     to: recipients,
     ...(data.email && isValidEmail(data.email) ? { replyTo: data.email } : {}),
@@ -237,40 +225,35 @@ export async function POST(request: NextRequest) {
   };
   const sendOptions = submissionId ? { idempotencyKey: `inquiry/${submissionId}` } : undefined;
 
+  let provider: EmailProvider;
   if (mode === "mock") {
-    const { data: sent, error, duplicate } = await mockSend(payload, sendOptions);
-    if (error) {
-      abandon();
-      const code = providerConflict(error);
-      if (code) return conflict(code, code === "in_progress" ? IN_PROGRESS_MESSAGE : CHANGED_MESSAGE);
-      return failure("The message could not be handed to our email service.", 502);
+    const mockUrl = readEnv(inquiryConfig.env.mockProviderUrl);
+    provider = mockUrl ? httpMockProvider(mockUrl) : memoryMockProvider();
+  } else {
+    const apiKey = readEnv(inquiryConfig.env.apiKey);
+    if (!apiKey) {
+      console.error(`[inquiry] ${inquiryConfig.env.apiKey} is not set in this environment.`);
+      return failure("The contact form is not configured on this server.", 500);
     }
-    done({ delivery: "mock", id: sent?.id ?? null });
-    return NextResponse.json({ ok: true, delivery: "mock", id: sent?.id ?? null, ...(duplicate ? { duplicate: true } : {}) });
-  }
-
-  const apiKey = readEnv(inquiryConfig.env.apiKey);
-  if (!apiKey) {
-    console.error(`[inquiry] ${inquiryConfig.env.apiKey} is not set in this environment.`);
-    abandon();
-    return failure("The contact form is not configured on this server.", 500);
+    provider = resendProvider(apiKey);
   }
 
   try {
-    const resend = new Resend(apiKey);
-    const { data: sent, error } = await resend.emails.send(payload, sendOptions);
+    const { data: sent, error, duplicate } = await provider.send(payload, sendOptions);
     if (error) {
-      abandon();
       const code = providerConflict(error);
-      if (code) return conflict(code, code === "in_progress" ? IN_PROGRESS_MESSAGE : CHANGED_MESSAGE);
-      console.error("[inquiry] Resend send failed:", error);
+      if (code) return conflictResponse(code);
+      console.error(`[inquiry] ${provider.kind} send failed:`, error);
       return failure("The message could not be handed to our email service.", 502);
     }
-    done({ id: sent?.id ?? null });
-    return NextResponse.json({ ok: true, id: sent?.id ?? null });
+    return NextResponse.json({
+      ok: true,
+      id: sent?.id ?? null,
+      ...(provider.kind === "mock" ? { delivery: "mock" } : {}),
+      ...(duplicate ? { duplicate: true } : {}),
+    });
   } catch (err) {
-    abandon();
-    console.error("[inquiry] Resend threw:", err);
+    console.error(`[inquiry] ${provider.kind} send threw:`, err);
     return failure("The message could not be handed to our email service.", 502);
   }
 }
