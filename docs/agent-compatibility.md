@@ -25,10 +25,11 @@ both, and keeps them apart.
 - Delivery was mocked (`INQUIRY_DELIVERY=mock`; Harbor Lane also
   `forceMock`). **No real inquiry, application, email or booking was sent.**
 
-Build under test: branch `claude/template-completion`, commit recorded in
-the review package (the trials ran against local production builds of that
-tree, Show Me on `showmeelectrical.com.localhost:3330`, Harbor Lane on
-`harbor-lane.example.localhost:3331`). Date: 2026-09-20.
+Build under test: branch `claude/template-completion`. The Batch C trials
+ran at `d218f1a`; the inquiry re-runs below ran against local production
+builds of the C1/C2 tree (`a612fff`), Show Me on
+`showmeelectrical.com.localhost:3330`, Harbor Lane on
+`harbor-lane.example.localhost:3331`. Date: 2026-09-20.
 
 ## Task fixtures (the prompts, verbatim in `scripts/qa/agent-tasks.md`)
 
@@ -120,12 +121,48 @@ Findings and disposition:
 | The agent hit the per-IP rate limit (429) on its 4th POST because the test harness had already used the same connection; the notice's "try again in a moment" sits beside the 429 text "wait a few minutes" | Rate limiting behaved as designed (5 per 10 minutes per connection, explicit message, values preserved). The wording overlap is noted for the client copy review; out of the C1/C2 scope, unchanged |
 | Nothing on the success panel says what a second send would do | There is no second-send control after success (the form is removed), so nothing to explain; unchanged |
 
+### Harbor Lane Plumbing
+
+A first attempt was blocked by the test harness, not the site: the
+agent's connection had already reached the per-connection rate limit
+(5 messages per 10 minutes) from the scripted suite, so its first POST got
+the 429 notice (quoted, values preserved, focus on the alert), and the
+local server was then restarted mid-trial. That attempt is recorded as
+**not completed**. The trial was re-run against a freshly started server
+with a cap of four submissions.
+
+| Step | Result | Evidence the agent recorded |
+|---|---|---|
+| Reach the form by the site's own links | Pass | Header "Contact" → `/contact` |
+| First submission | Pass — one POST, `{ok:true, delivery:"mock"}`; "Thanks — your message was accepted." and "On this demonstration nothing is delivered." both quoted; focus on the success panel | POST #1 |
+| "Send another message" | Pass — empty form, focus on the name field | — |
+| Network failure, then retry **without editing** | Pass — failure notice quoted, values preserved, focus on the alert; the retry carried the **same** `submissionId` and was delivered once | POST #2 (aborted) and POST #3 share one id |
+| Name-only submission | Pass — the three error texts quoted; no request sent; focus on the **email** field (first invalid) | — |
+
+Agent's observations, with disposition: there is no separate "Try again"
+control (re-clicking "Send message" is the retry, and it reuses the id) —
+accepted as designed; the honeypot field is present but hidden and was
+correctly left empty; the email/phone pair shares one error line with both
+fields `aria-invalid` — accepted; the Next.js route announcer is harmless.
+
+### What the re-runs establish
+
+- Unchanged retries reuse one `submissionId` (Harbor Lane: 2 attempts;
+  Show Me: 7 attempts) and deliver once; an edited message gets a new id
+  and is delivered as a new message (Show Me).
+- Server-side behaviour behind those ids (simultaneous requests, lost
+  responses, a fresh handler instance, changed content under an old id) is
+  covered by `scripts/qa/forms.test.mjs`, not by the agent trials, which
+  see only what the browser sends.
+- Both trials cover one agent family and one browser; the enabled careers
+  workflow and other agents remain untested. Nothing real was sent.
+
 ## Scripted checks (automation, not agent trials)
 
 | Suite | Show Me | Harbor Lane |
 |---|---|---|
 | `crawl.mjs` (raw HTML, canonical, sitemap, links, fragments, schema refs, orphans, 404) | PASS, 16 routes | PASS, 14 routes |
-| `forms.test.mjs` (API contract + browser: validation, honeypot, cross-origin, rate limit, failure recovery, duplicate-safe retry, double-click, focus) | 22 checks pass | 22 checks pass (re-run after the focus fix: see review package) |
+| `forms.test.mjs` (API contract; idempotency: simultaneous requests, lost response, fresh handler instance, changed content; browser: validation, focus order, failure recovery, unchanged vs. edited retry ids, server-validation focus, double-click) | 39 checks pass | 39 checks pass |
 | `browser.test.mjs` (no-JS content, reduced motion, 390px overflow, touch targets, tables, skip link, nav focus) | 46 checks pass (5 paths) | 40 checks pass (4 paths) |
 | Leak scan (reference-client strings in the second brand) | — | 0 matches |
 | Production guard (fictional brand / demo fixtures with `VERCEL_ENV=production`) | build refused | build refused |
