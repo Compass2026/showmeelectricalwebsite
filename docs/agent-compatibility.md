@@ -90,6 +90,36 @@ Agent's observations, with disposition:
 | Honeypot "Website" field could be filled by a naive agent reading raw HTML | Known trade-off: the field is `aria-hidden`, visually hidden and `tabindex=-1`; an agent using accessible names (as required by §12) never sees it. An agent that fills every raw input would be silently accepted, as a bot is. Documented, not changed |
 | Without JavaScript "nav links render as icons/empty text in places" (agent's text extractor) | Not reproduced: `browser.test.mjs` no-JS checks pass on both brands; treated as an extractor artefact, **unverified** |
 
+## Inquiry task re-run after the C1 correction (2026-09-20)
+
+After the idempotency and focus changes (C1), the inquiry task was re-run
+by a Claude agent (same model family, Chromium 141, Playwright 1.56.1, no
+source access, mocked delivery) on both brands, against local production
+builds of the C1/C2 tree. The agent recorded every POST body to
+`/api/inquiry`.
+
+### Show Me Electrical
+
+| Step | Result | Evidence the agent recorded |
+|---|---|---|
+| Reach the form by the site's own links | Pass | Header "Get a free quote" → `/contact` |
+| First submission | Pass — one POST, `{ok:true, delivery:"mock"}`, success panel quoted; acceptance clear | POST #1 with a UUID `submissionId` |
+| Network failure on a fresh message | Pass — failure notice quoted, values preserved, focus on the alert | POST #2 aborted by the agent's route |
+| **Edited** message after the failure | Pass — delivered, and the `submissionId` **changed** (new message, new id) | POST #3 id ≠ POST #2 id |
+| **Unchanged** retries | Pass — seven retries of one unedited message all carried the **same** `submissionId` | session 2, POSTs #5–#11 |
+| Resend after success | Pass — the form is removed; the only control is "Send another message", which opens an empty form; no duplicate path | DOM inspection |
+| Name-only submission | Pass for messages and preserved values; **finding:** focus landed on the *last* invalid field (details) instead of the first (email/phone) | quoted the three error texts |
+
+Findings and disposition:
+
+| Observation | Disposition |
+|---|---|
+| Focus on the last invalid field when both the contact rule and the details rule fail | **Fixed in this pass:** the contact rule now sits at the email field's position in form order; covered by a new `forms.test.mjs` check |
+| The details hint disappears while `aria-describedby` still references its id | **Fixed:** hidden hints are no longer referenced; covered by a new check |
+| Focus stays on `<body>` after success and after "Send another message" | **Fixed:** the success panel receives focus; "Send another message" focuses the name field; covered by a new check |
+| The agent hit the per-IP rate limit (429) on its 4th POST because the test harness had already used the same connection; the notice's "try again in a moment" sits beside the 429 text "wait a few minutes" | Rate limiting behaved as designed (5 per 10 minutes per connection, explicit message, values preserved). The wording overlap is noted for the client copy review; out of the C1/C2 scope, unchanged |
+| Nothing on the success panel says what a second send would do | There is no second-send control after success (the form is removed), so nothing to explain; unchanged |
+
 ## Scripted checks (automation, not agent trials)
 
 | Suite | Show Me | Harbor Lane |

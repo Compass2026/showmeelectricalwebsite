@@ -105,10 +105,15 @@ export default function InquiryForm({
    */
   const attempted = useRef<string | null>(null);
   const alertRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
-  // Move focus to the failure notice once it has rendered.
+  // Move focus to the failure notice or the success panel once it renders,
+  // so keyboard and screen-reader users (and agents reading the focused
+  // element) land on the outcome.
   useEffect(() => {
     if (status === "error") alertRef.current?.focus();
+    if (status === "success") statusRef.current?.focus();
   }, [status]);
 
   const message = (field: InquiryField | "contact", code: InquiryErrorCode | undefined) => {
@@ -208,9 +213,11 @@ export default function InquiryForm({
   if (status === "success") {
     return (
       <div
+        ref={statusRef}
+        tabIndex={-1}
         role="status"
         aria-live="polite"
-        className="rounded-xl border border-accent-700/30 bg-accent-500/10 p-8"
+        className="rounded-xl border border-accent-700/30 bg-accent-500/10 p-8 outline-none"
       >
         <p className="text-xl font-extrabold text-primary-900">{labels.success.heading}</p>
         <p className="mt-3 leading-relaxed text-ink/80">{labels.success.body}</p>
@@ -230,6 +237,7 @@ export default function InquiryForm({
             setStatus("idle");
             submissionId.current = newSubmissionId();
             attempted.current = null;
+            requestAnimationFrame(() => nameRef.current?.focus());
           }}
           className="mt-6 text-sm font-bold text-accent-700 underline underline-offset-4"
         >
@@ -242,8 +250,10 @@ export default function InquiryForm({
   const fieldId = (f: string) => `${id}-${f}`;
   const errId = (f: string) => `${id}-${f}-error`;
   const contactHintId = `${id}-contact-hint`;
-  const describedBy = (f: InquiryField, hintId?: string) =>
-    [errors[f] ? errId(f) : null, hintId ?? null].filter(Boolean).join(" ") || undefined;
+  // The contact hint keeps its id in both states (hint or alert); a field's
+  // own hint is hidden while its error shows, so it is not referenced then.
+  const describedBy = (f: InquiryField, hintId?: string, hintAlwaysRendered = false) =>
+    [errors[f] ? errId(f) : null, hintId && (hintAlwaysRendered || !errors[f]) ? hintId : null].filter(Boolean).join(" ") || undefined;
 
   return (
     <form
@@ -274,6 +284,7 @@ export default function InquiryForm({
           className="sm:col-span-2"
         >
           <input
+            ref={nameRef}
             id={fieldId("name")}
             name="name"
             type="text"
@@ -304,7 +315,7 @@ export default function InquiryForm({
             value={values.email}
             onChange={(e) => set("email")(e.target.value)}
             aria-invalid={!!errors.email || !!errors.contact || undefined}
-            aria-describedby={describedBy("email", contactHintId)}
+            aria-describedby={describedBy("email", contactHintId, true)}
             className={`${inputBase} ${errors.email || errors.contact ? inputBad : inputOk}`}
           />
         </Field>
@@ -325,7 +336,7 @@ export default function InquiryForm({
             value={values.phone}
             onChange={(e) => set("phone")(e.target.value)}
             aria-invalid={!!errors.phone || !!errors.contact || undefined}
-            aria-describedby={describedBy("phone", contactHintId)}
+            aria-describedby={describedBy("phone", contactHintId, true)}
             className={`${inputBase} ${errors.phone || errors.contact ? inputBad : inputOk}`}
           />
         </Field>
@@ -456,9 +467,10 @@ export default function InquiryForm({
  * The "contact" rule points at the email field.
  */
 function focusFirstInvalid(form: HTMLFormElement, errors: InquiryErrors) {
-  const order: (InquiryField | "contact")[] = ["name", "email", "phone", "service", "details"];
-  const first = order.find((f) => errors[f]) ?? (errors.contact ? "contact" : undefined);
-  const name = first === "contact" ? "email" : first;
+  const order: InquiryField[] = ["name", "email", "phone", "service", "details"];
+  // The "contact" rule (no email AND no phone) belongs to the email field's
+  // position in form order, so it is found before a later details error.
+  const name = order.find((f) => errors[f] || (f === "email" && errors.contact));
   if (!name) return;
   const el = form.elements.namedItem(name) as HTMLElement | null;
   requestAnimationFrame(() => el?.focus());

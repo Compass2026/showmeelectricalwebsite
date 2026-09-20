@@ -174,6 +174,13 @@ check("empty submit → no API call made (client validation)", apiCalls.length =
 await wait(300);
 check("empty submit → focus moves to the first invalid field", await page.evaluate(() => document.activeElement?.getAttribute("name") === "name"));
 
+// a2) name only: the contact rule (email position) is focused before the later details error
+await page.fill("input[name=name]", "QA Focus Order");
+await submit.click();
+await wait(300);
+check("name-only submit → focus on the email field (contact rule), not the later details error", await page.evaluate(() => document.activeElement?.getAttribute("name") === "email"), await page.evaluate(() => document.activeElement?.getAttribute("name") ?? document.activeElement?.tagName));
+check("hidden hints are not referenced by aria-describedby", await page.evaluate(() => [...document.querySelectorAll("[aria-describedby]")].every((el) => el.getAttribute("aria-describedby").split(" ").every((id) => document.getElementById(id)))));
+
 // b) fill; network fails on the first attempt; input survives; retry succeeds once with the SAME id
 await page.fill("input[name=name]", "QA Browser Test");
 await page.fill("input[name=email]", "qa-browser@example.test");
@@ -188,6 +195,8 @@ const firstId = apiCalls[0]?.submissionId;
 await submit.click();
 await page.waitForSelector("[role=status]", { timeout: 15000 });
 check("retry → success state only after {ok:true}", (await page.locator("[role=status]").count()) === 1);
+await wait(200);
+check("success panel receives focus", await page.evaluate(() => document.activeElement?.getAttribute("role") === "status"));
 check("retry of UNCHANGED content reused the same submissionId", apiCalls.length === 2 && apiCalls[1].submissionId === firstId && /^[0-9a-f-]{36}$/.test(firstId ?? ""), apiCalls.map((c) => c.submissionId).join(", "));
 check("success state names the fallback phone", /\d{3}/.test((await page.locator("[role=status]").textContent()) ?? ""));
 
