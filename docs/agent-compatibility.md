@@ -162,7 +162,8 @@ fields `aria-invalid` — accepted; the Next.js route announcer is harmless.
 | Suite | Show Me | Harbor Lane |
 |---|---|---|
 | `crawl.mjs` (raw HTML, canonical, sitemap, links, fragments, schema refs, orphans, 404) | PASS, 16 routes | PASS, 14 routes |
-| `forms.test.mjs` (API contract; idempotency: simultaneous requests, lost response, fresh handler instance, changed content; browser: validation, focus order, failure recovery, unchanged vs. edited retry ids, server-validation focus, double-click) | 39 checks pass | 39 checks pass |
+| `idempotency.test.mjs` (module-level: abandoned-lease recovery, ownership after release, atomic acquisition on every recovery path, owner-checked completion/release, mocked-provider key contract) | 31 checks pass | 31 checks pass (brand-independent) |
+| `forms.test.mjs` (API contract; idempotency: simultaneous requests, lost response, abandoned claim, fresh handler instance with isolated storage via the mocked provider key, changed content on both instances; browser: validation, focus order, failure recovery, unchanged vs. edited retry ids, server-validation focus, double-click) | 44 checks pass | 44 checks pass |
 | `browser.test.mjs` (no-JS content, reduced motion, 390px overflow, touch targets, tables, skip link, nav focus) | 46 checks pass (5 paths) | 40 checks pass (4 paths) |
 | Leak scan (reference-client strings in the second brand) | — | 0 matches |
 | Production guard (fictional brand / demo fixtures with `VERCEL_ENV=production`) | build refused | build refused |

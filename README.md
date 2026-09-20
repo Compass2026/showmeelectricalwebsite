@@ -335,7 +335,8 @@ npm run qa:crawl:test                     # negative fixtures: proves the crawl 
 npm run qa:manifest                       # docs/route-manifest.md + .qa/routes.json for COMPASS_BRAND (default showme)
 npm run build && INQUIRY_DELIVERY=mock npm start &   # production build on :3000, provider mocked
 npm run qa:crawl -- http://localhost:3000 --host showmeelectrical.com --assets remap
-node scripts/qa/forms.test.mjs http://localhost:3000 --host showmeelectrical.com   # mocked inquiry: validation, idempotent retries (incl. a second server instance), failure recovery
+npm run qa:idempotency                    # module-level lease/ownership recovery + mocked-provider key contract (no server)
+node scripts/qa/forms.test.mjs http://localhost:3000 --host showmeelectrical.com   # mocked inquiry: validation, idempotent retries (incl. a second instance with isolated storage), failure recovery
 node scripts/qa/browser.test.mjs http://localhost:3000 --host showmeelectrical.com --paths /,/contact  # no-JS, reduced motion, keyboard, tables, 390px
 npm run verify                            # all of the above for BOTH brands, incl. the browser suite, + the production guards
 FRESH=1 npm run verify                    # the same from a fresh clone of HEAD (git clone + npm ci in a temp dir) — the clean-checkout run
@@ -360,14 +361,30 @@ node scripts/qa/browser-launch.mjs --check     # prints the executable and versi
 Every message carries a client-minted `submissionId` bound to its content.
 The API keeps a durable per-id record (content fingerprint + completion) in
 `INQUIRY_IDEMPOTENCY_DIR` (default `<tmpdir>/compass-inquiry-idempotency`,
-24-hour retention) with atomic claims, and passes the same id as the email
-provider's `Idempotency-Key` on every real send (Resend keeps keys for
-24 hours) — the provider is the guard across serverless instances that share
-no disk. Outcomes are explicit: an unchanged retry answers
+24-hour retention) and passes the same id as the email provider's
+`Idempotency-Key` on every send (Resend keeps keys for 24 hours) — the
+provider is the guard across serverless instances that share no disk.
+
+The local record is a **lease**: a claim holds an owner token and is valid
+for 60 seconds while pending. A sender that never finishes (crash, timeout)
+leaves an abandoned lease that the next retry takes over at once — never
+after the retention window — and takeover is atomic (exclusive create or
+rename), so of several retries exactly one owns the send on every path:
+missing, unreadable, expired or abandoned record, or a claim released by a
+failed sender. Completion and release are honoured only for the current
+owner. Outcomes are explicit: an unchanged retry answers
 `{ ok: true, duplicate: true }` without sending; the same id with different
-content answers 409 `submission_changed`; a retry while the first send is
-still in flight answers 409 `in_progress`. The form reuses the id for an
+content answers 409 `submission_changed`; a retry while a live sender holds
+the lease answers 409 `in_progress`. The form reuses the id for an
 unchanged retry and mints a new one for an edited message.
+
+`INQUIRY_DELIVERY=mock` routes the send through `lib/mock-provider.ts`,
+which enforces the provider's own key contract (same key + same payload →
+the original id, different payload → `invalid_idempotent_request`, in
+flight → `concurrent_idempotent_requests`) on a ledger under
+`INQUIRY_MOCK_PROVIDER_DIR`. Mocked tests therefore exercise the same
+provider-call path as a real send, including a retry from a handler
+instance with isolated local storage. Nothing is delivered anywhere.
 
 `forms.test` and `browser.test` are scripted browser automation. They are
 not AI-agent trials; those are recorded separately in

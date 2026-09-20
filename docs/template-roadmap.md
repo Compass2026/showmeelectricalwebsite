@@ -454,6 +454,26 @@ Batch C review at `f9aec93`.
 
 Out of scope and untouched: production, DNS, live GBP, CRM integration,
 additional page batches, GA4, extra visual presets. Result: **ready for final
-review**, not finally approved. City,
+review**, not finally approved.
+
+### C1 recovery correction (2026-09-20)
+
+From the reviewer's "Current correction review: one remaining C1 recovery
+defect" (Drive Brief). C2 was accepted. Two defects reproduced at
+`5168494`: an abandoned pending claim (sender interrupted after claiming)
+answered `in_progress` until the 24 h expiry, and after a failed sender
+released its claim several waiters could all return `claimed`.
+
+| Item | What changed | Where |
+|---|---|---|
+| Leases + ownership | `claim()` is an acquisition loop. A pending record is a 60 s lease held by an owner token (`PENDING_LEASE_MS`). Every path that finds no usable record — missing, unreadable, expired (done > 24 h), abandoned (pending > lease) or released — goes back through acquisition: exclusive create (`wx`) or an atomic rename-over, then a re-read that confirms the surviving owner token. Nothing is reported `claimed` without holding the lease. `complete()`/`release()` act only for the current owner and return whether they did. A live sender is still answered `pending` after the short wait, never taken over early. | `lib/idempotency.ts` |
+| Provider-path mock | `INQUIRY_DELIVERY=mock` now calls `lib/mock-provider.ts` with the **same payload and idempotency-key options** as the real `resend.emails.send`, and the mock enforces the provider's contract (same key + same payload → original id as a duplicate; different payload → `invalid_idempotent_request`; in flight → `concurrent_idempotent_requests`) on a per-key ledger (`INQUIRY_MOCK_PROVIDER_DIR`). Provider errors map to the existing 409 codes in both modes. Same-id/different-content behaviour, the provider key and content-bound browser ids are unchanged. | `lib/mock-provider.ts`, `app/api/inquiry/route.ts` |
+| Tests | `scripts/qa/idempotency.test.mjs` (`npm run qa:idempotency`, module-level, no server): abandoned claim 10 min old recovers in ~0 ms; five waiters after a release → one claimed, four see its result; six simultaneous takers of an abandoned, unreadable, expired or missing record → one claimed; stale owners cannot complete or release; mocked key contract. `forms.test.mjs`: abandoned claim recovers through the API; the second `next start` runs with an **isolated** `INQUIRY_IDEMPOTENCY_DIR`, and its retry reaches the same mocked key with the ledger showing one send; changed content is rejected on the instance with a local record (store) and on the one without (provider key). Both suites run in `verify.sh`. | `scripts/qa/idempotency.test.mjs`, `scripts/qa/forms.test.mjs`, `scripts/qa/verify.sh` |
+
+Server-validation and focus regression checks are unchanged and pass. No
+template batch, CRM work, real email, production promotion or DNS change.
+Result: **ready for final review**, not finally approved.
+
+City,
 branch and individual-service templates (G2) are Batch B; neutral branding,
 optional careers, starter and agent trials (G3, G8 remainder, G9) are Batch C.

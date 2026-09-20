@@ -10,11 +10,16 @@
  *      limit shape.
  *   2. Idempotency (fetch, mocked delivery): simultaneous requests deliver
  *      once; a retry after "delivery accepted but response lost" is a
- *      duplicate; a retry through a FRESH handler instance (a second
- *      server process started by this script from the same build) is a
- *      duplicate; the same id with different content is refused explicitly;
- *      a malformed id is ignored. Delivery counts are read from the durable
- *      store (INQUIRY_IDEMPOTENCY_DIR, default <tmpdir>/compass-inquiry-idempotency).
+ *      duplicate; an ABANDONED claim (sender interrupted) recovers at once;
+ *      a retry through a FRESH handler instance (a second server process
+ *      started by this script from the same build, with its OWN isolated
+ *      local store) reaches the same mocked provider key and sends once;
+ *      the same id with different content is refused explicitly on both
+ *      instances; a malformed id is ignored. Delivery counts are read from
+ *      the local store (INQUIRY_IDEMPOTENCY_DIR) and from the mocked
+ *      provider's ledger (INQUIRY_MOCK_PROVIDER_DIR, shared like the real
+ *      provider's key space). Module-level lease/ownership cases live in
+ *      ./idempotency.test.mjs.
  *   3. Browser behaviour (Playwright + Chromium via ./browser-launch.mjs):
  *      errors readable and associated with fields, focus on the first
  *      invalid field, input survives a failure, a retry after a network
@@ -25,7 +30,7 @@
  * Exit 1 on any failure. Scripted automation, not an AI-agent trial.
  */
 import { spawn } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { createServer } from "node:net";
@@ -57,6 +62,9 @@ const postTo = (b, body, extra = {}) => fetch(`${b}/api/inquiry`, { method: "POS
 const post = (body, extra = {}) => postTo(base, body, extra);
 const storeDir = process.env.INQUIRY_IDEMPOTENCY_DIR || path.join(tmpdir(), "compass-inquiry-idempotency");
 const record = (id) => { try { return JSON.parse(readFileSync(path.join(storeDir, `${id}.json`), "utf8")); } catch { return null; } };
+const providerDir = process.env.INQUIRY_MOCK_PROVIDER_DIR || path.join(tmpdir(), "compass-inquiry-mock-provider");
+/** How many times the mocked provider actually "sent" for a submission id (its idempotency key). */
+const sends = (id) => { try { return JSON.parse(readFileSync(path.join(providerDir, `inquiry_${id}.json`), "utf8")).sends ?? 0; } catch { return 0; } };
 const valid = (over = {}) => ({ name: "QA idempotency test", details: "Mocked delivery. Not a real inquiry.", email: "qa@example.test", ...over });
 
 /* ---------- 1. API contract ---------- */
@@ -94,12 +102,13 @@ console.log("\n# Idempotency");
   j = await r.json();
   check("retry after lost response (same id, same content) → {ok:true, duplicate:true}, nothing sent", r.status === 200 && j.ok === true && j.duplicate === true && !("delivery" in j), JSON.stringify(j));
   check("durable store records exactly one delivery for the id", record(id)?.deliveries === 1 && record(id)?.status === "done", JSON.stringify(record(id)));
+  check("mocked provider received exactly one send for the id's key", sends(id) === 1, `sends=${sends(id)}`);
 
   // b) same id, different content → explicit refusal, no delivery
   r = await post(valid({ submissionId: id, details: "Edited message under the OLD id. Must not be sent." }));
   j = await r.json();
   check("same id + different content → 409 submission_changed (not a silent success)", r.status === 409 && j.ok === false && j.code === "submission_changed" && /changed/i.test(j.error ?? ""), JSON.stringify(j));
-  check("changed content did not deliver", record(id)?.deliveries === 1);
+  check("changed content did not deliver", record(id)?.deliveries === 1 && sends(id) === 1);
 
   // c) an id cannot launder an invalid message
   r = await post({ name: "QA", details: "x", submissionId: id });
@@ -118,32 +127,58 @@ console.log("\n# Idempotency");
   const dups = results.filter((x) => x.body.duplicate === true).length;
   const inProgress = results.filter((x) => x.status === 409 && x.body.code === "in_progress").length;
   check("6 simultaneous requests, one id → exactly one delivery", delivered === 1, `delivered=${delivered} duplicate=${dups} in_progress=${inProgress}`);
-  check("the others are explicit duplicates or in_progress, never a second send", delivered + dups + inProgress === 6 && record(cid)?.deliveries === 1, JSON.stringify(results.map((x) => x.status)));
+  check("the others are explicit duplicates or in_progress, never a second send", delivered + dups + inProgress === 6 && record(cid)?.deliveries === 1 && sends(cid) === 1, JSON.stringify(results.map((x) => x.status)));
 
-  // f) a retry through a FRESH handler instance (second server process, same build)
+  // f) an ABANDONED claim — a sender that took the lease and never finished
+  //    (crash, timeout) — is recoverable at once, not after the retention window
+  const aid = uuid();
+  mkdirSync(storeDir, { recursive: true });
+  writeFileSync(path.join(storeDir, `${aid}.json`), JSON.stringify({ hash: "stale", status: "pending", at: Date.now() - 10 * 60 * 1000, owner: "crashed-sender", deliveries: 0 }));
+  const t0 = Date.now();
+  r = await post(valid({ submissionId: aid }));
+  j = await r.json();
+  check("pending claim abandoned 10 min ago → the retry takes over the lease and delivers now", r.status === 200 && j.delivery === "mock" && Date.now() - t0 < 2000 && record(aid)?.status === "done" && record(aid)?.deliveries === 1 && sends(aid) === 1, `${r.status} ${JSON.stringify(j)} in ${Date.now() - t0} ms`);
+  r = await post(valid({ submissionId: aid }));
+  j = await r.json();
+  check("its unchanged retry → duplicate", j.duplicate === true && sends(aid) === 1, JSON.stringify(j));
+
+  // g) a retry through a FRESH handler instance (second server process, same
+  //    build) with an ISOLATED local store — as on a serverless platform, where
+  //    instances share no disk. The provider's idempotency key is the guard:
+  //    the retry reaches the same mocked key and the provider sends once.
   if (secondInstance) {
     const port2 = await freePort();
-    const child = spawn("npx", ["next", "start", "-p", String(port2)], { env: { ...process.env, INQUIRY_DELIVERY: "mock" }, stdio: ["ignore", "pipe", "pipe"] });
+    const isolatedStore = mkdtempSync(path.join(tmpdir(), "inquiry-store-instance2-"));
+    const child = spawn("npx", ["next", "start", "-p", String(port2)], { env: { ...process.env, INQUIRY_DELIVERY: "mock", INQUIRY_IDEMPOTENCY_DIR: isolatedStore }, stdio: ["ignore", "pipe", "pipe"] });
     let ready = false;
     for (let i = 0; i < 60 && !ready; i++) { await wait(500); try { ready = (await fetch(`http://localhost:${port2}/api/inquiry`, { method: "OPTIONS" })).status < 600; } catch {} }
     if (!ready) { check("second handler instance started", false, "could not start a second `next start` from this build"); }
     else {
       const b2 = `http://localhost:${port2}`;
+      const record2 = (sid) => { try { return JSON.parse(readFileSync(path.join(isolatedStore, `${sid}.json`), "utf8")); } catch { return null; } };
       r = await postTo(b2, valid({ submissionId: id }));
       j = await r.json();
-      check("retry of the delivered message through a fresh instance → duplicate, nothing sent", r.status === 200 && j.duplicate === true && record(id)?.deliveries === 1, JSON.stringify(j));
+      check("retry of the delivered message through a fresh instance (no local record) → ok + duplicate from the PROVIDER key, sends still 1", r.status === 200 && j.ok === true && j.duplicate === true && sends(id) === 1, JSON.stringify(j));
+      check("the fresh instance had no local record for it before the call (isolated store), and completed its own afterwards", record2(id)?.status === "done" && record2(id)?.deliveries === 1 && record(id)?.deliveries === 1, JSON.stringify(record2(id)));
       const id2 = uuid();
       r = await postTo(b2, valid({ submissionId: id2 }));
       j = await r.json();
-      check("new message delivered by the fresh instance", j.delivery === "mock", JSON.stringify(j));
+      check("new message delivered by the fresh instance", j.delivery === "mock" && !j.duplicate && sends(id2) === 1, JSON.stringify(j));
       r = await post(valid({ submissionId: id2 }));
       j = await r.json();
-      check("its retry on the FIRST instance → duplicate (store shared across instances)", j.duplicate === true && record(id2)?.deliveries === 1, JSON.stringify(j));
+      check("its retry on the FIRST instance (which never saw the id) → duplicate via the provider key, sends still 1", j.ok === true && j.duplicate === true && sends(id2) === 1 && record(id2)?.deliveries === 1, JSON.stringify(j));
       r = await postTo(b2, valid({ submissionId: id2, name: "QA edited on instance 2" }));
       j = await r.json();
-      check("changed content on the fresh instance → 409 submission_changed", r.status === 409 && j.code === "submission_changed", JSON.stringify(j));
+      check("changed content on the fresh instance (local record) → 409 submission_changed", r.status === 409 && j.code === "submission_changed" && sends(id2) === 1, JSON.stringify(j));
+      const id3 = uuid();
+      r = await postTo(b2, valid({ submissionId: id3 }));
+      j = await r.json();
+      r = await post(valid({ submissionId: id3, details: "Edited on the FIRST instance, which holds no record for this id." }));
+      j = await r.json();
+      check("changed content on an instance with NO local record → 409 submission_changed from the provider key, nothing sent", r.status === 409 && j.code === "submission_changed" && sends(id3) === 1 && record(id3) === null, JSON.stringify(j));
     }
     await stop(child);
+    rmSync(isolatedStore, { recursive: true, force: true });
   } else {
     console.log("skip second-instance checks (--no-second-instance)");
   }

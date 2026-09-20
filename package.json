@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit",
     "typecheck:brand": "node scripts/qa/typecheck-brand.mjs",
     "qa:forms": "node scripts/qa/forms.test.mjs",
+    "qa:idempotency": "tsx scripts/qa/idempotency.test.mjs",
     "verify": "bash scripts/qa/verify.sh"
   },
   "dependencies": {

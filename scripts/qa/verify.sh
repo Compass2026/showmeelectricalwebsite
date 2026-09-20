@@ -22,7 +22,9 @@ echo "== browser"; node scripts/qa/browser-launch.mjs --check
 echo "== type checks"; npm run -s typecheck; node scripts/qa/typecheck-brand.mjs harbor-lane
 echo "== lint"; npm run -s lint
 echo "== crawl fixtures"; npm run -s qa:crawl:test
-export INQUIRY_IDEMPOTENCY_DIR="$(mktemp -d)"   # a clean durable store for this run
+export INQUIRY_IDEMPOTENCY_DIR="$(mktemp -d)"   # a clean local idempotency store for this run
+export INQUIRY_MOCK_PROVIDER_DIR="$(mktemp -d)" # a clean mocked-provider ledger for this run
+echo "== idempotency (module-level lease, ownership and mocked-provider contract)"; npx tsx scripts/qa/idempotency.test.mjs
 PORT_A=3451; PORT_B=3452
 run_brand () { # brand host port paths
   local brand=$1 host=$2 port=$3 paths=$4 dist=.next-verify-$1

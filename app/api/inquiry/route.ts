@@ -10,6 +10,7 @@ import {
   type InquiryConflictCode,
 } from "@/lib/inquiry";
 import { claim, complete, release, contentFingerprint } from "@/lib/idempotency";
+import { mockSend } from "@/lib/mock-provider";
 
 export const runtime = "nodejs";
 
@@ -62,11 +63,12 @@ function rateLimited(ip: string): boolean {
 }
 
 /* ---------- Duplicate guard — see lib/idempotency.ts and lib/inquiry.ts.
- * Two layers: the durable store (atomic claim per submission id + content
- * fingerprint; shared by every handler instance on a shared disk) and the
- * provider's Idempotency-Key on the real send (the guard across serverless
- * instances). Outcomes are explicit — duplicate, changed, in progress —
- * and success is only ever reported after a completed delivery. */
+ * Two layers: the local lease store (owner-tokened claim per submission id
+ * + content fingerprint, recoverable when a sender is interrupted; shared
+ * by every handler instance on a shared disk) and the provider's
+ * Idempotency-Key on every send — real or mocked — (the guard across
+ * serverless instances). Outcomes are explicit — duplicate, changed, in
+ * progress — and success is only ever reported after a completed delivery. */
 const conflict = (code: InquiryConflictCode, message: string) =>
   NextResponse.json({ ok: false, code, error: message }, { status: 409 });
 const CHANGED_MESSAGE = "This message changed since the first attempt, so it was not sent. Please send it again.";
@@ -153,18 +155,23 @@ export async function POST(request: NextRequest) {
   // validation, so an id can never make an invalid message look accepted.)
   const submissionId = readSubmissionId(raw.submissionId);
   const fingerprint = contentFingerprint(data);
+  /** Lease owner token; set only while this request holds the local lease. */
+  let owner: string | null = null;
   if (submissionId) {
     const outcome = await claim(submissionId, fingerprint);
     if (outcome.state === "done") return NextResponse.json({ ok: true, duplicate: true });
     if (outcome.state === "mismatch") return conflict("submission_changed", CHANGED_MESSAGE);
     if (outcome.state === "pending") return conflict("in_progress", IN_PROGRESS_MESSAGE);
+    owner = outcome.owner;
   }
+  const done = (result?: unknown) => { if (submissionId && owner) complete(submissionId, owner, result); };
+  const abandon = () => { if (submissionId && owner) release(submissionId, owner); };
 
   /* ---------- Delivery ---------- */
   const mode = isProduction ? "" : inquiryConfig.forceMock ? "mock" : readEnv(inquiryConfig.env.delivery);
   if (mode === "fail") {
     console.error("[inquiry] simulated provider failure (INQUIRY_DELIVERY=fail)");
-    if (submissionId) release(submissionId);
+    abandon();
     return failure("The message could not be handed to our email service.", 502);
   }
 
@@ -214,52 +221,55 @@ export async function POST(request: NextRequest) {
     `Submitted via ${inquiryConfig.sourceLabel}`,
   ].join("\n");
 
+  // The provider's idempotency key is the cross-instance duplicate guard:
+  // the same key with the same payload returns the original send; the same
+  // key with a different payload or a concurrent send is refused by the
+  // provider, and mapped below to the same explicit conflicts. The mock
+  // provider (local/preview, never in production) enforces the same
+  // contract so mocked tests exercise this exact path.
+  const payload = {
+    from,
+    to: recipients,
+    ...(data.email && isValidEmail(data.email) ? { replyTo: data.email } : {}),
+    subject,
+    html,
+    text,
+  };
+  const sendOptions = submissionId ? { idempotencyKey: `inquiry/${submissionId}` } : undefined;
+
   if (mode === "mock") {
-    console.log("[inquiry] MOCK delivery (INQUIRY_DELIVERY=mock):", {
-      from,
-      to: recipients,
-      replyTo: data.email || undefined,
-      subject,
-    });
-    if (submissionId) complete(submissionId, { delivery: "mock" });
-    return NextResponse.json({ ok: true, delivery: "mock" });
+    const { data: sent, error, duplicate } = await mockSend(payload, sendOptions);
+    if (error) {
+      abandon();
+      const code = providerConflict(error);
+      if (code) return conflict(code, code === "in_progress" ? IN_PROGRESS_MESSAGE : CHANGED_MESSAGE);
+      return failure("The message could not be handed to our email service.", 502);
+    }
+    done({ delivery: "mock", id: sent?.id ?? null });
+    return NextResponse.json({ ok: true, delivery: "mock", id: sent?.id ?? null, ...(duplicate ? { duplicate: true } : {}) });
   }
 
   const apiKey = readEnv(inquiryConfig.env.apiKey);
   if (!apiKey) {
     console.error(`[inquiry] ${inquiryConfig.env.apiKey} is not set in this environment.`);
-    if (submissionId) release(submissionId);
+    abandon();
     return failure("The contact form is not configured on this server.", 500);
   }
 
   try {
     const resend = new Resend(apiKey);
-    // The provider's idempotency key is the cross-instance duplicate guard:
-    // the same key with the same payload returns the original send; the
-    // same key with a different payload or a concurrent send is refused
-    // by the provider, and mapped below to the same explicit conflicts.
-    const { data: sent, error } = await resend.emails.send(
-      {
-        from,
-        to: recipients,
-        ...(data.email && isValidEmail(data.email) ? { replyTo: data.email } : {}),
-        subject,
-        html,
-        text,
-      },
-      submissionId ? { idempotencyKey: `inquiry/${submissionId}` } : undefined
-    );
+    const { data: sent, error } = await resend.emails.send(payload, sendOptions);
     if (error) {
+      abandon();
       const code = providerConflict(error);
-      if (submissionId) release(submissionId);
       if (code) return conflict(code, code === "in_progress" ? IN_PROGRESS_MESSAGE : CHANGED_MESSAGE);
       console.error("[inquiry] Resend send failed:", error);
       return failure("The message could not be handed to our email service.", 502);
     }
-    if (submissionId) complete(submissionId, { id: sent?.id ?? null });
+    done({ id: sent?.id ?? null });
     return NextResponse.json({ ok: true, id: sent?.id ?? null });
   } catch (err) {
-    if (submissionId) release(submissionId);
+    abandon();
     console.error("[inquiry] Resend threw:", err);
     return failure("The message could not be handed to our email service.", 502);
   }
