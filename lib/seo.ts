@@ -33,12 +33,17 @@ export function localBusinessJsonLd(baseUrl: string = site.productionUrl) {
     description: site.businessDescription,
     logo: `${baseUrl}${site.logoUrl}`,
     image: `${baseUrl}${site.shareImage}`,
+    /**
+     * A service-area business has no street address, and Google asks that one
+     * is not published for it. Locality and region stay: they are true and
+     * they anchor the listing. Same omit-rather-than-invent rule as `geo`.
+     */
     address: {
       "@type": "PostalAddress",
-      streetAddress: site.address.street,
+      ...(site.address.street ? { streetAddress: site.address.street } : {}),
       addressLocality: site.address.city,
       addressRegion: site.address.state,
-      postalCode: site.address.zip,
+      ...(site.address.zip ? { postalCode: site.address.zip } : {}),
       addressCountry: site.address.country,
     },
     /**

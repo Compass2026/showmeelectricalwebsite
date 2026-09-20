@@ -107,9 +107,22 @@ export default function ContactPage() {
               <Reveal immediate delay={0.2} className="rounded-xl border border-primary-900/10 bg-white p-8">
                 <h2 className="text-lg font-bold text-primary-900">{contact.cards.shop.heading}</h2>
                 <address className="mt-3 not-italic leading-relaxed text-ink/75">
-                  {site.address.street}
-                  <br />
-                  {site.address.city}, {site.address.state} {site.address.zip}
+                  {/* No street for a service-area business: the area we serve
+                      stands in its place rather than a blank line. */}
+                  {site.address.street ? (
+                    <>
+                      {site.address.street}
+                      <br />
+                      {site.address.city}, {site.address.state}
+                      {site.address.zip ? ` ${site.address.zip}` : ""}
+                    </>
+                  ) : (
+                    <>
+                      {site.address.city}, {site.address.state}
+                      <br />
+                      {site.serviceAreaLong}
+                    </>
+                  )}
                 </address>
                 <p className="mt-4 text-sm text-ink/70">{contact.cards.shop.note}</p>
               </Reveal>

@@ -48,11 +48,18 @@ export const site = {
   phone: "(555) 010-0199",
   phoneHref: "tel:+15550100199",
   email: "hello@harbor-lane.example",
+  /**
+   * SERVICE-AREA BUSINESSES: `street` and `zip` are nullable. A business that
+   * goes to the customer has no public street address, and inventing one is a
+   * false claim. Leave them null and the footer, the contact page and the
+   * LocalBusiness JSON-LD omit the street line and keep "City, ST" — the same
+   * shape the locations registry already uses for its optional street.
+   */
   address: {
-    street: "100 Example Way",
+    street: "100 Example Way" as string | null,
     city: "Exampleton",
     state: "XX",
-    zip: "00000",
+    zip: "00000" as string | null,
     country: "US",
   },
   geo: null as { lat: number; lng: number } | null,

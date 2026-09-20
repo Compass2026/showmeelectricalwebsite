@@ -72,9 +72,15 @@ export default function SiteFooter() {
               </a>
             </li>
             <li className="leading-relaxed">
-              {site.address.street}
-              <br />
-              {site.address.city}, {site.address.state} {site.address.zip}
+              {/* A service-area business has no public street address. */}
+              {site.address.street && (
+                <>
+                  {site.address.street}
+                  <br />
+                </>
+              )}
+              {site.address.city}, {site.address.state}
+              {site.address.zip ? ` ${site.address.zip}` : ""}
             </li>
           </ul>
         </div>
