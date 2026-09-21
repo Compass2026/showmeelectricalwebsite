@@ -17,6 +17,15 @@ and nothing else. Nothing under `brands/showme/` (the reference client) or
       `notFound` copy, `metadata` defaults, `careers` (`null` unless the
       client has a careers property), `offersEmergencyService`, `sameAs`,
       `geo` (only a verified pin), `fictional: false`.
+- [ ] **Service-area business?** Set `address.street` and `address.zip` to
+      `null` (both are `string | null`). The footer and the contact card then
+      show `City, ST` — the contact card puts `serviceAreaLong` where the
+      street was — and the LocalBusiness and JobPosting JSON-LD omit
+      `streetAddress` and `postalCode` rather than emit empty strings. Never
+      invent a street address for a business that goes to the customer: it is
+      a false claim, and Google asks that one is not published for a
+      service-area business. `city`, `state` and `country` are still required
+      and must be true.
 - [ ] `theme.css`: the semantic tokens (`--brand-primary-*`, `--brand-accent-*`,
       `--brand-surface`, `--brand-ink`, fonts). Check `accent-700` meets 4.5:1
       on white and on `surface`. `fonts.ts`: the two `next/font` families.
