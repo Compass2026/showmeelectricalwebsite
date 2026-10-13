@@ -53,6 +53,7 @@ export const redirects: Redirect[] = [
   ...[
     ["2025/10/10BF7BF3-A2B5-48E8-8859-44E5ABA87C19_4_5005_c.jpg", "industrial-high-bay"],
     ["2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg", "commercial-checkout"],
+    ["2025/10/IMG_0176.jpg", "tray-ceiling-recessed-lighting"],
     ["2025/10/IMG_0179-1.jpg", "finished-interior-lighting"],
     ["2025/10/IMG_0354-1.jpg", "ceiling-fan-install"],
     ["2025/10/IMG_0488-1.jpg", "roughin-attic"],

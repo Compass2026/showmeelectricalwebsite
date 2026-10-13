@@ -81,10 +81,21 @@ export const hero = {
   headlineAccent: "done right the first time.",
   /** Source: live homepage subhead, condensed to two lines. */
   body: "Owner-led electrical contractor for residential, commercial and industrial work across the Greater St. Louis area. Free consultations, straight answers, code-compliant work.",
+  /**
+   * Source: the client's own WordPress media library (`2025/10/IMG_0176.jpg`),
+   * re-encoded to webp. A genuine job-site photo, not stock — the images the
+   * live WordPress hero rotates are stock-library downloads (`-utc` filenames,
+   * one a 3D render) and are deliberately not carried over; see
+   * docs/migration-inventory.md §7b.
+   *
+   * Chosen for the hero because it is one of the few true landscape frames in
+   * the library (2048×1536), it reads as finished residential lighting work at
+   * a glance, and nobody is identifiable in it.
+   */
   image: {
-    src: "/photos/commercial-panels.webp",
-    /** Corrected 2026-09-19: these are wall-mounted stainless units, not panels. */
-    alt: "Four wall-mounted stainless-steel units with flue pipes on a white brick wall in a commercial space, each wired through conduit to a junction box",
+    src: "/photos/tray-ceiling-recessed-lighting.webp",
+    /** Written from the frame itself, 2026-10-13. Nothing described here is inferred. */
+    alt: "A dark-painted recessed tray ceiling lit by eight recessed downlights, with two round in-ceiling speakers set among them, in a room still mid-renovation",
   },
 };
 
