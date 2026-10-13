@@ -163,6 +163,30 @@ contrast, the 2026-09-19 run carried three findings fixed in-flight
 (F1–F3); all three remain fixed here, and the `www.showmeelectrical.com`
 occurrences it left open in the legal documents are now gone.
 
+## 8a. Addendum — hero change, 2026-10-13 (after the audit above)
+
+The audit above was run against the tree at `f0eb073`. One change landed after
+it, on the same branch, at the owner's request: the homepage hero became a
+full-height photo panel, and its photo changed from
+`/photos/commercial-panels.webp` to `/photos/tray-ceiling-recessed-lighting.webp`
+(`2025/10/IMG_0176.jpg` from the client's WordPress library, newly retained —
+§7a of the migration inventory now lists ten photos, not nine).
+
+**It was not accepted on the strength of the earlier run.** Re-run against the
+new build:
+
+| Check | Result |
+|---|---|
+| `npm run verify`, whole | ALL PASSED |
+| The audit harness, preview configuration | 52 / 52 |
+| All ten retained photo redirects | 10 / 10 → 200, `image/webp`, correct destination |
+| Horizontal overflow at 390, 1366 and 1920 | 0 px at every width |
+| Primary CTA above the fold at 1366×768 | Visible on arrival — and it was **not**, at the first attempt. A straight `1fr/1fr` split narrowed the text column enough to wrap the headline to four lines and push the CTA onto the fold; the ratio is `1.12fr/0.88fr` because of that measurement. |
+| Routes, sitemap, canonicals, redirects | Unchanged — the change touches one image and one component |
+
+The release pin in `docs/deployment-plan.md` §0 therefore moves with this
+branch; see the note there.
+
 ## 9. Carried forward
 
 Unchanged from `docs/launch-checklist.md` and `docs/deployment-plan.md`:
