@@ -1,18 +1,27 @@
 # Deployment plan — Show Me Electrical main site launch
 
 Prepared 2026-09-19, revised the same day for D-007 and the exact-record
-rule. **Nothing in this plan has been executed.** Production, DNS and the
-live careers site stay unchanged until Tom approves the release.
+rule, and revised **2026-10-13** to point at the re-audited release (§0).
+**Nothing in this plan has been executed.** Production, DNS and the live
+careers site stay unchanged until Tom approves the release.
 
 ## 0. What is being promoted
 
+> **Changed 2026-10-13.** The release moved from the 2026-09-19 build to the
+> re-audited current tip. What the promotion itself does is unchanged; only
+> the commit differs. The route surface grew from 14 pages to 16 (two
+> additions, nothing removed or renamed), so §5's post-promotion checks now
+> expect a 16-URL sitemap. See `docs/launch-audit.md` §0 for the full
+> change-by-change reading and §7a for the one check that was not repeated.
+
 | Item | Value |
 |---|---|
-| Release | Git tag **`launch-2026-09-19`**, an exact commit — not the branch tip. The hash is printed in the review package. Before promoting: `git rev-parse launch-2026-09-19^{commit}` must equal that hash, and `git rev-parse origin/claude/main-site-foundation-v1` should equal it too (if it does not, something was pushed after review — stop and re-review). |
+| Release | **Commit `f0eb073d72114a337f3c5a9b7d12b91c05f0fbb4`** on `claude/template-completion` — the exact tree `docs/launch-audit.md` (2026-10-13) passed. The audit documents themselves land in later commits and do not change the build. **The commit hash written here is the authority, not a tag.** The previous plan keyed promotion to a tag, and the tag it named had never been pushed, so the check could never run; a hash in this document cannot go missing the same way. Tom may still create the tag for convenience — `git tag -a launch-2026-10-13 f0eb073 -m "re-audited release" && git push origin launch-2026-10-13` — but nothing in §4 depends on it (this environment's git relay refuses refs outside `refs/heads/*`, so the tag could not be pushed from the audit session). |
+| ~~Previous release~~ | ~~`launch-2026-09-19` on `claude/main-site-foundation-v1` @ `e2dba27`~~ — **superseded.** That tag was never pushed to the remote (`git ls-remote --tags origin` was empty on 2026-10-13), so the promotion check as originally written could not be run at all. The commit itself is still reachable as `origin/claude/main-site-foundation-v1`. Do not promote it: the code has moved 18 commits past it, and launching it would put the live site on a layout the CRM no longer builds from. |
 | Vercel project | `showmeelectricalwebsite` — `prj_KHnKJNKpoEB6AjdC0rp1J86AyduC`, team `compassmarketin` (`team_JxUWGz1PjUP4jOAqXQqy3YFN`), Next.js, Node 24.x |
 | Production branch (Git) | `claude/show-me-electrical-careers-k6km12` — the repository's default branch and the branch Vercel builds as **production** |
-| Verified rollback deployment | **`dpl_4q2JCghjVErahoK8FSigLr41F2dT`** — verified 2026-09-19 via the Vercel API: state READY, target `production`, currently aliased to `careers.showmeelectrical.com` and `showmeelectricalwebsite.vercel.app`, commit `d819f02` (2026-08-29), listed as a rollback candidate. This is the build serving the live careers site right now. |
-| Branch relationship | The release commit contains the production branch's history; **fast-forward is possible**, no merge commit. |
+| Verified rollback deployment | **`dpl_4q2JCghjVErahoK8FSigLr41F2dT`** — commit `d819f02` (2026-08-29). **Re-verified 2026-10-13** via the Vercel API: still state READY, target `production`, still a rollback candidate. This is the build serving the live careers site right now. |
+| Branch relationship | Re-confirmed 2026-10-13: the production branch (`d819f02`) is an ancestor of the release commit, so **fast-forward is possible**, no merge commit. |
 | Domains on the project today | `careers.showmeelectrical.com` (verified, live), `showmeelectricalwebsite.vercel.app`. **`showmeelectrical.com` and `www` are not on the project yet** — so Vercel has not yet displayed the DNS records it wants for them (§6). |
 | WordPress backup | **NOT completed.** Requires WP Engine access, which the build team does not have. Owner/agency action in §2.3; the release must not be promoted until it is done and the backup location is written here. |
 | Deployment protection | SSO protection on all deployments **except custom domains** — production on the custom domains is public; preview URLs need a share link. |
@@ -96,8 +105,9 @@ vercel env ls production                      # or the dashboard: both NEXT_PUBL
 
 # 1. pin to the reviewed commit
 git fetch origin --tags
-REL=$(git rev-parse launch-2026-09-19^{commit})
-echo "$REL"                                   # must match the hash in the review package
+REL=f0eb073d72114a337f3c5a9b7d12b91c05f0fbb4   # the re-audited commit, from §0
+git cat-file -e "$REL^{commit}"               # it exists locally after the fetch
+git log -1 --format='%H %s' "$REL"            # confirm it is the merge of PR #2
 
 # 2. fast-forward the production branch to exactly that commit
 git checkout claude/show-me-electrical-careers-k6km12
@@ -121,7 +131,7 @@ Careers host (live traffic, non-sending checks only):
 
 Main site on the Vercel production URL (`showmeelectricalwebsite.vercel.app`; if SSO-protected, use a share link):
 
-- Every page 200; robots meta `index, follow`; `robots.txt` allows; sitemap lists the 14 main URLs with the `showmeelectrical.com` origin; review banner absent.
+- Every page 200; robots meta `index, follow`; `robots.txt` allows; sitemap lists the **16** main URLs with the `showmeelectrical.com` origin; review banner absent. (14 before the 2026-10-13 release; the additions are `/services/residential/electrical-panel-upgrades` and `/service-area/edwardsville-il`.)
 - `POST /api/inquiry` with `{"name":"probe"}` → 400 with field codes (validation reached, nothing sent). Resend dashboard shows no new sends.
 - A real inquiry is sent **only if Tom authorizes it**, and then once.
 
