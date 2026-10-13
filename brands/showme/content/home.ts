@@ -82,21 +82,34 @@ export const hero = {
   /** Source: live homepage subhead, condensed to two lines. */
   body: "Owner-led electrical contractor for residential, commercial and industrial work across the Greater St. Louis area. Free consultations, straight answers, code-compliant work.",
   /**
-   * Source: the client's own WordPress media library (`2025/10/IMG_0176.jpg`),
-   * re-encoded to webp. A genuine job-site photo, not stock — the images the
-   * live WordPress hero rotates are stock-library downloads (`-utc` filenames,
-   * one a 3D render) and are deliberately not carried over; see
-   * docs/migration-inventory.md §7b.
+   * HERO PHOTOGRAPHY — one or two frames. Two rotate (a CSS crossfade, no
+   * JavaScript; see `.hero-slide-top` in app/globals.css); one stays still.
    *
-   * Chosen for the hero because it is one of the few true landscape frames in
-   * the library (2048×1536), it reads as finished residential lighting work at
-   * a glance, and nobody is identifiable in it.
+   * Both are the client's own work, from their WordPress media library,
+   * re-encoded to webp at their native 2048×1536. They mirror the live site's
+   * own hero, which alternates a homes message and a businesses message — so
+   * the first frame is residential and the second commercial.
+   *
+   * The live hero's two slide BACKGROUNDS are not reused: both are stock
+   * (`54218-glass-windows-and-doors-of-modern-house-…-utc`, and a 3D render,
+   * `3d-rendering-business-meeting-room-on-high-rise-of-…-utc`). The site does
+   * not present stock as this client's work — docs/migration-inventory.md §7b.
+   * `IMG_6345` below IS on the live site, on its "Commercial Lighting" slide.
    */
-  image: {
-    src: "/photos/tray-ceiling-recessed-lighting.webp",
-    /** Written from the frame itself, 2026-10-13. Nothing described here is inferred. */
-    alt: "A dark-painted recessed tray ceiling lit by eight recessed downlights, with two round in-ceiling speakers set among them, in a room still mid-renovation",
-  },
+  images: [
+    {
+      /** `2025/10/IMG_0176.jpg`. Residential. */
+      src: "/photos/tray-ceiling-recessed-lighting.webp",
+      /** Written from the frame itself, 2026-10-13. Nothing here is inferred. */
+      alt: "A dark-painted recessed tray ceiling lit by eight recessed downlights, with two round in-ceiling speakers set among them, in a room still mid-renovation",
+    },
+    {
+      /** `2025/07/IMG_6345.jpg`. Commercial. */
+      src: "/photos/commercial-led-retrofit.webp",
+      /** Written from the frame itself, 2026-10-13. */
+      alt: "Recessed LED panels and smoke detectors set into a commercial drop ceiling beside an exposed brick wall, with a step ladder below and a lit exit sign",
+    },
+  ] as const,
 };
 
 /** Trust points are shared with the service pages — see content/shared.ts. */

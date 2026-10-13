@@ -59,6 +59,7 @@ export const redirects: Redirect[] = [
     ["2025/10/IMG_0488-1.jpg", "roughin-attic"],
     ["2025/10/IMG_1447-1.jpg", "commercial-panels"],
     ["2025/10/IMG_2411-1.jpg", "roughin-wall"],
+    ["2025/07/IMG_6345.jpg", "commercial-led-retrofit"],
     ["2025/10/IMG_7032-1.jpg", "roughin-framing"],
     ["2025/10/PHOTO-2025-04-15-22-41-56.jpg", "service-entrance"],
   ].map(([old, name]) => ({

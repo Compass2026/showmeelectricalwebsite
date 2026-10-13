@@ -23,10 +23,19 @@ import { hero } from "@/content/home";
  * arrival — measured, not assumed. `lg:min-h-[32rem]` on the photo sets the
  * section's floor.
  *
- * ONE `<Image>`, not one per breakpoint. A second copy hidden with `display:
- * none` is still fetched by most browsers, and `priority` would preload both —
- * two hero-sized downloads on the one view where that costs most. The single
- * element moves between the stacked band and the right-hand panel with CSS.
+ * One `<Image>` PER PHOTO, not one per breakpoint: the same element serves the
+ * stacked mobile band and the desktop panel, moved by CSS. A copy hidden with
+ * `display: none` is still fetched by most browsers, so a per-breakpoint
+ * duplicate would cost a second hero-sized download on the one view where that
+ * hurts most.
+ *
+ * A brand may supply one photo or two. Two crossfade — in CSS, so the rotation
+ * works on a page served without JavaScript and does not wait on hydration
+ * (`.hero-slide-top`, app/globals.css), and stops entirely under
+ * `prefers-reduced-motion`. Only the first is `priority`: it is the one in
+ * front of the visitor on arrival, and preloading the second would put two
+ * hero-sized images on the critical path to show one of them eight seconds
+ * later.
  *
  * The left column's padding tracks where the `max-w-7xl` container would start
  * — `max(1.5rem, (100vw - 80rem)/2 + 1.5rem)` — so the headline stays aligned
@@ -94,14 +103,17 @@ export default function Hero() {
         >
           <Parallax className="h-full w-full rounded-2xl border border-white/10 shadow-2xl shadow-primary-950/60 lg:rounded-none lg:border-0 lg:border-l lg:shadow-none">
             <div className="relative h-full w-full">
-              <Image
-                src={hero.image.src}
-                alt={hero.image.alt}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
+              {hero.images.map((image, i) => (
+                <Image
+                  key={image.src}
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  priority={i === 0}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className={`object-cover${i > 0 ? " hero-slide-top" : ""}`}
+                />
+              ))}
             </div>
           </Parallax>
 
