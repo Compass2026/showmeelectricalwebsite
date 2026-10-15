@@ -62,6 +62,13 @@ export const redirects: Redirect[] = [
     ["2025/07/IMG_6345.jpg", "commercial-led-retrofit"],
     ["2025/10/IMG_7032-1.jpg", "roughin-framing"],
     ["2025/10/PHOTO-2025-04-15-22-41-56.jpg", "service-entrance"],
+    // Added 2026-10-15 with the segment image pass (§7a).
+    ["2024/09/Kitchen-1-JPEG-3.jpg", "kitchen-pendant-lighting"],
+    ["2025/10/IMG_4815-1-1536x2048-1.jpg", "commercial-fitout-lighting"],
+    ["2025/06/C624B554-A2B3-4CE3-BB74-E7359ADEC038.jpg", "industrial-switchgear"],
+    ["2025/10/IMG_4886-1536x2048-1.jpg", "factory-floor-high-bay"],
+    ["2025/10/87B73734-7F42-4D6E-AA45-4FA15FF7E933_4_5005_c.jpg", "fire-pump-controller"],
+    ["2024/09/20240829_124523.jpg", "living-room-chandelier"],
   ].map(([old, name]) => ({
     source: `/wp-content/uploads/${old}`,
     destination: `/photos/${name}.webp`,
@@ -69,8 +76,10 @@ export const redirects: Redirect[] = [
   })),
 
   // The two live hero slide backgrounds, carried over at the owner's
-  // direction (2026-10-15). STOCK, not the client's work — kept separate from
-  // the job-site list above so that stays true. Migration inventory §7d.
+  // direction on 2026-10-15 and taken back out the same day when the client's
+  // own segment photography replaced them (§7d). STOCK, not the client's
+  // work. The files and these redirects stay so the legacy upload URLs keep
+  // resolving and so the pair can be restored without re-encoding.
   ...[
     ["2025/07/54218-glass-windows-and-doors-of-modern-house-2025-04-03-15-41-34-utc-scaled.jpg", "modern-home-entrance"],
     ["2025/07/3d-rendering-business-meeting-room-on-high-rise-of-2025-01-07-05-56-21-utc-scaled.jpg", "boardroom-cove-lighting"],

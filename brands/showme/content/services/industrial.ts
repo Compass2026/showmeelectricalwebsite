@@ -69,9 +69,14 @@ export const industrial: ServicePageContent = {
     headline: "Industrial Electrician in St. Louis, MO",
     intro:
       "High-voltage work for industrial and large-scale systems — transformers, switchgear, heavy-duty equipment wiring and power distribution — managed with safety and precision at every step. Serving plants and facilities across St. Louis, St. Charles, Lincoln and Warren Counties.",
+    /**
+     * Changed 2026-10-15. The high-bay shot stays as the share image and on
+     * the homepage card; the page hero is now the plant floor, which shows
+     * the scale this page describes. Both are the client's own work.
+     */
     image: {
-      src: "/photos/industrial-high-bay.webp",
-      alt: "High-bay LED lighting installed across the ceiling of an industrial warehouse, with a yellow gantry crane below, viewed from a lift",
+      src: "/photos/factory-floor-high-bay.webp",
+      alt: "A plant floor seen from the aisle: production machinery under rows of high-bay lighting, with conduit and services running along the ceiling structure",
     },
   },
 

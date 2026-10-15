@@ -82,38 +82,43 @@ export const hero = {
   /** Source: live homepage subhead, condensed to two lines. */
   body: "Owner-led electrical contractor for residential, commercial and industrial work across the Greater St. Louis area. Free consultations, straight answers, code-compliant work.",
   /**
-   * HERO PHOTOGRAPHY — one or two frames. Two rotate (a CSS crossfade, no
-   * JavaScript; see `.hero-slide-top` in app/globals.css); one stays still.
+   * HERO PHOTOGRAPHY — one to three frames, crossfading in CSS
+   * (`.hero-slide-2` / `.hero-slide-3`, app/globals.css).
    *
-   * These are the live WordPress hero's own two slide backgrounds, carried
-   * over at the owner's direction (2026-10-15) so the rebuild opens the way
-   * the current site does: a homes frame, then a businesses frame.
+   * Three frames, one per segment, so the opening screen shows the whole
+   * business rather than one corner of it: residential, then commercial,
+   * then industrial. That mirrors the live WordPress hero's homes/businesses
+   * alternation and widens it to the three the taxonomy actually sells.
    *
-   * PROVENANCE — BOTH ARE STOCK, not this client's work. The filenames carry
-   * the stock-library `-utc` signature, and the second is a 3D rendering, not
-   * a photograph. They are therefore illustrative: nothing on the page
-   * describes either as a Show Me Electrical job, and the alt text says what
-   * is actually in frame. The licence is the owner's to hold — the images
-   * come from the client's own site, but a stock licence does not transfer
-   * automatically with a rebuild. See docs/migration-inventory.md §7d.
+   * ALL THREE ARE THE CLIENT'S OWN WORK, from their WordPress media library,
+   * re-encoded to webp at native resolution. The stock pair that briefly held
+   * this hero (a stock house exterior and a 3D boardroom render) is retired
+   * again — see docs/migration-inventory.md §7d. No stock, no renders, and no
+   * third party's branding or customers in frame.
    *
-   * The client's own photographs stay in the repository and are the better
-   * material when they fit: `/photos/tray-ceiling-recessed-lighting.webp`
-   * (residential) and `/photos/commercial-led-retrofit.webp` (commercial)
-   * were the previous two frames and remain available, with their redirects.
+   * Frames 2 and 3 are portrait originals, so the panel crops them top and
+   * bottom. Both were chosen because their subject runs the full width of the
+   * frame and survives that crop; a portrait whose subject is vertical would
+   * not.
    */
   images: [
     {
-      /** `2025/07/54218-glass-windows-and-doors-of-modern-house-…-utc-scaled.jpg` — stock. */
-      src: "/photos/modern-home-entrance.webp",
+      /** `Kitchen-1-JPEG-3.jpg`. Residential. The one landscape original. */
+      src: "/photos/kitchen-pendant-lighting.webp",
       /** Written from the frame itself, 2026-10-15. */
-      alt: "The entrance of a cedar-clad modern house at dusk, a glass door flanked by two lit wall sconces, with warm light coming from the rooms and stairway inside",
+      alt: "A finished kitchen with a brass-and-glass pendant hanging over a white marble waterfall island, recessed ceiling lights and a lit range hood",
     },
     {
-      /** `2025/07/3d-rendering-business-meeting-room-on-high-rise-of-…-utc-scaled.jpg` — stock, a 3D rendering. */
-      src: "/photos/boardroom-cove-lighting.webp",
-      /** Says "rendering" because it is one; describing it as a photograph would be untrue. */
-      alt: "A rendering of a timber-panelled boardroom lit by concealed cove lighting, recessed ceiling downlights and wall washers, with a long table and leather chairs",
+      /** `2025/10/IMG_4815-1.jpg`. Commercial. */
+      src: "/photos/commercial-fitout-lighting.webp",
+      /** Written from the frame itself, 2026-10-15. */
+      alt: "A finished commercial tenant space lit by rows of suspended linear LED fixtures, with exposed painted structure, conduit runs and an illuminated exit sign",
+    },
+    {
+      /** `C624B554-….jpg`. Industrial. */
+      src: "/photos/industrial-switchgear.webp",
+      /** Written from the frame itself, 2026-10-15. */
+      alt: "A wall of industrial switchgear: labelled panelboards with disconnect handles, feeding rigid conduit that runs up into the ceiling of a plant room",
     },
   ] as const,
 };
@@ -159,9 +164,15 @@ export const servicePathways: {
       "Panel & service upgrades",
       "Code compliance & inspections",
     ],
+    /**
+     * Replaced 2026-10-15. The previous photo showed a named national
+     * retailer's store with its trademark and signage legible. The work was
+     * ours; the brand is not, and that store has not agreed to appear in our
+     * marketing. See docs/migration-inventory.md §7e.
+     */
     image: {
-      src: "/photos/commercial-checkout.webp",
-      alt: "Newly built retail checkout counter with electrical service installed",
+      src: "/photos/commercial-fitout-lighting.webp",
+      alt: "A finished commercial tenant space lit by rows of suspended linear LED fixtures, with exposed painted structure and conduit runs",
     },
     /** Built — see content/services/commercial.ts. */
     href: "/services/commercial",
