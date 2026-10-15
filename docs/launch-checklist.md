@@ -4,7 +4,7 @@ Concise, in order. Details for each line are in `docs/deployment-plan.md`
 (§ numbers) and `docs/launch-audit.md`. Nothing here is executed until the
 remaining blockers below are cleared and Tom gives the go.
 
-**Revised 2026-10-15.** Release = commit **`a8e7a7c`**, the head of
+**Revised 2026-10-15.** Release = commit **`9dde4e9`**, the head of
 `claude/template-completion` after PR #3 merged. 16 routes. Dan approved the
 replacement on 2026-10-15. Both earlier releases (`f0eb073`, `e2dba27`) are
 superseded — see `docs/deployment-plan.md` §0.
@@ -14,9 +14,9 @@ superseded — see `docs/deployment-plan.md` §0.
 - [x] Release **re-audited 2026-10-13**: PASS, zero findings (`docs/launch-audit.md`) — 107 audit checks over the preview and launch configurations, plus the repository suite's 202 checks on a clean checkout.
 - [x] Content decisions applied (D-001 to D-007); no open content flags; policies dated 2026-09-19. The `www.showmeelectrical.com` occurrences the previous audit left open are gone.
 - [x] Two new routes reviewed for sourcing: `/services/residential/electrical-panel-upgrades` (derived from approved hub copy, omissions named) and `/service-area/edwardsville-il` (decision D-003 coverage).
-- [x] Release pinned to the commit hash **`a8e7a7c9bcf3eb7266c56c277a4e1396e6fa9241`**, recorded in the plan rather than in a tag — the previous plan's tag was never pushed, so its promotion check could never run. Tagging is optional and §4 does not depend on it.
+- [x] **Release re-pinned 2026-10-15 to `9dde4e9b7426c7c6fc86ab99ece1c3b5b7dd8540`** (merge of PR #6), recorded in the plan rather than in a tag — the previous plan's tag was never pushed, so its promotion check could never run. It replaces `a8e7a7c`, which predates the photography pass and would ship the withdrawn imagery; **`a8e7a7c` must not be promoted.** Tagging is optional and §4 does not depend on it.
 - [x] `npm run verify` re-run at the release commit itself (2026-10-15): passed whole. Its tree is byte-identical to the audited `dda1e12`.
-- [x] Fast-forward re-confirmed 2026-10-15: production branch `d819f02` is an ancestor of `a8e7a7c`.
+- [x] Fast-forward re-confirmed 2026-10-15: production branch `d819f02` is an ancestor of `9dde4e9`.
 - [x] Rollback deployment **re-verified 2026-10-15**: `dpl_4q2JCghjVErahoK8FSigLr41F2dT` (READY, production, rollback candidate, serving the careers domain today).
 - [x] Careers endpoint confirmed unchanged in behaviour: `/api/apply` sender and recipients are byte-identical to the live values after the brand refactor.
 - [x] Delivery evidence on file: preview inquiry accepted; Resend reports delivered; inbox receipt unverified and not a blocker (D-007). No further test messages without authorization. **The 2026-10-13 re-audit sent nothing — delivery was mocked throughout.**
@@ -46,7 +46,7 @@ superseded — see `docs/deployment-plan.md` §0.
 
 ## Promotion (§4)
 
-- [ ] `git merge --ff-only a8e7a7c9bcf3eb7266c56c277a4e1396e6fa9241` on the production branch (aborts if it is not a fast-forward); push.
+- [ ] `git merge --ff-only 9dde4e9b7426c7c6fc86ab99ece1c3b5b7dd8540` on the production branch (aborts if it is not a fast-forward); push.
 - [ ] Deployment READY.
 
 ## Immediately after (§5, non-sending)
