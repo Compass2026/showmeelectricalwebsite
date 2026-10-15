@@ -120,8 +120,8 @@ width of its landscape original). Old paths are relative to
 |---|---|---|---|
 | `2025/10/10BF7BF3-A2B5-48E8-8859-44E5ABA87C19_4_5005_c.jpg` | `/photos/industrial-high-bay.webp` | High-bay warehouse lighting | Home, `/services/industrial` (hero) |
 | `2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg` | `/photos/commercial-checkout.webp` | Retail checkout build-out | Home, `/services/commercial` |
-| `2025/10/IMG_0176.jpg` | `/photos/tray-ceiling-recessed-lighting.webp` | Recessed tray ceiling, eight downlights and two in-ceiling speakers, mid-renovation | Home (hero) — **added 2026-10-13** |
-| `2025/07/IMG_6345.jpg` | `/photos/commercial-led-retrofit.webp` | Recessed LED panels in a commercial drop ceiling, brick wall, exit sign | Home (hero, second frame) — **added 2026-10-13**. Also on the live WordPress site's "Commercial Lighting" slide. |
+| `2025/10/IMG_0176.jpg` | `/photos/tray-ceiling-recessed-lighting.webp` | Recessed tray ceiling, eight downlights and two in-ceiling speakers, mid-renovation | Added 2026-10-13 as the home hero; **unplaced since 2026-10-15** (§7d). Retained and redirected. |
+| `2025/07/IMG_6345.jpg` | `/photos/commercial-led-retrofit.webp` | Recessed LED panels in a commercial drop ceiling, brick wall, exit sign | Added 2026-10-13 as the hero's second frame; **unplaced since 2026-10-15** (§7d). Also on the live site's "Commercial Lighting" slide. Retained and redirected. |
 | `2025/10/IMG_0179-1.jpg` | `/photos/finished-interior-lighting.webp` | Finished interior lighting | Home, `/services/residential` |
 | `2025/10/IMG_0354-1.jpg` | `/photos/ceiling-fan-install.webp` | Ceiling fan installation | `/services/residential` |
 | `2025/10/IMG_0488-1.jpg` | `/photos/roughin-attic.webp` | Recessed lighting rough-in, vaulted ceiling | Home, `/about`, `/blog`, `/services/residential` |
@@ -190,10 +190,48 @@ listed:
 | Service card, Industrial | `10BF7BF3-…` | the client's own — retained, §7a |
 | Blog thumbnails (×3) | `worker-is-cutting-wires-…`, `electrical-outlet-replacement-…`, `vintage-electric-switch-…` | stock photos |
 
-All of the stock stays retired. The live hero's *structure* — two slides
-alternating a homes message and a businesses message — is worth keeping, and
-the rebuilt hero does keep it, with two of the client's own photographs in
-place of the two stock backgrounds.
+The live hero's *structure* — two slides alternating a homes message and a
+businesses message — is kept by the rebuilt hero. Its two slide BACKGROUNDS
+were carried over too, by the owner's decision on 2026-10-15; see §7d. The
+rest of the stock above stays retired.
+
+### 7d. Stock carried over by owner decision — 2026-10-15
+
+Two stock images are published on the rebuilt site. They are recorded
+separately from §7a so that section stays what it says it is: the client's
+own photography.
+
+| Old WordPress file | New file | What it is |
+|---|---|---|
+| `2025/07/54218-glass-windows-and-doors-of-modern-house-…-utc-scaled.jpg` | `/photos/modern-home-entrance.webp` | Stock photograph. Cedar-clad house entrance at dusk, glass door between two lit sconces. |
+| `2025/07/3d-rendering-business-meeting-room-on-high-rise-of-…-utc-scaled.jpg` | `/photos/boardroom-cove-lighting.webp` | Stock **3D rendering**. Timber-panelled boardroom with cove lighting and recessed downlights. |
+
+**Why they are here.** They are the live WordPress hero's own two slide
+backgrounds, and the owner asked for the rebuilt hero to use them, after the
+stock provenance was put to him twice. That is his call to make and it is
+recorded as his, not as a finding of this inventory.
+
+**What was decided against.** §7b's rule — the site does not present stock as
+the client's work — is not weakened by this, and is the reason for the
+handling below:
+
+- Neither image is captioned, described or framed anywhere on the page as a
+  Show Me Electrical job. They are illustrative only.
+- The alt text describes what is actually in frame, and the second says
+  "a rendering", because calling a 3D render a photograph would be untrue.
+- They are not in §7a and are not counted among the retained job-site photos.
+
+**Open item for the owner: the licence.** These came from the client's
+WordPress library, but a stock licence does not transfer automatically to a
+rebuild, a new domain or a new agency. Confirm the original licence covers
+continued use on the relaunched site before launch. Nothing in this
+repository can establish that.
+
+**The alternative is still in the repository.** The client's own
+`/photos/tray-ceiling-recessed-lighting.webp` (residential) and
+`/photos/commercial-led-retrofit.webp` (commercial) were the hero's two
+frames from 2026-10-13 to 2026-10-15 and remain retained and redirected,
+ready to go back in.
 
 ## 8. Not yet inventoried / needs access
 

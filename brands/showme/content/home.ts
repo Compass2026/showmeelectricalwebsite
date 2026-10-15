@@ -85,29 +85,35 @@ export const hero = {
    * HERO PHOTOGRAPHY — one or two frames. Two rotate (a CSS crossfade, no
    * JavaScript; see `.hero-slide-top` in app/globals.css); one stays still.
    *
-   * Both are the client's own work, from their WordPress media library,
-   * re-encoded to webp at their native 2048×1536. They mirror the live site's
-   * own hero, which alternates a homes message and a businesses message — so
-   * the first frame is residential and the second commercial.
+   * These are the live WordPress hero's own two slide backgrounds, carried
+   * over at the owner's direction (2026-10-15) so the rebuild opens the way
+   * the current site does: a homes frame, then a businesses frame.
    *
-   * The live hero's two slide BACKGROUNDS are not reused: both are stock
-   * (`54218-glass-windows-and-doors-of-modern-house-…-utc`, and a 3D render,
-   * `3d-rendering-business-meeting-room-on-high-rise-of-…-utc`). The site does
-   * not present stock as this client's work — docs/migration-inventory.md §7b.
-   * `IMG_6345` below IS on the live site, on its "Commercial Lighting" slide.
+   * PROVENANCE — BOTH ARE STOCK, not this client's work. The filenames carry
+   * the stock-library `-utc` signature, and the second is a 3D rendering, not
+   * a photograph. They are therefore illustrative: nothing on the page
+   * describes either as a Show Me Electrical job, and the alt text says what
+   * is actually in frame. The licence is the owner's to hold — the images
+   * come from the client's own site, but a stock licence does not transfer
+   * automatically with a rebuild. See docs/migration-inventory.md §7d.
+   *
+   * The client's own photographs stay in the repository and are the better
+   * material when they fit: `/photos/tray-ceiling-recessed-lighting.webp`
+   * (residential) and `/photos/commercial-led-retrofit.webp` (commercial)
+   * were the previous two frames and remain available, with their redirects.
    */
   images: [
     {
-      /** `2025/10/IMG_0176.jpg`. Residential. */
-      src: "/photos/tray-ceiling-recessed-lighting.webp",
-      /** Written from the frame itself, 2026-10-13. Nothing here is inferred. */
-      alt: "A dark-painted recessed tray ceiling lit by eight recessed downlights, with two round in-ceiling speakers set among them, in a room still mid-renovation",
+      /** `2025/07/54218-glass-windows-and-doors-of-modern-house-…-utc-scaled.jpg` — stock. */
+      src: "/photos/modern-home-entrance.webp",
+      /** Written from the frame itself, 2026-10-15. */
+      alt: "The entrance of a cedar-clad modern house at dusk, a glass door flanked by two lit wall sconces, with warm light coming from the rooms and stairway inside",
     },
     {
-      /** `2025/07/IMG_6345.jpg`. Commercial. */
-      src: "/photos/commercial-led-retrofit.webp",
-      /** Written from the frame itself, 2026-10-13. */
-      alt: "Recessed LED panels and smoke detectors set into a commercial drop ceiling beside an exposed brick wall, with a step ladder below and a lit exit sign",
+      /** `2025/07/3d-rendering-business-meeting-room-on-high-rise-of-…-utc-scaled.jpg` — stock, a 3D rendering. */
+      src: "/photos/boardroom-cove-lighting.webp",
+      /** Says "rendering" because it is one; describing it as a photograph would be untrue. */
+      alt: "A rendering of a timber-panelled boardroom lit by concealed cove lighting, recessed ceiling downlights and wall washers, with a long table and leather chairs",
     },
   ] as const,
 };

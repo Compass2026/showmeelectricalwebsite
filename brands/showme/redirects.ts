@@ -68,6 +68,18 @@ export const redirects: Redirect[] = [
     permanent: true,
   })),
 
+  // The two live hero slide backgrounds, carried over at the owner's
+  // direction (2026-10-15). STOCK, not the client's work — kept separate from
+  // the job-site list above so that stays true. Migration inventory §7d.
+  ...[
+    ["2025/07/54218-glass-windows-and-doors-of-modern-house-2025-04-03-15-41-34-utc-scaled.jpg", "modern-home-entrance"],
+    ["2025/07/3d-rendering-business-meeting-room-on-high-rise-of-2025-01-07-05-56-21-utc-scaled.jpg", "boardroom-cove-lighting"],
+  ].map(([old, name]) => ({
+    source: `/wp-content/uploads/${old}`,
+    destination: `/photos/${name}.webp`,
+    permanent: true,
+  })),
+
   // WordPress sitemap index and its four sub-sitemaps → the Next.js sitemap.
   // Listed explicitly (from the live wp-sitemap.xml) rather than by pattern,
   // so nothing is appended to the destination as a query string.
