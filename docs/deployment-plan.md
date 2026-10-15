@@ -94,9 +94,81 @@ are untouched.
 | `NEXT_PUBLIC_SITE_URL` | `https://showmeelectrical.com` | Canonicals, structured data, sitemap origin. Build-time. |
 | `RESEND_API_KEY` | already set (careers) | Also used by `/api/inquiry`. No change. |
 | `INQUIRY_RECIPIENT` | leave unset | Defaults to `info@showmeelectrical.com` (D-004). |
-| `INQUIRY_FROM` | leave unset | Defaults to the verified agency sender. Change only after a `showmeelectrical.com` sending domain is verified in Resend. |
+| `INQUIRY_FROM` | leave unset | Defaults to the verified agency sender. Change only after a client sending domain is verified in Resend — §3a.1. |
 | `INQUIRY_DELIVERY` | must be absent | Mock/fail are ignored in production anyway. |
 | `APPLICATION_RECIPIENT`, `RESEND_FROM` | unchanged | Careers defaults stay. |
+
+## 3a. Email delivery (Resend) — verified 2026-10-15
+
+**Delivery is ready as it stands; the switch needs no change here.** Both
+forms send through Resend from the agency's verified
+`send.compassmarketing.ai` domain — the same domain the live careers form
+has been sending from in production since August.
+
+Read back from the Vercel project (Production target) on 2026-10-15:
+
+| Variable | State | Effect |
+|---|---|---|
+| `RESEND_API_KEY` | present, encrypted | Serves both `/api/inquiry` and `/api/apply`. A separate preview key exists, send-only. |
+| `INQUIRY_DELIVERY` | absent | Ignored in production in any case: the route short-circuits on `isProduction` **before** reading it (`app/api/inquiry/route.ts:162`), so a mocked success can never be shown to a real visitor. |
+| `INQUIRY_RECIPIENT` | absent | Falls back to `info@showmeelectrical.com` (D-004). |
+| `INQUIRY_FROM` | absent | Falls back to `inquiries@send.compassmarketing.ai`. |
+| `RESEND_FROM`, `APPLICATION_RECIPIENT` | absent | Careers keeps `careers@send.compassmarketing.ai` → `info@showmeelectrical.com`, `thomas@compassmarketing.ai`. |
+
+`brands/showme/inquiry.config.ts` has `forceMock: false` (that flag is for
+the fictional demonstration brand, which can never send).
+
+What the office actually receives for a website inquiry: **From** `Show Me
+Electrical Website <inquiries@send.compassmarketing.ai>`, **Reply-To** the
+visitor's own address whenever they gave one — so hitting reply answers the
+visitor, not the agency. Subject is `Website inquiry — <service> — <name>`.
+When no email is given the footer says to reply by phone.
+
+Rate limiting is **per serverless instance**, not per deployment: the
+counter lives in one warm function's memory and a cold start begins empty.
+It brakes a naive script against a single instance and nothing more. If the
+form is ever abused at scale, the answer is Vercel's platform protection,
+not this counter.
+
+### 3a.1 Moving the sender to the client's own domain — optional, not a blocker
+
+Nothing breaks today, but `inquiries@send.compassmarketing.ai` is an agency
+address on a client's form. To put it on the client's own domain:
+
+1. In Resend, add the sending domain **`send.showmeelectrical.com`** — the
+   subdomain, never the apex. Resend then issues three DNS records scoped
+   to that subdomain (an MX for bounce feedback, an SPF TXT, and a DKIM
+   `TXT` under `resend._domainkey.send.showmeelectrical.com`).
+2. Add **exactly the records Resend displays** at GoDaddy. Because every one
+   of them sits under `send.`, the apex MX, SPF, DKIM, DMARC and the
+   Microsoft 365 verification TXT listed in §2.4 are untouched — the office
+   mailbox cannot be affected by this step. Do not "merge" Resend's SPF into
+   the apex SPF record; it belongs on the subdomain only.
+3. Wait for Resend to report the domain **verified**.
+4. Confirm the production `RESEND_API_KEY` is permitted to send from the new
+   domain. A Resend key can be restricted to one domain — the preview key
+   here is restricted to `send.compassmarketing.ai` — and a restricted key
+   answers a send from an unverified-for-it domain with a 403, which the
+   form surfaces as a delivery failure. If the production key is restricted,
+   issue a new key or widen it **before** step 5.
+5. Set `INQUIRY_FROM` on the Production target to
+   `Show Me Electrical Website <inquiries@send.showmeelectrical.com>` and
+   redeploy. This is read at request time, so an existing deployment picks
+   it up on the next request; no rebuild is needed.
+6. One authorized inquiry to confirm the Reply-To still carries the
+   visitor's address. **No test message without Tom's explicit
+   authorization** (D-007).
+7. Careers moves the same way, separately, with `RESEND_FROM`. Change one
+   form at a time so a failure is unambiguous.
+
+Rolling back is removing `INQUIRY_FROM`; the verified agency sender returns
+on the next request.
+
+**Not done in this session:** the Resend account itself was unreachable —
+the Resend connector is not authorized for this workspace, so the sending
+domains, the key's domain restriction and the delivery log could not be
+inspected or changed from here. Everything above is the environment- and
+code-side state, which was read directly.
 
 ## 4. Promotion (creates the production deployment)
 
@@ -191,5 +263,5 @@ forward in Git.
 | Weekly, first month | Indexing status of the 14 main-site URLs; GBP website link; the legacy URL table once. |
 | After every deployment | Routing matrix on both hosts; robots meta on `/` of each host; `POST /api/inquiry` invalid body → 400. |
 | Delivery monitoring | Resend shows every accepted inquiry with its delivery status; a `delivered` status is the provider's evidence, inbox receipt is the business's. No scheduled test submissions. |
-| When a `showmeelectrical.com` sending domain is verified | Set `INQUIRY_FROM`; one authorized inquiry to confirm Reply-To. |
+| When a client sending domain is verified | Follow §3a.1: set `INQUIRY_FROM`, then one authorized inquiry to confirm Reply-To. |
 | When GA4 is set up (D-006 follow-up) | Add the tag, update privacy §7, bump the policy date. |
