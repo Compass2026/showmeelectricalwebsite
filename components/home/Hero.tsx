@@ -29,13 +29,13 @@ import { hero } from "@/content/home";
  * duplicate would cost a second hero-sized download on the one view where that
  * hurts most.
  *
- * A brand may supply one photo or two. Two crossfade — in CSS, so the rotation
- * works on a page served without JavaScript and does not wait on hydration
- * (`.hero-slide-top`, app/globals.css), and stops entirely under
- * `prefers-reduced-motion`. Only the first is `priority`: it is the one in
- * front of the visitor on arrival, and preloading the second would put two
- * hero-sized images on the critical path to show one of them eight seconds
- * later.
+ * A brand may supply one, two or three photos. More than one crossfades — in
+ * CSS, so the rotation works on a page served without JavaScript and does not
+ * wait on hydration (`.hero-slide-2` / `.hero-slide-3`, app/globals.css), and
+ * stops entirely under `prefers-reduced-motion`. Only the FIRST is `priority`:
+ * it is the one in front of the visitor on arrival, and preloading the others
+ * would put three hero-sized images on the critical path to show one of them
+ * eight seconds later.
  *
  * The left column's padding tracks where the `max-w-7xl` container would start
  * — `max(1.5rem, (100vw - 80rem)/2 + 1.5rem)` — so the headline stays aligned
@@ -111,7 +111,7 @@ export default function Hero() {
                   fill
                   priority={i === 0}
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className={`object-cover${i > 0 ? " hero-slide-top" : ""}`}
+                  className={`object-cover${i > 0 ? ` hero-slide-${i + 1}` : ""}`}
                 />
               ))}
             </div>

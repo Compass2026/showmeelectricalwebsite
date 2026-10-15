@@ -65,9 +65,14 @@ export const residential: ServicePageContent = {
     headline: "Residential Electrician in St. Louis, MO",
     intro:
       "From a single outlet to a whole-home rewire, Show Me Electrical handles the electrical work in St. Louis homes — panel upgrades, lighting, ceiling fans, EV chargers and the repairs that keep a house safe. Owner-led, code-compliant, and done right the first time.",
+    /**
+     * Changed 2026-10-15. `finished-interior-lighting` stays as the share
+     * image and on the homepage card; the page hero is now a finished room,
+     * which is what this page is selling. The client's own work.
+     */
     image: {
-      src: "/photos/finished-interior-lighting.webp",
-      alt: "Finished lower level of a home with recessed ceiling lights on, a tray ceiling and island cabinetry being installed",
+      src: "/photos/living-room-chandelier.webp",
+      alt: "A finished living room lit by a large brass ring chandelier, with recessed ceiling lights and daylight through plantation shutters",
     },
   },
 

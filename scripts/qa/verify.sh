@@ -33,11 +33,35 @@ run_brand () { # brand host port paths
   local brand=$1 host=$2 port=$3 paths=$4 dist=.next-verify-$1
   echo "== build $brand"; COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist npx next build >/dev/null
   COMPASS_BRAND=$brand node scripts/qa/manifest.mjs
-  ( COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist INQUIRY_DELIVERY=mock npx next start -p $port >/tmp/verify-$brand.log 2>&1 & ); sleep 4   # inherits INQUIRY_MOCK_PROVIDER_URL
+  # REFUSE to run against someone else's server. `next start` on a taken port
+  # fails into its log and the stages below would then test whatever IS on
+  # that port — a stale build passing as the current one. That happened: the
+  # old cleanup matched "next start -p $port", but the process is named
+  # "next-server", so every run leaked a server and later runs silently
+  # verified the first run's build. Fail loudly instead.
+  if curl -sf -m 2 -o /dev/null "http://127.0.0.1:$port/"; then
+    echo "FAIL: port $port is already serving something. Refusing to verify against it."
+    echo "      Free it first:  fuser -k $port/tcp"
+    exit 1
+  fi
+  COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist INQUIRY_DELIVERY=mock npx next start -p $port >/tmp/verify-$brand.log 2>&1 &
+  local srv=$!
+  # Wait for it to actually answer rather than hoping four seconds is enough.
+  local waited=0
+  until curl -sf -m 2 -o /dev/null "http://127.0.0.1:$port/"; do
+    sleep 1; waited=$((waited + 1))
+    if ! kill -0 $srv 2>/dev/null; then echo "FAIL: $brand server exited; see /tmp/verify-$brand.log"; tail -20 "/tmp/verify-$brand.log"; exit 1; fi
+    if [ $waited -ge 60 ]; then echo "FAIL: $brand server did not answer on $port within 60s"; tail -20 "/tmp/verify-$brand.log"; exit 1; fi
+  done
   echo "== crawl $brand";   node scripts/qa/crawl.mjs http://localhost:$port --host $host --assets remap
   echo "== forms $brand";   COMPASS_BRAND=$brand COMPASS_DIST_DIR=$dist node scripts/qa/forms.test.mjs http://localhost:$port --host $host
   echo "== browser $brand"; node scripts/qa/browser.test.mjs http://localhost:$port --host $host --paths "$paths"
-  pkill -f "next start -p $port" || true; sleep 1
+  # Kill the server AND the next-server child it spawned, then confirm the
+  # port is actually free before the next brand reuses the pattern.
+  kill $srv 2>/dev/null || true
+  pkill -P $srv 2>/dev/null || true
+  fuser -k "$port/tcp" 2>/dev/null || true
+  sleep 1
 }
 run_brand showme showmeelectrical.com $PORT_A "/,/services/residential/electrical-panel-upgrades,/service-area/edwardsville-il,/blog/the-most-common-electrical-hazards-found-in-missouri-homes,/contact"
 run_brand harbor-lane harbor-lane.example $PORT_B "/,/locations/westfield,/service-area/northgate,/contact"

@@ -109,7 +109,7 @@ Image URLs are not redirected — nothing the rebuild controls links to them —
 so each old URL will 404 after the move. The tables below are the record of
 what became what.
 
-### 7a. Retained — the client's own job-site photography (11)
+### 7a. Retained — the client's own job-site photography (17)
 
 Visually verified as genuine Show Me Electrical work, re-encoded to WebP at
 up to 1600px wide (`public/photos/`; the 2026-10-13 addition is 2048px, the
@@ -119,10 +119,16 @@ width of its landscape original). Old paths are relative to
 | Old WordPress file | New file | Shows | Used on |
 |---|---|---|---|
 | `2025/10/10BF7BF3-A2B5-48E8-8859-44E5ABA87C19_4_5005_c.jpg` | `/photos/industrial-high-bay.webp` | High-bay warehouse lighting | Home, `/services/industrial` (hero) |
-| `2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg` | `/photos/commercial-checkout.webp` | Retail checkout build-out | Home, `/services/commercial` |
+| `2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg` | `/photos/commercial-checkout.webp` | Retail checkout build-out | **Withdrawn from the site 2026-10-15 — see §7e.** File and redirect retained. |
 | `2025/10/IMG_0176.jpg` | `/photos/tray-ceiling-recessed-lighting.webp` | Recessed tray ceiling, eight downlights and two in-ceiling speakers, mid-renovation | Added 2026-10-13 as the home hero; **unplaced since 2026-10-15** (§7d). Retained and redirected. |
 | `2025/07/IMG_6345.jpg` | `/photos/commercial-led-retrofit.webp` | Recessed LED panels in a commercial drop ceiling, brick wall, exit sign | Added 2026-10-13 as the hero's second frame; **unplaced since 2026-10-15** (§7d). Also on the live site's "Commercial Lighting" slide. Retained and redirected. |
-| `2025/10/IMG_0179-1.jpg` | `/photos/finished-interior-lighting.webp` | Finished interior lighting | Home, `/services/residential` |
+| `2024/09/Kitchen-1-JPEG-3.jpg` | `/photos/kitchen-pendant-lighting.webp` | Finished kitchen, brass pendant over a marble waterfall island | Home hero, frame 1 (residential) — **added 2026-10-15** |
+| `2025/10/IMG_4815-1-1536x2048-1.jpg` | `/photos/commercial-fitout-lighting.webp` | Commercial tenant space, suspended linear LED fixtures | Home hero frame 2, homepage commercial card, `/services/commercial` hero — **added 2026-10-15** |
+| `2025/06/C624B554-….jpg` | `/photos/industrial-switchgear.webp` | Wall of labelled industrial switchgear and conduit | Home hero, frame 3 (industrial) — **added 2026-10-15** |
+| `2025/10/IMG_4886-1536x2048-1.jpg` | `/photos/factory-floor-high-bay.webp` | Plant floor, machinery under high-bay lighting | `/services/industrial` hero — **added 2026-10-15** |
+| `2025/10/87B73734-….jpg` | `/photos/fire-pump-controller.webp` | Electric fire pump controller, red housing | `/services/commercial` gallery — **added 2026-10-15** |
+| `2024/09/20240829_124523.jpg` | `/photos/living-room-chandelier.webp` | Living room, brass ring chandelier | `/services/residential` hero — **added 2026-10-15** |
+| `2025/10/IMG_0179-1.jpg` | `/photos/finished-interior-lighting.webp` | Finished interior lighting | Homepage residential card, `/services/residential` share image |
 | `2025/10/IMG_0354-1.jpg` | `/photos/ceiling-fan-install.webp` | Ceiling fan installation | `/services/residential` |
 | `2025/10/IMG_0488-1.jpg` | `/photos/roughin-attic.webp` | Recessed lighting rough-in, vaulted ceiling | Home, `/about`, `/blog`, `/services/residential` |
 | `2025/10/IMG_1447-1.jpg` | `/photos/commercial-panels.webp` | Stainless wall units (not panels — alt corrected) | Home, `/services`, `/services/commercial` |
@@ -195,21 +201,29 @@ businesses message — is kept by the rebuilt hero. Its two slide BACKGROUNDS
 were carried over too, by the owner's decision on 2026-10-15; see §7d. The
 rest of the stock above stays retired.
 
-### 7d. Stock carried over by owner decision — 2026-10-15
+### 7d. Stock carried over, then withdrawn — both on 2026-10-15
 
-Two stock images are published on the rebuilt site. They are recorded
-separately from §7a so that section stays what it says it is: the client's
-own photography.
+Two stock images **were** published on the rebuilt site for part of
+2026-10-15 and are no longer. They are recorded separately from §7a so that
+section stays what it says it is: the client's own photography.
+
+**Current status: not published.** The owner asked for the live site's two
+hero slide backgrounds, and they were used; later the same day the hero was
+rebuilt from the client's own segment photography (§7a) and these came back
+out. The files and their redirects are retained so the legacy upload URLs
+keep resolving and so the pair can be restored without re-encoding.
 
 | Old WordPress file | New file | What it is |
 |---|---|---|
 | `2025/07/54218-glass-windows-and-doors-of-modern-house-…-utc-scaled.jpg` | `/photos/modern-home-entrance.webp` | Stock photograph. Cedar-clad house entrance at dusk, glass door between two lit sconces. |
 | `2025/07/3d-rendering-business-meeting-room-on-high-rise-of-…-utc-scaled.jpg` | `/photos/boardroom-cove-lighting.webp` | Stock **3D rendering**. Timber-panelled boardroom with cove lighting and recessed downlights. |
 
-**Why they are here.** They are the live WordPress hero's own two slide
+**Why they were here.** They are the live WordPress hero's own two slide
 backgrounds, and the owner asked for the rebuilt hero to use them, after the
-stock provenance was put to him twice. That is his call to make and it is
-recorded as his, not as a finding of this inventory.
+stock provenance was put to him twice. That was his call to make and it is
+recorded as his, not as a finding of this inventory. It was superseded by his
+own later instruction to showcase residential, commercial and industrial
+work, which the client's own photography does better.
 
 **What was decided against.** §7b's rule — the site does not present stock as
 the client's work — is not weakened by this, and is the reason for the
@@ -221,17 +235,62 @@ handling below:
   "a rendering", because calling a 3D render a photograph would be untrue.
 - They are not in §7a and are not counted among the retained job-site photos.
 
-**Open item for the owner: the licence.** These came from the client's
-WordPress library, but a stock licence does not transfer automatically to a
-rebuild, a new domain or a new agency. Confirm the original licence covers
-continued use on the relaunched site before launch. Nothing in this
-repository can establish that.
+**The licence question is now moot for launch** — nothing stock is
+published — but it returns the moment either file is used again. A stock
+licence does not transfer automatically to a rebuild, a new domain or a new
+agency, and nothing in this repository can establish that it does.
 
-**The alternative is still in the repository.** The client's own
-`/photos/tray-ceiling-recessed-lighting.webp` (residential) and
-`/photos/commercial-led-retrofit.webp` (commercial) were the hero's two
-frames from 2026-10-13 to 2026-10-15 and remain retained and redirected,
-ready to go back in.
+**What replaced them.** The hero now runs three of the client's own frames,
+one per segment (§7a). `/photos/tray-ceiling-recessed-lighting.webp` and
+`/photos/commercial-led-retrofit.webp`, the frames from 2026-10-13, remain
+retained and redirected but unplaced.
+
+### 7e. Withdrawn — a third party's branding — 2026-10-15
+
+`/photos/commercial-checkout.webp` (`2025/10/B8048B09-….jpg`) was published
+on the homepage and as the `/services/commercial` hero from launch
+preparation until 2026-10-15. It is a **named national retailer's store**,
+with the company's trademark and its "Online Pickup" signage plainly legible.
+
+The electrical work in the photograph is Show Me Electrical's. The brand in
+it is not, and that retailer has not agreed to appear in a contractor's
+marketing. Published as-is it reads as an endorsement nobody gave. It is now
+replaced everywhere by `/photos/commercial-fitout-lighting.webp`, a finished
+commercial space with no branding and nobody in frame.
+
+**The audit did not catch this**, and that is a gap in the audit rather than
+bad luck: the claim sweep reads page TEXT, and nothing checks imagery for
+third-party trademarks or identifiable people. Two further images in the
+library have the same problem and are therefore not used — a second frame of
+the same store (one with an employee at the till), and a photograph of a man
+in front of a **Lucas Construction** sign, which is another Compass client
+and should probably not be in this client's media library at all.
+
+Worth adding to the pre-publication checklist for every client: *does any
+image show someone else's trademark, or a person who has not consented?*
+
+### 7f. The rest of the library, reviewed 2026-10-15
+
+All 39 previously unexamined originals were downloaded and looked at. Usable
+and not yet placed, by segment:
+
+- **Industrial** — two large disconnects on a concrete wall; warehouse with
+  forklifts under new high-bay (the forklifts dominate, crop needed);
+  mechanical room with switchgear, conduit and gas cylinders.
+- **Commercial** — conduit trench alongside a brick building; glass atrium
+  with feature lighting; multi-meter bank on brick; restaurant fit-out with
+  copper-branch chandeliers (mid-fit-out: ladder and boxes in frame).
+- **Residential** — two more pendant-lit kitchens; starburst ceiling fan in a
+  vaulted room; bathroom vanity sconces; EV charger; exterior service
+  entrance; built-in cabinetry with under-cabinet lighting.
+- **Company** — a fleet shot of three branded vans. The natural trust image
+  for `/about`, which currently stands in a job-site photo for want of a
+  portrait of Dan.
+
+**Not usable:** five Tesla-coil/lightning renders (not photographs of the
+client's work), an unrelated headshot, four theme placeholders, and the two
+third-party-branding images in §7e. The `DSC_*` 2011–2012 set remains out
+(§7c).
 
 ## 8. Not yet inventoried / needs access
 

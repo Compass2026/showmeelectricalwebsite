@@ -128,11 +128,26 @@ h4 {
   animation: node-pulse 3.4s ease-in-out infinite;
 }
 
-/* Hero crossfade — two photos, no JavaScript.
+/* Hero crossfade — up to three photos, no JavaScript.
  *
- * The first photo is the base and stays at full opacity underneath; the second
- * sits on top and fades in and out over it. That is why there is no moment
- * where both are half-visible, which a pair of mirrored fades would produce.
+ * The first photo is the BASE and never animates; it sits at the bottom of
+ * the stack at full opacity. Each later photo is an overlay above it, and an
+ * overlay only ever fades IN over whatever is already showing — it never
+ * fades out while the next one fades in. That is the whole trick: two
+ * mirrored fades would both sit near 0.5 at the crossover and let the base
+ * flash through. Here an overlay drops back to 0 only while the overlay
+ * ABOVE it is still fully opaque, so the drop is invisible.
+ *
+ * Three frames on a 24s cycle, 8s each:
+ *   0–8s   base (no overlay visible)
+ *   8–16s  slide 2 over the base
+ *   16–24s slide 3 over slide 2; slide 2 hides behind it, then slide 3 fades
+ *          out to reveal the base again
+ *
+ * The percentages are per-frame rather than generated, because keyframe
+ * stops cannot be computed from a custom property. Two frames use
+ * `.hero-slide-2` alone, which still reads correctly: it fades in at a third
+ * of the cycle and out at the end.
  *
  * CSS, not JS, on purpose: the hero must rotate on a page served without
  * JavaScript (scripts/qa/browser.test.mjs checks the no-JS render), and a
@@ -141,13 +156,28 @@ h4 {
  * Nothing here carries text, so the rotation cannot hide content from the
  * no-JS or reduced-motion checks, which only consider text-bearing leaves.
  */
-@keyframes hero-crossfade {
+@keyframes hero-fade-2 {
   0%,
-  42% {
+  29% {
     opacity: 0;
   }
-  50%,
+  33%,
   92% {
+    opacity: 1;
+  }
+  96%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-fade-3 {
+  0%,
+  62% {
+    opacity: 0;
+  }
+  66%,
+  96% {
     opacity: 1;
   }
   100% {
@@ -155,9 +185,17 @@ h4 {
   }
 }
 
-.hero-slide-top {
+.hero-slide-2,
+.hero-slide-3 {
   opacity: 0;
-  animation: hero-crossfade 16s ease-in-out infinite;
+}
+
+.hero-slide-2 {
+  animation: hero-fade-2 24s ease-in-out infinite;
+}
+
+.hero-slide-3 {
+  animation: hero-fade-3 24s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -165,7 +203,8 @@ h4 {
     scroll-behavior: auto;
   }
   /* No rotation at all: the base photo alone, held still. */
-  .hero-slide-top {
+  .hero-slide-2,
+  .hero-slide-3 {
     animation: none;
     opacity: 0;
   }

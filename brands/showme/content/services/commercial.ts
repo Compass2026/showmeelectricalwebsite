@@ -43,7 +43,7 @@ export const commercial: ServicePageContent = {
       "commercial electrical panel st louis",
       "electrical inspection st louis",
     ],
-    image: "/photos/commercial-checkout.webp",
+    image: "/photos/commercial-fitout-lighting.webp",
   },
 
   schema: {
@@ -65,9 +65,15 @@ export const commercial: ServicePageContent = {
     headline: "Commercial Electrician in St. Louis, MO",
     intro:
       "Scalable, efficient electrical for Missouri businesses — retail fit-outs, warehouse lighting, office rewiring and the panel and service upgrades behind them — so your space meets today's demands while planning for tomorrow's growth. Owner-led, on schedule, and up to code.",
+    /**
+     * Replaced 2026-10-15. The previous photo was a named national
+     * retailer's store with its trademark and signage legible — our work,
+     * but not our brand to publish, and that store never agreed to appear
+     * in our marketing. See docs/migration-inventory.md §7e.
+     */
     image: {
-      src: "/photos/commercial-checkout.webp",
-      alt: "Newly built retail checkout counter with point-of-sale equipment powered up, shelving stocked behind it",
+      src: "/photos/commercial-fitout-lighting.webp",
+      alt: "A finished commercial tenant space lit by rows of suspended linear LED fixtures, with exposed painted structure, conduit runs and an illuminated exit sign",
     },
   },
 
@@ -140,9 +146,9 @@ export const commercial: ServicePageContent = {
         caption: "Wall-mounted equipment wired in conduit, commercial interior.",
       },
       {
-        src: "/photos/service-entrance.webp",
-        alt: "New electrical service on the exterior of a block building: four conduit risers feeding a stainless-steel cabinet and a meter",
-        caption: "New electrical service on a commercial building.",
+        src: "/photos/fire-pump-controller.webp",
+        alt: "An electric fire pump controller on a red housing, its display showing phase and status indicators above the printed operating instructions",
+        caption: "Fire pump controller — life-safety power on a commercial building.",
       },
     ],
   },
