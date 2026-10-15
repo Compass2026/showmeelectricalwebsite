@@ -16,7 +16,7 @@ careers site stay unchanged until Tom approves the release.
 
 | Item | Value |
 |---|---|
-| Release | **Commit `9dde4e9b7426c7c6fc86ab99ece1c3b5b7dd8540`** — the head of `claude/template-completion`, the merge of PR #6 on 2026-10-15. It supersedes `a8e7a7c`, which this plan pinned earlier the same day: `a8e7a7c` predates the photography pass and would ship the withdrawn imagery, including the third party's trademark (`docs/migration-inventory.md` §7e). **Do not promote `a8e7a7c`.** The audit in `docs/launch-audit.md` §8b was run against `719ee71`; the two commits since are documentation only, so the audited tree is the shipping tree for every route and asset. `npm run verify` passed whole at `142e683`. **The commit hash written here is the authority, not a tag** — the previous plan keyed promotion to a tag that had never been pushed, so its own first check could never run. Tagging is optional: `git tag -a launch-2026-10-15 9dde4e9 -m "re-audited release" && git push origin launch-2026-10-15`. Nothing in §4 depends on it. |
+| Release | **The head of `claude/template-completion`, provided every commit after `9dde4e9b7426c7c6fc86ab99ece1c3b5b7dd8540` touches `docs/` only.** Check that before promoting — `git diff --stat 9dde4e9..origin/claude/template-completion` must list nothing outside `docs/`. If it does, that is a code change: it needs its own audit and its own pin, and the head must not be promoted on the strength of this line. This is written as a rule rather than a bare hash because a hash goes stale the moment the plan that carries it is edited — re-pinning is itself a commit, so a literal pin always trails the branch by one. `9dde4e9` is the merge of PR #6 on 2026-10-15. It supersedes `a8e7a7c`, which this plan pinned earlier the same day: `a8e7a7c` predates the photography pass and would ship the withdrawn imagery, including the third party's trademark (`docs/migration-inventory.md` §7e). **Do not promote `a8e7a7c`.** The audit in `docs/launch-audit.md` §8b was run against `719ee71`; the two commits since are documentation only, so the audited tree is the shipping tree for every route and asset. `npm run verify` passed whole at `142e683`. **The commit hash written here is the authority, not a tag** — the previous plan keyed promotion to a tag that had never been pushed, so its own first check could never run. Tagging is optional: `git tag -a launch-2026-10-15 9dde4e9 -m "re-audited release" && git push origin launch-2026-10-15`. Nothing in §4 depends on it. |
 | ~~Superseded~~ | ~~`f0eb073`~~ (carries the pre-2026-10-13 hero) and ~~`launch-2026-09-19` / `e2dba27`~~ on `claude/main-site-foundation-v1` (18 commits behind, tag never pushed). Do not promote either. |
 | ~~Previous release~~ | ~~`launch-2026-09-19` on `claude/main-site-foundation-v1` @ `e2dba27`~~ — **superseded.** That tag was never pushed to the remote (`git ls-remote --tags origin` was empty on 2026-10-13), so the promotion check as originally written could not be run at all. The commit itself is still reachable as `origin/claude/main-site-foundation-v1`. Do not promote it: the code has moved 18 commits past it, and launching it would put the live site on a layout the CRM no longer builds from. |
 | Vercel project | `showmeelectricalwebsite` — `prj_KHnKJNKpoEB6AjdC0rp1J86AyduC`, team `compassmarketin` (`team_JxUWGz1PjUP4jOAqXQqy3YFN`), Next.js, Node 24.x |
@@ -176,11 +176,13 @@ code-side state, which was read directly.
 # 0. confirm the variables from §3 exist for the Production target
 vercel env ls production                      # or the dashboard: both NEXT_PUBLIC_* rows present
 
-# 1. pin to the reviewed commit
+# 1. resolve the release and prove it is still documentation-only (§0)
 git fetch origin --tags
-REL=9dde4e9b7426c7c6fc86ab99ece1c3b5b7dd8540   # the release commit, from §0
-git cat-file -e "$REL^{commit}"               # it exists locally after the fetch
-git log -1 --format='%H %s' "$REL"            # confirm it is the merge of PR #6
+REL=$(git rev-parse origin/claude/template-completion)
+git diff --stat 9dde4e9 "$REL" -- . ':(exclude)docs'   # MUST print nothing.
+                                              # Any output is a code change:
+                                              # stop, audit it, re-pin.
+git log -1 --format='%H %s' "$REL"            # what you are about to promote
 
 # 2. fast-forward the production branch to exactly that commit
 git checkout claude/show-me-electrical-careers-k6km12
