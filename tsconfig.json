@@ -34,11 +34,9 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".next-harbor-lane/types/**/*.ts",
-    ".next-verify-showme/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    ".next-verify-harbor-lane/types/**/*.ts"
+    ".next-harbor-lane/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
