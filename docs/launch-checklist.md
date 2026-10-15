@@ -29,9 +29,11 @@ superseded — see `docs/deployment-plan.md` §0.
 3. **DKIM confirmation in the GoDaddy zone, and apex/`www` TTLs down to 300s**, ideally a day before the switch.
 4. **The DNS change itself** (§6) — apex A records and the `www` CNAME only. Cannot be done from a Claude session; there is no GoDaddy access.
 
-## Re-audit gap — decide before promotion
+## Audit — closed 2026-10-15
 
-- [ ] **Mobile loading performance was NOT re-measured** (`docs/launch-audit.md` §7a). Lighthouse is not installed in the audit environment. The 18 new commits include layout-affecting work, so the 2026-09-19 lab numbers should not be quoted as current. Either re-measure, or accept the earlier numbers as stale — it is lab data, not a blocker on its own.
+- [x] **Second re-audit run after the photography pass** (`docs/launch-audit.md` §8b), against `719ee71`: harness 52/52 preview and 55/55 launch, `npm run verify` whole, 16 routes × 2 widths with no overflow, no broken images, no missing alt and one `h1` each, and all 13 photo redirects resolving.
+- [x] **Mobile performance measured** — the §7a gap is closed. Homepage under real throttling: perf 92, LCP 1.7 s, CLS 0. Accessibility 98/95/100, best practices 100, SEO 100. The simulated-throttling figure (perf 81, LCP 4.0 s) is an artefact of measuring a real-time hydration guard with a modelled clock; §8b explains it.
+- [ ] **A1 — decide, does not block.** Section headings are hidden from the accessibility tree until scrolled, because the motion system uses GSAP `autoAlpha` (`visibility: hidden`). axe fails `heading-order`; it is the only accessibility failure on the site. It predates this work and belongs to the Foundation, affecting every brand built on it. Reduced-motion and no-JS users are unaffected. Three remedies and the trade-off are in `docs/launch-audit.md` §8b.
 
 ## Before promotion (Tom / agency)
 

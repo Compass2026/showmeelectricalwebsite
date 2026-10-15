@@ -187,6 +187,114 @@ new build:
 The release pin in `docs/deployment-plan.md` §0 therefore moves with this
 branch; see the note there.
 
+## 8b. Second re-audit — 2026-10-15, after the photography pass
+
+Run against `claude/segment-photography` @ `719ee71`, which replaced the hero
+and the service-page photography (§7a, §7e of the migration inventory). This
+run closes the two gaps §7a and §8a left open: mobile performance was never
+re-measured, and no run had ever looked at every page at every width.
+
+**Result: PASS, with one accessibility finding (A1) that predates all of this
+work and belongs to the Foundation, not to this brand.**
+
+| What | Result |
+|---|---|
+| Audit harness, preview configuration | 52 / 52 |
+| Audit harness, launch configuration | 55 / 55 |
+| `npm run verify`, both brands | ALL PASSED |
+| 16 routes × 2 widths (1366 and 390), rendered | 0 horizontal overflow, 0 broken images, 0 images without `alt`, exactly one `h1` each, no heading-level skip in the markup |
+| All 13 retained-photo redirects | 200, `image/webp`, correct destination |
+
+### Mobile performance — re-measured, and the headline number is a trap
+
+Lighthouse 12.8.2, mobile form factor, launch-configuration build. The same
+page measures very differently depending on the throttling method:
+
+| Page | Simulated | Real (devtools) |
+|---|---|---|
+| `/` | perf **81**, LCP **4.0 s**, CLS 0, TBT 290 ms | perf **92**, LCP **1.7 s**, CLS 0, TBT 320 ms |
+| `/services/residential` | perf 92, LCP 3.1 s, CLS 0 | — |
+| `/contact` | perf 97, LCP 2.4 s, CLS 0 | — |
+
+Accessibility 98 / 95 / 100, best practices 100 / 100 / 100, SEO 100 / 100 /
+100.
+
+**Why the two numbers differ, and which to believe.** The LCP element on the
+homepage is the hero paragraph, not any image — the three hero photos are 28,
+33 and 42 KB and are not the bottleneck. That paragraph is hidden by GSAP
+(`autoAlpha`) until hydration, and `Reveal` has a guard for exactly this:
+`immediateDeadlineMs: 1200` skips the hidden start state when hydration lands
+late, so a slow device shows the text immediately. Lighthouse's *simulated*
+throttling applies its penalty analytically — wall-clock `performance.now()`
+still runs fast, the guard does not fire, and the simulation then charges for
+text that a real slow phone would have been shown at once. Under real CPU and
+network throttling the guard fires and LCP is **1.7 s**.
+
+Treat **1.7 s / perf 92** as the honest lab figure and the simulated 4.0 s as
+an artefact of measuring a real-time guard with a modelled clock. Neither is
+field data; CrUX after launch is the only number that settles it.
+
+### A1 — section headings are hidden from the accessibility tree until scrolled
+
+**The only accessibility failure on the site, and it is a Foundation issue,
+not a Show Me Electrical one.** It affects every brand built on this template.
+
+`Reveal` and `StaggerText` hide their start state with GSAP `autoAlpha: 0`,
+which sets `visibility: hidden` as well as `opacity: 0`. `visibility: hidden`
+removes an element from the accessibility tree. So before a section has been
+scrolled into view, its headings do not exist for assistive technology. The
+exposed outline on the homepage at load is:
+
+```
+h1  Powering St. Louis homes and businesses…
+h3  Plan            ← the h2 "Powering your project" above it is hidden
+h3  Install
+h3  Power on
+h2  Explore / Areas Served / Contact   (footer, never animated)
+```
+
+axe therefore reports `heading-order` invalid — h1 followed by h3. Ten
+headings on the homepage are hidden at load; the same pattern fails on
+`/services/residential`.
+
+**Not affected:** readers with `prefers-reduced-motion` (the animation is
+removed outright — measured 0 faded, 0 translated), and anyone without
+JavaScript (the server HTML renders everything visible; the no-JS suite
+passes). In practice most screen readers scroll the viewport as the virtual
+cursor moves, which fires the trigger — but the heading map is unreliable
+until they do, and a crawler or tool that reads the tree once sees a broken
+outline.
+
+**It is a trade-off, not an oversight.** `autoAlpha` also prevents a keyboard
+user tabbing into a link that is invisible on screen. Plain `opacity: 0`
+would fix the heading outline and reintroduce that problem. Three ways out,
+for the Foundation to decide rather than this release:
+
+1. Animate an inner wrapper and leave headings out of the animated element —
+   correct outline, keeps the effect, most work.
+2. `opacity` instead of `autoAlpha`, plus `pointer-events: none` and
+   `inert` on the un-revealed container — correct outline, no focus trap,
+   `inert` also removes it from the tree, so the gain is partial.
+3. Trigger reveals earlier so the hidden window is near zero in practice —
+   cheapest, does not fix the outline at first paint.
+
+**Not fixed in this release.** It predates the work Tom commissioned, it is
+one rule on one tool, the two populations most at risk are explicitly
+unaffected, and changing the motion system is a Foundation decision with its
+own accessibility cost. Raised here so it is a choice rather than a surprise.
+
+### Not findings, recorded so the next run does not re-investigate
+
+- **The service-area chips take ~2 s to finish staggering in.** All eight
+  reach full opacity by 2.5 s. Sampling earlier catches them mid-flight and
+  looks like stranded content; it is not.
+- **Scrolling back to the top re-arms the scroll reveals**, so below-fold
+  elements correctly return to their hidden state. Measuring "is anything
+  hidden after a full scroll" from the top of the page reports false
+  positives. The question worth asking is whether anything is invisible
+  *while in view*, and nothing is.
+- `uses-responsive-images` offers ~150 ms on the homepage. Minor.
+
 ## 9. Carried forward
 
 Unchanged from `docs/launch-checklist.md` and `docs/deployment-plan.md`:
