@@ -16,13 +16,13 @@ careers site stay unchanged until Tom approves the release.
 
 | Item | Value |
 |---|---|
-| Release | **Commit `a8e7a7c9bcf3eb7266c56c277a4e1396e6fa9241`** — the head of `claude/template-completion`, the merge of PR #3 on 2026-10-15. Its tree (`d8f3b7e5…`) is **byte-identical** to `dda1e12`, the commit `docs/launch-audit.md` passed, so the audit evidence transfers exactly; `npm run verify` was re-run at this commit anyway and passed whole. **The commit hash written here is the authority, not a tag** — the previous plan keyed promotion to a tag that had never been pushed, so its own first check could never run. Tagging is optional: `git tag -a launch-2026-10-15 a8e7a7c -m "re-audited release" && git push origin launch-2026-10-15`. Nothing in §4 depends on it. |
+| Release | **Commit `9dde4e9b7426c7c6fc86ab99ece1c3b5b7dd8540`** — the head of `claude/template-completion`, the merge of PR #6 on 2026-10-15. It supersedes `a8e7a7c`, which this plan pinned earlier the same day: `a8e7a7c` predates the photography pass and would ship the withdrawn imagery, including the third party's trademark (`docs/migration-inventory.md` §7e). **Do not promote `a8e7a7c`.** The audit in `docs/launch-audit.md` §8b was run against `719ee71`; the two commits since are documentation only, so the audited tree is the shipping tree for every route and asset. `npm run verify` passed whole at `142e683`. **The commit hash written here is the authority, not a tag** — the previous plan keyed promotion to a tag that had never been pushed, so its own first check could never run. Tagging is optional: `git tag -a launch-2026-10-15 9dde4e9 -m "re-audited release" && git push origin launch-2026-10-15`. Nothing in §4 depends on it. |
 | ~~Superseded~~ | ~~`f0eb073`~~ (carries the pre-2026-10-13 hero) and ~~`launch-2026-09-19` / `e2dba27`~~ on `claude/main-site-foundation-v1` (18 commits behind, tag never pushed). Do not promote either. |
 | ~~Previous release~~ | ~~`launch-2026-09-19` on `claude/main-site-foundation-v1` @ `e2dba27`~~ — **superseded.** That tag was never pushed to the remote (`git ls-remote --tags origin` was empty on 2026-10-13), so the promotion check as originally written could not be run at all. The commit itself is still reachable as `origin/claude/main-site-foundation-v1`. Do not promote it: the code has moved 18 commits past it, and launching it would put the live site on a layout the CRM no longer builds from. |
 | Vercel project | `showmeelectricalwebsite` — `prj_KHnKJNKpoEB6AjdC0rp1J86AyduC`, team `compassmarketin` (`team_JxUWGz1PjUP4jOAqXQqy3YFN`), Next.js, Node 24.x |
 | Production branch (Git) | `claude/show-me-electrical-careers-k6km12` — the repository's default branch and the branch Vercel builds as **production** |
 | Verified rollback deployment | **`dpl_4q2JCghjVErahoK8FSigLr41F2dT`** — commit `d819f02` (2026-08-29). **Re-verified 2026-10-15** via the Vercel API: still state READY, target `production`, still a rollback candidate. This is the build serving the live careers site right now. |
-| Branch relationship | Re-confirmed **2026-10-15** against `a8e7a7c`: the production branch (`d819f02`) is an ancestor, so **fast-forward is possible**, no merge commit. |
+| Branch relationship | Re-confirmed **2026-10-15** against `9dde4e9`: the production branch (`d819f02`) is an ancestor, so **fast-forward is possible**, no merge commit. |
 | Domains on the project today | `careers.showmeelectrical.com` (verified, live), `showmeelectricalwebsite.vercel.app`. **`showmeelectrical.com` and `www` are not on the project yet** — so Vercel has not yet displayed the DNS records it wants for them (§6). |
 | WordPress backup | **NOT completed.** Requires WP Engine access, which the build team does not have. Owner/agency action in §2.3; the release must not be promoted until it is done and the backup location is written here. |
 | Deployment protection | SSO protection on all deployments **except custom domains** — production on the custom domains is public; preview URLs need a share link. |
@@ -178,9 +178,9 @@ vercel env ls production                      # or the dashboard: both NEXT_PUBL
 
 # 1. pin to the reviewed commit
 git fetch origin --tags
-REL=a8e7a7c9bcf3eb7266c56c277a4e1396e6fa9241   # the release commit, from §0
+REL=9dde4e9b7426c7c6fc86ab99ece1c3b5b7dd8540   # the release commit, from §0
 git cat-file -e "$REL^{commit}"               # it exists locally after the fetch
-git log -1 --format='%H %s' "$REL"            # confirm it is the merge of PR #3
+git log -1 --format='%H %s' "$REL"            # confirm it is the merge of PR #6
 
 # 2. fast-forward the production branch to exactly that commit
 git checkout claude/show-me-electrical-careers-k6km12
