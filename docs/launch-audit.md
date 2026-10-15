@@ -1,179 +1,218 @@
 # Prelaunch audit — pass/fail report
 
-Run 2026-09-19 against the release build of `claude/main-site-foundation-v1`
-(local production build, preview configuration; then the launch
-configuration with `NEXT_PUBLIC_ALLOW_INDEXING=true`; then spot checks on the
-Vercel preview deployment). Method: raw HTML via `curl`, Playwright
-(Chromium) for browser behaviour, both hostnames driven with a `Host:`
-header locally. The full script and output are in the review package.
+Run **2026-10-13** against `claude/template-completion` @
+`f0eb073d72114a337f3c5a9b7d12b91c05f0fbb4` — the current release candidate.
+This supersedes the 2026-09-19 audit of `claude/main-site-foundation-v1` @
+`e2dba27`, which is retained in git history. The re-audit was asked for
+because the code moved 18 commits past the audited release: the brand
+separation (`brands/showme` + the `@brand` alias), the second, fictional
+brand, the durable inquiry idempotency work, and the service-area change
+that made `address.street` optional.
 
-**Result: PASS**, with three findings fixed during the run and re-verified
-(F1–F3) and two items that can only be proven on the real hostnames after
-promotion (P1–P2, see `docs/deployment-plan.md` §5).
+Method: the repository's own suite (`npm run verify`, 202 checks) on a clean
+`npm ci` checkout, then a separate audit harness over two full production
+builds — the preview configuration and the launch configuration
+(`NEXT_PUBLIC_ALLOW_INDEXING=true NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com`)
+— driving both hostnames with a `Host:` header. 52 audit checks in the
+preview configuration, 55 in the launch configuration.
 
-## 1. Pages, layout, content, motion — 14 pages
+**Result: PASS. 107 audit checks and 202 suite checks, zero failures, zero
+findings.** Nothing was fixed during this run because nothing failed. The
+two items that can only be proven on the real hostnames after promotion
+(P1–P2) are unchanged and still carried forward; see
+`docs/deployment-plan.md` §5.
 
-`/`, `/about`, `/services`, `/services/residential`, `/services/commercial`,
-`/services/industrial`, `/service-area`, `/blog`, three posts,
-`/privacy-policy`, `/terms-of-service`, `/contact`.
+> Harness note, recorded because it nearly produced four false findings:
+> Node's global `fetch` silently drops the `Host` header (a forbidden header
+> name), which routes every careers-host check to the main site; and title
+> and description limits must be measured on **decoded** text, since `&amp;`
+> is one character to a search engine and five in the markup. Every
+> host-dependent request in the harness goes through `curl`, and every
+> length is measured after entity decoding.
+
+## 0. What changed since the audited release, and what it means for launch
+
+| Area | Change | Launch consequence |
+|---|---|---|
+| **URL surface** | 14 routes → **16**. Nothing was removed or renamed. The two additions are `/services/residential/electrical-panel-upgrades` (service detail) and `/service-area/edwardsville-il` (served city). | No redirect, canonical or legacy-URL consequence. The sitemap grows from 14 to 16. |
+| Route implementation | The three service hubs and the two legal pages moved from static files to `app/services/[slug]`, `app/services/[slug]/[child]` and `app/[doc]`. | Same paths, same output — verified by the route matrix below. |
+| `/locations` | New in the framework, **null for this brand** (`brands/showme/content/locations.ts`: one shop, no branch pages). | No `/locations` route is published. |
+| `app/api/apply` (the **live** careers endpoint) | `FROM` and `TO` moved from literals to `brands/showme/careers.ts`, plus a 404 guard for brands with no careers property. | **Byte-identical values**: `Show Me Electrical Careers <careers@send.compassmarketing.ai>` and `["info@showmeelectrical.com", "thomas@compassmarketing.ai"]`. `site.careers` is non-null for this brand, so the guard never fires. No behaviour change for the live careers site. |
+| `middleware.ts` | `site.careersUrl` → `site.careers.url`, plus a null guard. | Rules 1–4 unchanged for this brand; the careers host matrix below is identical to the 2026-09-19 run. |
+| Legacy redirects | Moved from `config/redirects.ts` to `brands/showme/redirects.ts`. | Same table. Every entry verified behaviourally below, including all nine retained photos. |
+| Indexing switch | `allowIndexing` is now `allowIndexing && !site.fictional`; `robots.ts` likewise. | No change for this brand (`fictional: false`). The switch still governs launch exactly as before. |
+| `app/api/inquiry` | Rewritten onto a provider adapter with the provider's `Idempotency-Key` as the single authority for duplicate sends. | The largest functional change in the 18 commits. `INQUIRY_DELIVERY` is still ignored when `VERCEL_ENV=production` (`isProduction ? "" : …`), and `brands/showme/inquiry.config.ts` has `forceMock: false`, so production cannot be put into a mock mode. Covered by 50+ suite checks across two server instances. |
+
+## 1. Pages, layout, content, motion — 16 routes
+
+All 16 main-host routes answer 200 in both configurations.
 
 | Check | Result |
 |---|---|
-| Desktop (1440) and mobile (390) full-page screenshots, every page | Pass — no clipped sections, no overlapping text, address and phone consistent |
-| Horizontal overflow at 390px | 0 px on every page |
-| Fold at 1366×768 with motion on | H1 and first text visible on arrival on every page |
-| Stranded (invisible after scroll) elements, motion on | 0 on every page, desktop and mobile |
-| Reduced motion | 0 hidden elements on every page |
-| Single H1, no skipped heading levels | Pass on every page |
-| Navigation | Every nav/footer/breadcrumb link resolves; Careers links leave for the careers host by design |
+| Horizontal overflow at 390px | 0 px |
+| Stranded (invisible after scroll) elements, motion on | 0 hidden by opacity/visibility |
+| Reduced motion | 0 elements left translated, 0 faded text after load |
+| Single H1 per page | Pass on all 16 |
+| Internal links and fragments | 0 unresolved (route manifest: 16 routes, 38 content links, 0 unresolved, 0 non-https external) |
+
+Browser checks ran on the suite's five representative routes per brand
+(home, a service detail, a served city, an article, contact), not on all 16.
+Full-page visual review across every page remains Tom's, as before.
 
 ## 2. Keyboard, reduced motion, no JavaScript
 
 | Check | Result |
 |---|---|
-| Skip link, `main#main`, labelled sections, `aria-current` on breadcrumbs | Pass (home and contact have no breadcrumb by design) |
-| Tab order through the inquiry form | name → email → phone → service → details → submit → phone link |
-| FAQ disclosure by keyboard (Enter / Space) | Pass on hub pages |
-| JavaScript disabled | All sections rendered; FAQ answers in the DOM; inquiry form rendered with the submit button disabled and a notice pointing at phone/email; no native submission possible |
-| Tap targets under 24 px (mobile) | Only the visually-hidden skip link, on every page |
+| First Tab lands on a visible skip link; it reaches `#main` | Pass |
+| Tap targets ≥ 24px | Pass (only the visually-hidden skip link excepted) |
+| JavaScript disabled | H1 and main text present on every probed route (1,086–6,075 characters); no content hidden by opacity or visibility; the inquiry submit button disabled so no native submission is possible |
 
 ## 3. Metadata, canonicals, structured data, sitemap, indexing
 
 | Check | Result |
 |---|---|
-| Title ≤ 60 chars, one per page | Pass (homepage title fixed this pass: 88 → 49) |
-| Description ≤ 155 chars | Pass after F1 (homepage 235 → 155, service area 172 → 152) |
-| Canonical = production URL, one per page | Pass |
-| Open Graph / Twitter tags | Present; og:image on every page that has a hero photo |
-| JSON-LD | Electrician + WebSite on every page; Service on hubs; AboutPage, WebPage, CollectionPage, Blog, BlogPosting, BreadcrumbList as appropriate; every `about` / `isPartOf` / `provider` reference resolves to a node on the same page |
-| FAQPage = visible FAQ text | Identical on every page that renders FAQs (6, 5, 13, 9, 7, 4 questions) |
-| Address in schema | `5602 Heege Rd, Affton, MO 63123` (D-005); no "Hegee" anywhere; no coordinates emitted (none confirmed) |
-| Claim sweep (24/7, guarantees, "licensed Master", reviewer voice, Missouri-wide, fire ranking, property value, code claim, panel age, inspection CTA, "fast") | Clean on every page after F2. Only remaining hits: `www.showmeelectrical.com` ×3 in the legal documents — pending the policy revision (P1/T1) |
-| Preview configuration | `noindex, nofollow` meta, `robots.txt` `Disallow: /`, review banner shown — on both hosts |
-| Launch configuration (`NEXT_PUBLIC_ALLOW_INDEXING=true`) | see §7 |
-| Sitemap, main host | 14 URLs, `showmeelectrical.com` origin, no careers URLs |
-| Sitemap, careers host | 5 URLs, careers origin only |
+| Title ≤ 60 characters, one per page (decoded) | Pass on all 16 |
+| Description ≤ 155 characters (decoded) | Pass on all 16 |
+| Canonical on `https://showmeelectrical.com`, one per page | Pass |
+| JSON-LD present and parsing on every page | Pass |
+| Every `about` / `isPartOf` / `provider` / `publisher` `@id` resolves to a node on the same page | Pass |
+| FAQPage questions identical to the visible text | Pass on every page that renders FAQs |
+| Address | `5602 Heege Rd` present (D-005); no "Hegee" anywhere |
+| Claim sweep — 24/7 or round-the-clock, after-hours / overnight / weekend coverage, guarantees, "licensed Master", Missouri-wide, property-value claims, response-time promises | **Clean on all 16 routes.** The `www.showmeelectrical.com` hits the previous audit left open (P1/T1) are gone: 0 occurrences. |
+| Sitemap, main host | 16 URLs, `showmeelectrical.com` origin, every route present, no careers URLs |
+| Sitemap, careers host | 5 URLs, careers origin only (unchanged) |
+| Preview configuration | `noindex` meta on every page, `Disallow: /` on both hosts |
+| Launch configuration | `index, follow` on every page; neither host disallows; each `robots.txt` names its own sitemap; the review banner is absent on every page |
+
+The two new routes carry their provenance in source.
+`electrical-panel-upgrades.ts` derives every sentence from already-approved
+residential-hub copy and names what it deliberately omits for want of a
+source (prices, duration, permit and utility specifics, amperage
+recommendations, brand names, and any residential panel photograph).
+`edwardsville-il.ts` rests on decision **D-003** (owner-confirmed
+2026-09-19): those two Illinois cities only, not their counties and not the
+wider Metro East.
 
 ## 4. Redirects — legacy pages and retained images
 
 | From | Result |
 |---|---|
 | `/about/`, `/services/`, `/contact/`, `/privacy-policy/`, `/terms-of-service/` | 1 hop → page, 200 |
-| `/locations/` → `/service-area`; `/st-louis/` → `/services/industrial`; `/category/blog/` → `/blog`; three post URLs → `/blog/<slug>` | 2 hops (Next's slash strip, then the rule), 200 |
-| `/careers/`, `/career/` → careers host; `/careers/jobs/<slug>` → careers host `/jobs/<slug>` | 308 |
-| `/wp-sitemap.xml` + 4 sub-sitemaps → `/sitemap.xml` | 1 hop, 200 XML |
+| `/locations/` → `/service-area`; `/st-louis/` → `/services/industrial`; `/category/blog/` → `/blog` | 2 hops (Next's slash strip, then the rule), 200 |
+| `/careers/`, `/career/` → careers host | 2 hops, 308, final `https://careers.showmeelectrical.com/` |
+| `/careers/jobs/<slug>` → careers host `/jobs/<slug>` | 1 hop, 308 |
+| `/wp-sitemap.xml` and its sub-sitemaps → `/sitemap.xml` | 1 hop, 200 |
+| **All nine** retained photo URLs (`/wp-content/uploads/…`) → `/photos/<name>.webp` | 9 of 9: 200, `image/webp`, correct destination (the previous audit sampled three) |
+| An unretained stock upload | 404 by design |
 | `/global-styles/` | 410 Gone |
-| 9 retained photo URLs (`/wp-content/uploads/…`) → `/photos/<name>.webp` | 1 hop, 200 `image/webp` (three sampled) |
-| Stock upload URL | 404 by design |
 
 ## 5. Contact form and production readiness
 
+Covered by the suite rather than re-driven by hand: 50+ checks over server
+validation (empty, name-only, no contact, bad email, bad phone, unknown
+service), the honeypot, cross-origin POST, the per-instance rate limit,
+provider failure and network failure, hydration and focus behaviour, and
+the full duplicate-send contract across two independent server instances
+(unchanged retry → the original provider id and exactly one send; edited
+message under a used key → 409 `submission_changed` and nothing delivered;
+simultaneous sends → one delivery and explicit `in_progress` conflicts for
+the rest). Recipient `info@showmeelectrical.com`; sender
+`Show Me Electrical Website <inquiries@send.compassmarketing.ai>`.
+
+Delivery was **mocked throughout this audit — no message was sent.** The
+2026-09-19 real-delivery evidence (provider reports delivered; human inbox
+receipt unverified, D-007) still stands and is not re-tested; no test
+messages without authorization.
+
+## 6. Careers host and application workflow
+
 | Check | Result |
 |---|---|
-| Server validation (empty, name only, no contact, bad email, bad phone, unknown service, 3,001-char details) | 400 with field codes; inline messages rendered |
-| Valid submissions (phone only, email only, known service) | Accepted; mocked delivery logged with recipient `info@showmeelectrical.com`, Reply-To the visitor |
-| Fast submission (autofill/paste, 388 ms after load) | Accepted — no timing trap |
-| Honeypot | Silent 200, nothing delivered |
-| Cross-origin POST / non-JSON / GET | 403 / 400 / 405 |
-| Per-instance rate limit | 6th request from one IP in 10 min → 429 (per instance only, documented) |
-| Provider failure (simulated) | 502; failure banner with phone + email; all five values preserved; focus moves to the banner |
-| Network failure | Message shown, values preserved |
-| Server 400 with client checks bypassed | Field error rendered, values preserved |
-| Loading state | Button disabled, "Sending…", `aria-busy` |
-| Success only on server `{ ok: true }` | Pass |
-| Pre-hydration / no-JS | Submit disabled in served HTML, `method="post"`, no data in URL |
-| Production configuration | `RESEND_API_KEY` present for production; `INQUIRY_*` defaults correct; `INQUIRY_DELIVERY` absent in production; mock/fail ignored when `VERCEL_ENV=production` (code). Real-delivery test on the preview: **provider reports delivered; human inbox receipt unverified** (D-007) |
-
-## 6. Careers host and application workflow (release build, `Host:` header)
-
-| Check | Result |
-|---|---|
-| `/` and the four `/jobs/<slug>` pages | 200 |
-| `/careers`, `/careers/jobs/<slug>` on the careers host | 308 → clean URL |
+| Careers host `/` and `/jobs/<slug>` | 200 |
+| Careers host `/careers` | 308 → clean URL |
 | Main-site paths on the careers host (`/about`, `/blog`, `/career`) | 404 |
-| Main host `/careers*`, `/career*` | 308 → careers host (rule 4) |
-| Per-host robots and sitemap; canonical on job pages | Correct host in each |
-| Careers home after hydration | H1 present, job cards present, no main-site nav |
-| Application form (`/?role=<slug>#apply`, where job pages link) | In the served HTML and interactive after hydration; the job page's apply link 308s from `/careers?role=…` to `/?role=…` on the careers host |
-| `/api/apply` validation | GET 405; missing fields 400; bad email 400; honeypot silent 200; valid body with a dummy key → 502 from the provider (no email sent). Route file unchanged since the live deployment (`git diff` empty). |
-
-P1 — the same matrix and the non-sending apply-route probe on the real
-hostnames — is the post-promotion check in the deployment plan; it cannot
-be run against a preview because Vercel routes by domain. P2 — a real
-application through the live form — happens only if Tom authorizes it
-(D-007: no test messages without authorization).
+| Main host `/careers*`, `/career*` | 308 → careers host |
+| Canonical on the careers host | `https://careers.showmeelectrical.com` |
+| `/api/apply` validation | GET 405; empty body 400; bad email 400; non-JSON 400. Probed against a server holding a deliberately invalid provider key, so validation is reachable and nothing past it could send. |
 
 ## 7. Launch configuration build
 
-Built with `NEXT_PUBLIC_ALLOW_INDEXING=true NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com`:
+Built with `NEXT_PUBLIC_ALLOW_INDEXING=true NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com`
+and audited as its own server: 55 checks, all passing — see §3 for the
+indexing, robots, sitemap and banner rows.
+
+## 7a. Mobile loading performance — NOT re-measured
+
+The 2026-09-19 audit recorded Lighthouse lab measurements (Lighthouse
+12.8.2, Chromium 141, mobile form factor). **This run did not repeat them:**
+Lighthouse is not installed in this environment and was not fetched. The 18
+commits include layout-affecting work (brand separation, inline prose link
+hit areas, per-brand build directories), so the earlier numbers should not
+be assumed to carry over.
+
+This is not a launch blocker on its own — it is lab data, not field data,
+and the previous run's remaining performance items were already recorded as
+non-blocking — but **re-measure before promotion if the earlier numbers are
+going to be quoted as current.** Field Core Web Vitals remain a
+post-launch item either way.
+
+## 8. Findings
+
+**None.** Nothing failed, so nothing was fixed during this run. For
+contrast, the 2026-09-19 run carried three findings fixed in-flight
+(F1–F3); all three remain fixed here, and the `www.showmeelectrical.com`
+occurrences it left open in the legal documents are now gone.
+
+## 8a. Addendum — hero change, 2026-10-13 (after the audit above)
+
+The audit above was run against the tree at `f0eb073`. One change landed after
+it, on the same branch, at the owner's request: the homepage hero became a
+full-height photo panel, and its photo changed from
+`/photos/commercial-panels.webp` to `/photos/tray-ceiling-recessed-lighting.webp`
+(`2025/10/IMG_0176.jpg` from the client's WordPress library, newly retained —
+§7a of the migration inventory now lists ten photos, not nine).
+
+**It was not accepted on the strength of the earlier run.** Re-run against the
+new build:
 
 | Check | Result |
 |---|---|
-| Robots meta, both hosts | `index, follow` |
-| `robots.txt`, both hosts | Allow, own sitemap |
-| Review banner | Hidden on every page (gated on the same switch) |
-| Reviewer notes text in HTML | Absent |
-| Canonicals and sitemap origin | `https://showmeelectrical.com`, careers host unchanged |
+| `npm run verify`, whole | ALL PASSED |
+| The audit harness, preview configuration | 52 / 52 |
+| All ten retained photo redirects | 10 / 10 → 200, `image/webp`, correct destination |
+| Horizontal overflow at 390, 1366 and 1920 | 0 px at every width |
+| Primary CTA above the fold at 1366×768 | Visible on arrival — and it was **not**, at the first attempt. A straight `1fr/1fr` split narrowed the text column enough to wrap the headline to four lines and push the CTA onto the fold; the ratio is `1.12fr/0.88fr` because of that measurement. |
+| Routes, sitemap, canonicals, redirects | Unchanged — the change touches one image and one component |
 
-## 7a. Mobile loading performance (lab measurements, not real-user data)
+The release pin in `docs/deployment-plan.md` §0 therefore moves with this
+branch; see the note there.
 
-**Environment.** Lighthouse 12.8.2, Chromium 141 headless, mobile form
-factor (412×823, DPR 1.75), performance category only. Two throttling modes:
-*simulated* (Lighthouse's default model: 150 ms RTT, 1.6 Mbps, 4× CPU) and
-*applied* (`devtools`: 562 ms request latency, 1.5 Mbps, 4× CPU, actually
-enforced in the browser). Local runs hit `next start` over HTTP/1.1 in the
-sandbox; deployed runs hit the Vercel preview through the sandbox's HTTPS
-proxy, which also negotiates HTTP/1.1 — so neither run benefits from the
-HTTP/2 multiplexing real visitors get on Vercel, and both are pessimistic
-for request queuing. These are lab numbers on one device profile; there is
-no real-user (field) data yet — see the follow-up in §9.
+## 9. Carried forward
 
-**Finding (material) and fix.** Above-the-fold entrance animations
-(`Reveal`/`StaggerText` with `immediate`) faded already-painted hero content
-back in after hydration. On a slow device that pushed Largest Contentful
-Paint out by the whole hydration time: LCP render delay of 2.4–3.0 s on
-every page, with FCP under 1.1 s. Fix: `motion.immediateDeadlineMs` (1200)
-in `config/theme.config.ts` — immediate entrances play only if hydration
-happened within 1.2 s of navigation start; otherwise the server-rendered
-content is left as is. Scroll-triggered entrances are unaffected; fast
-devices still see the entrance (verified: hero words at opacity 0 at 266 ms,
-1 after the animation).
+Unchanged from `docs/launch-checklist.md` and `docs/deployment-plan.md`:
 
-| Page | Simulated, before → after | Applied throttling, local build | Applied throttling, **deployed preview** |
-|---|---|---|---|
-| `/` | score 82 → 92 · LCP 3.5 → 3.2 s · TBT 346 → 108 ms · SI 3.2 → 1.5 s | score 79 · FCP 1.8 s · LCP 3.2 s (hero image, queued behind 5 font preloads on HTTP/1.1) · TBT 477 ms · CLS 0.06 | **score 85 · FCP 1.8 s · LCP 1.8 s · TBT 498 ms · CLS 0.055 · SI 2.1 s · 516 KiB** |
-| `/services/residential` | 94 → 96 · LCP 2.8 → 2.6 s · TBT 141 → 112 ms | 87 · FCP 1.8 s · LCP 1.8 s · TBT 425 ms · CLS 0.06 | **84 · FCP 1.8 s · LCP 1.8 s · TBT 557 ms · CLS 0.049 · SI 2.0 s · 363 KiB** |
-| `/contact` | 96 → 96 · LCP 2.7 → 2.7 s · TBT 36 ms | 98 · FCP 1.7 s · LCP 1.7 s · TBT 119 ms · CLS 0.00 | **98 · FCP 1.7 s · LCP 1.7 s · TBT 128 ms · CLS 0.001 · SI 1.7 s · 321 KiB** |
+- **P1** — the routing matrix and the non-sending apply probe on the real
+  hostnames. Cannot be run against a preview: Vercel routes by domain.
+  Post-promotion check, deployment plan §5.
+- **P2** — a real application through the live form. Only if Tom authorizes
+  it (D-007).
+- **WordPress backup at WP Engine** — still not done, still a hard blocker.
+  Needs WP Engine access the build team does not have.
+- **The release is pinned by commit hash, not by a tag.** The previous plan
+  keyed promotion to `launch-2026-09-19`, which was never pushed to the
+  remote, so its own first promotion check could never have run. The hash is
+  now written into `docs/deployment-plan.md` §0. Tagging is optional; this
+  environment's git relay refuses refs outside `refs/heads/*`, so the tag
+  could not be created from the audit session.
+- **`NEXT_PUBLIC_ALLOW_INDEXING=true` and `NEXT_PUBLIC_SITE_URL` must exist
+  on Vercel production before the build.** Without the first, promotion
+  makes the live careers site `noindex` with `Disallow: /`. The sharpest
+  risk in the plan, and this audit does not reduce it.
+- **DKIM confirmation and the TTL reduction** in the GoDaddy zone.
+- **Tom's visual review and launch approval.**
 
-The simulated mode cannot exercise the deadline (its trace runs unthrottled
-and hydrates early), which is why simulated LCP barely moves; under applied
-throttling LCP equals FCP on every page, which is the intended effect.
+## 10. Repeat after launch
 
-**Remaining, not launch-blocking.** Total Blocking Time of ~0.5 s on the
-homepage and hubs under 4× CPU slowdown comes from hydration plus the GSAP
-scroll-trigger setup (main-thread "Style & Layout" ~1 s). Score bands: LCP
-and CLS "good", TBT "needs improvement" on those two pages. CLS 0.05 is font
-swap. Cheap follow-ups after real-user data exists: drop the unused Poppins
-500 weight preload, defer the scroll-story rail setup below the fold,
-consider a lower `quality` for hero images. Not done now: no evidence yet
-that real users on real devices are affected, and each change touches the
-shared motion system that every page uses.
-
-## 8. Findings fixed during the audit
-
-| # | Finding | Fix |
-|---|---|---|
-| F1 | Homepage and service-area meta descriptions over 155 characters (235, 172) | Rewritten to 155 and 152 |
-| F2 | Hazards post still said "Outdated wiring is one of the leading causes of electrical fires" (a second unsupported ranking, in the body) | "Outdated wiring can cause electrical fires." |
-| F3 | README routing matrix predated rule 4 (main host `/careers` was listed as 200) | Matrix updated: 308 to the careers host, main-site paths 404 on the careers host, banner hidden in production |
-| F4 | Entrance animations delayed LCP by the hydration time on slow devices (§7a) | Late-hydration deadline for immediate entrances |
-
-## 9. Repeat after launch
-
-See `docs/deployment-plan.md` §8. The audit script (`full-audit.sh` in the
-review package) runs unchanged against any port; the same checks on the real
-hostnames need only the host names swapped. Performance: once the site has
-28 days of Chrome UX Report data (Search Console → Core Web Vitals, or
-PageSpeed Insights "field data"), compare LCP/INP/CLS against the lab
-numbers above and act on the follow-ups in §7a only if the field data
-shows a problem.
+As before: the §4 and §6 matrices on the real hostnames, Search Console
+coverage and 404s for days 1–7, provider delivery statuses, and field Core
+Web Vitals once real-user data exists.

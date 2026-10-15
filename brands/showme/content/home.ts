@@ -81,11 +81,41 @@ export const hero = {
   headlineAccent: "done right the first time.",
   /** Source: live homepage subhead, condensed to two lines. */
   body: "Owner-led electrical contractor for residential, commercial and industrial work across the Greater St. Louis area. Free consultations, straight answers, code-compliant work.",
-  image: {
-    src: "/photos/commercial-panels.webp",
-    /** Corrected 2026-09-19: these are wall-mounted stainless units, not panels. */
-    alt: "Four wall-mounted stainless-steel units with flue pipes on a white brick wall in a commercial space, each wired through conduit to a junction box",
-  },
+  /**
+   * HERO PHOTOGRAPHY — one or two frames. Two rotate (a CSS crossfade, no
+   * JavaScript; see `.hero-slide-top` in app/globals.css); one stays still.
+   *
+   * These are the live WordPress hero's own two slide backgrounds, carried
+   * over at the owner's direction (2026-10-15) so the rebuild opens the way
+   * the current site does: a homes frame, then a businesses frame.
+   *
+   * PROVENANCE — BOTH ARE STOCK, not this client's work. The filenames carry
+   * the stock-library `-utc` signature, and the second is a 3D rendering, not
+   * a photograph. They are therefore illustrative: nothing on the page
+   * describes either as a Show Me Electrical job, and the alt text says what
+   * is actually in frame. The licence is the owner's to hold — the images
+   * come from the client's own site, but a stock licence does not transfer
+   * automatically with a rebuild. See docs/migration-inventory.md §7d.
+   *
+   * The client's own photographs stay in the repository and are the better
+   * material when they fit: `/photos/tray-ceiling-recessed-lighting.webp`
+   * (residential) and `/photos/commercial-led-retrofit.webp` (commercial)
+   * were the previous two frames and remain available, with their redirects.
+   */
+  images: [
+    {
+      /** `2025/07/54218-glass-windows-and-doors-of-modern-house-…-utc-scaled.jpg` — stock. */
+      src: "/photos/modern-home-entrance.webp",
+      /** Written from the frame itself, 2026-10-15. */
+      alt: "The entrance of a cedar-clad modern house at dusk, a glass door flanked by two lit wall sconces, with warm light coming from the rooms and stairway inside",
+    },
+    {
+      /** `2025/07/3d-rendering-business-meeting-room-on-high-rise-of-…-utc-scaled.jpg` — stock, a 3D rendering. */
+      src: "/photos/boardroom-cove-lighting.webp",
+      /** Says "rendering" because it is one; describing it as a photograph would be untrue. */
+      alt: "A rendering of a timber-panelled boardroom lit by concealed cove lighting, recessed ceiling downlights and wall washers, with a long table and leather chairs",
+    },
+  ] as const,
 };
 
 /** Trust points are shared with the service pages — see content/shared.ts. */

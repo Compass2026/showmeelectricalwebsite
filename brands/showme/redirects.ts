@@ -53,13 +53,27 @@ export const redirects: Redirect[] = [
   ...[
     ["2025/10/10BF7BF3-A2B5-48E8-8859-44E5ABA87C19_4_5005_c.jpg", "industrial-high-bay"],
     ["2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg", "commercial-checkout"],
+    ["2025/10/IMG_0176.jpg", "tray-ceiling-recessed-lighting"],
     ["2025/10/IMG_0179-1.jpg", "finished-interior-lighting"],
     ["2025/10/IMG_0354-1.jpg", "ceiling-fan-install"],
     ["2025/10/IMG_0488-1.jpg", "roughin-attic"],
     ["2025/10/IMG_1447-1.jpg", "commercial-panels"],
     ["2025/10/IMG_2411-1.jpg", "roughin-wall"],
+    ["2025/07/IMG_6345.jpg", "commercial-led-retrofit"],
     ["2025/10/IMG_7032-1.jpg", "roughin-framing"],
     ["2025/10/PHOTO-2025-04-15-22-41-56.jpg", "service-entrance"],
+  ].map(([old, name]) => ({
+    source: `/wp-content/uploads/${old}`,
+    destination: `/photos/${name}.webp`,
+    permanent: true,
+  })),
+
+  // The two live hero slide backgrounds, carried over at the owner's
+  // direction (2026-10-15). STOCK, not the client's work — kept separate from
+  // the job-site list above so that stays true. Migration inventory §7d.
+  ...[
+    ["2025/07/54218-glass-windows-and-doors-of-modern-house-2025-04-03-15-41-34-utc-scaled.jpg", "modern-home-entrance"],
+    ["2025/07/3d-rendering-business-meeting-room-on-high-rise-of-2025-01-07-05-56-21-utc-scaled.jpg", "boardroom-cove-lighting"],
   ].map(([old, name]) => ({
     source: `/wp-content/uploads/${old}`,
     destination: `/photos/${name}.webp`,

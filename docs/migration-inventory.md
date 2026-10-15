@@ -40,7 +40,7 @@ that sitemap plus a fetch of each URL, not from a homepage crawl.
 |---|---|---|
 | `/category/blog/` | `/blog` | **Consolidated ✅ + 301** — single category, flat index. |
 | `/wp-sitemap.xml` and its four sub-sitemaps (`-posts-post-1`, `-posts-page-1`, `-taxonomies-category-1`, `-users-1`) | `/sitemap.xml` | **301 ✅** — the author sitemap included, so no legacy sitemap URL 404s. |
-| `/wp-content/uploads/…` (32 images) | `/photos/<name>.webp` for the 9 retained photos | **9 redirected ✅, rest 404 by design.** The retained job-site photos redirect from their original upload URL to the re-encoded file (§7a); stock, unused and duplicate uploads are not redirected (§7b). |
+| `/wp-content/uploads/…` (282 in the library; 32 referenced by live pages) | `/photos/<name>.webp` for the 11 retained photos | **11 redirected ✅, rest 404 by design.** The retained job-site photos redirect from their original upload URL to the re-encoded file (§7a); stock, unused and duplicate uploads are not redirected (§7b, §7c). |
 
 ## 4. Redirect map — implemented, verified
 
@@ -109,16 +109,19 @@ Image URLs are not redirected — nothing the rebuild controls links to them —
 so each old URL will 404 after the move. The tables below are the record of
 what became what.
 
-### 7a. Retained — the client's own job-site photography (9)
+### 7a. Retained — the client's own job-site photography (11)
 
 Visually verified as genuine Show Me Electrical work, re-encoded to WebP at
-up to 1600px wide (`public/photos/`). Old paths are relative to
+up to 1600px wide (`public/photos/`; the 2026-10-13 addition is 2048px, the
+width of its landscape original). Old paths are relative to
 `https://showmeelectrical.com/wp-content/uploads/`.
 
 | Old WordPress file | New file | Shows | Used on |
 |---|---|---|---|
 | `2025/10/10BF7BF3-A2B5-48E8-8859-44E5ABA87C19_4_5005_c.jpg` | `/photos/industrial-high-bay.webp` | High-bay warehouse lighting | Home, `/services/industrial` (hero) |
 | `2025/10/B8048B09-5E7D-4030-935C-826FBC99AA97-1.jpg` | `/photos/commercial-checkout.webp` | Retail checkout build-out | Home, `/services/commercial` |
+| `2025/10/IMG_0176.jpg` | `/photos/tray-ceiling-recessed-lighting.webp` | Recessed tray ceiling, eight downlights and two in-ceiling speakers, mid-renovation | Added 2026-10-13 as the home hero; **unplaced since 2026-10-15** (§7d). Retained and redirected. |
+| `2025/07/IMG_6345.jpg` | `/photos/commercial-led-retrofit.webp` | Recessed LED panels in a commercial drop ceiling, brick wall, exit sign | Added 2026-10-13 as the hero's second frame; **unplaced since 2026-10-15** (§7d). Also on the live site's "Commercial Lighting" slide. Retained and redirected. |
 | `2025/10/IMG_0179-1.jpg` | `/photos/finished-interior-lighting.webp` | Finished interior lighting | Home, `/services/residential` |
 | `2025/10/IMG_0354-1.jpg` | `/photos/ceiling-fan-install.webp` | Ceiling fan installation | `/services/residential` |
 | `2025/10/IMG_0488-1.jpg` | `/photos/roughin-attic.webp` | Recessed lighting rough-in, vaulted ceiling | Home, `/about`, `/blog`, `/services/residential` |
@@ -140,7 +143,7 @@ duplicate upload of the same logo and is retired.
 | Group | Files | Why |
 |---|---|---|
 | **Stock photography** (never presented as client work) | `2025/06/vintage-electric-switch-…-utc.jpg` (+ `-scaled`), `2025/10/interior-of-a-lobby-hotel-reception-3d-illustratio-…-utc-1-1-1.jpg`, `2025/10/living-room-…-utc-4-1-1.jpg`, `2026/01/electrical-outlet-replacement-…-utc.jpg` (+ `-scaled`), `2026/01/worker-is-cutting-wires-…-utc.jpg` (+ `-scaled`) | `-utc` timestamp filenames are stock-library downloads; the brand board independently confirms two. The blog posts' featured images were these, so the posts now carry no image rather than a stock one. |
-| **Additional client photos, unused for now** | `2025/10/66432045448__0F850129-…jpg`, `2025/10/7BD07746-…_4_5005_c.jpg`, `2025/10/87B73734-…_4_5005_c.jpg`, `2025/10/AD15139E-…_4_5005_c.jpg`, `2025/10/IMG_4323.jpg`, `2025/10/IMG_4659-1-1536x2048-1.jpg`, `2025/10/IMG_4815-1-1536x2048-1.jpg`, `2025/10/IMG_4886-1536x2048-1.jpg`, `2025/10/PHOTO-2025-04-15-23-37-49-1.jpg`, `2025/07/IMG_5571.jpeg` | Same job-site library, not needed by the current page set. Candidates for the individual service pages later; each must be visually verified before use, as the nine above were. Not migrated = not lost: they stay in the WordPress media library until the site is retired, and should be exported with it. |
+| **Additional client photos, unused for now** | `2025/10/66432045448__0F850129-…jpg`, `2025/10/7BD07746-…_4_5005_c.jpg`, `2025/10/87B73734-…_4_5005_c.jpg`, `2025/10/AD15139E-…_4_5005_c.jpg`, `2025/10/IMG_4323.jpg`, `2025/10/IMG_4659-1-1536x2048-1.jpg`, `2025/10/IMG_4815-1-1536x2048-1.jpg`, `2025/10/IMG_4886-1536x2048-1.jpg`, `2025/10/PHOTO-2025-04-15-23-37-49-1.jpg`, `2025/07/IMG_5571.jpeg` | Same job-site library, not needed by the current page set. Candidates for the individual service pages later; each must be visually verified before use, as the eleven above were. Not migrated = not lost: they stay in the WordPress media library until the site is retired, and should be exported with it. |
 | **Facebook-sourced image** | `2025/06/499399452_2959955684207140_…_n.jpg` | Facebook CDN filename; provenance not verifiable, not used. |
 | **Graphics of unknown provenance** | `2025/05/SHOW-ME-INVESTMENT-2.png`, `2025/05/unnamed.png`, `2025/05/unnamed-2.png`, `2025/05/unnamed-3.png` | Not photography; not referenced by any rebuilt page. Available in the WordPress library if the owner wants them. |
 | **Site icon** | `2024/08/cropped-Untitled-design.png` | Replaced by `app/icon.svg`. |
@@ -148,6 +151,87 @@ duplicate upload of the same logo and is retired.
 
 **Missing:** a portrait of Dan. The About page shows a job-site photo as a
 stand-in; recorded in the reviewer notice, not captioned on the page.
+
+### 7c. The library is larger than this inventory — corrected 2026-10-13
+
+This section was built from the images the live pages reference (32). The
+WordPress media library actually holds **282 items** (`/wp-json/wp/v2/media`,
+three pages). The difference is not a migration gap — nothing referenced by a
+rebuilt page was missed — but it changes what is available, and two things in
+it are worth recording:
+
+- **A much deeper job-site library than §7b implies**, including around thirty
+  landscape frames. Most of the client's photography is portrait phone work
+  (roughly 100 originals), which is why the retained nine were all 1536×2048
+  and the hero cropped one of them. The genuine landscape frames are the
+  scarce, useful ones: `IMG_0176` (now the home hero), `IMG_6345` (commercial
+  LED troffer retrofit in a drop ceiling — now the hero's second frame), `31493461-…` (backlit onyx island; striking, but dim and
+  an identifiable person is in frame, so it needs consent before use) and
+  `6F134F3C-…` (built-in cabinetry with under-cabinet lighting).
+- **A `DSC_*` set dated 2011–2012** (`DSC_0689-smaller.jpg` and similar,
+  2500×1667) that is **not Show Me Electrical's work.** One was opened to
+  check: a potted plant on a table — interior-decor imagery, no electrical
+  content. Treat the whole set as unattributed and do not use it.
+
+The stock group in §7b is also larger than listed: sixteen stock originals
+carry the `-utc` signature, among them several 3D renders.
+
+**Where the live site actually uses them**, read off the page on 2026-10-13 —
+recorded precisely because an earlier note here said loosely that the hero
+"rotates these", and the hero in fact uses two stock files that §7b never
+listed:
+
+| Live placement | File | Kind |
+|---|---|---|
+| Hero slide 1, "Powering Homes Across Missouri…" | `54218-glass-windows-and-doors-of-modern-house-…-utc` | stock photo |
+| Hero slide 2, "Powering Businesses Across Missouri…" | `3d-rendering-business-meeting-room-on-high-rise-of-…-utc` | stock **3D render** |
+| Service card, Residential | `living-room-…-utc` | stock photo |
+| Service card, Commercial | `interior-of-a-lobby-hotel-reception-3d-illustratio-…-utc` | stock **3D render** |
+| Service card, Industrial | `10BF7BF3-…` | the client's own — retained, §7a |
+| Blog thumbnails (×3) | `worker-is-cutting-wires-…`, `electrical-outlet-replacement-…`, `vintage-electric-switch-…` | stock photos |
+
+The live hero's *structure* — two slides alternating a homes message and a
+businesses message — is kept by the rebuilt hero. Its two slide BACKGROUNDS
+were carried over too, by the owner's decision on 2026-10-15; see §7d. The
+rest of the stock above stays retired.
+
+### 7d. Stock carried over by owner decision — 2026-10-15
+
+Two stock images are published on the rebuilt site. They are recorded
+separately from §7a so that section stays what it says it is: the client's
+own photography.
+
+| Old WordPress file | New file | What it is |
+|---|---|---|
+| `2025/07/54218-glass-windows-and-doors-of-modern-house-…-utc-scaled.jpg` | `/photos/modern-home-entrance.webp` | Stock photograph. Cedar-clad house entrance at dusk, glass door between two lit sconces. |
+| `2025/07/3d-rendering-business-meeting-room-on-high-rise-of-…-utc-scaled.jpg` | `/photos/boardroom-cove-lighting.webp` | Stock **3D rendering**. Timber-panelled boardroom with cove lighting and recessed downlights. |
+
+**Why they are here.** They are the live WordPress hero's own two slide
+backgrounds, and the owner asked for the rebuilt hero to use them, after the
+stock provenance was put to him twice. That is his call to make and it is
+recorded as his, not as a finding of this inventory.
+
+**What was decided against.** §7b's rule — the site does not present stock as
+the client's work — is not weakened by this, and is the reason for the
+handling below:
+
+- Neither image is captioned, described or framed anywhere on the page as a
+  Show Me Electrical job. They are illustrative only.
+- The alt text describes what is actually in frame, and the second says
+  "a rendering", because calling a 3D render a photograph would be untrue.
+- They are not in §7a and are not counted among the retained job-site photos.
+
+**Open item for the owner: the licence.** These came from the client's
+WordPress library, but a stock licence does not transfer automatically to a
+rebuild, a new domain or a new agency. Confirm the original licence covers
+continued use on the relaunched site before launch. Nothing in this
+repository can establish that.
+
+**The alternative is still in the repository.** The client's own
+`/photos/tray-ceiling-recessed-lighting.webp` (residential) and
+`/photos/commercial-led-retrofit.webp` (commercial) were the hero's two
+frames from 2026-10-13 to 2026-10-15 and remain retained and redirected,
+ready to go back in.
 
 ## 8. Not yet inventoried / needs access
 

@@ -38,7 +38,8 @@ export const hero = {
   headline: "Plumbing done properly,",
   headlineAccent: "from two local branches.",
   body: "Fictional demonstration brand. Water heaters, drains, repiping and leak repair for Exampleton homes and small businesses — a free walkthrough first, a clear quote, then the work.",
-  image: placeholder("hero"),
+  /** One frame: the hero renders it static. Two would rotate. */
+  images: [placeholder("hero")] as const,
 };
 
 export { trustPoints } from "./shared";
