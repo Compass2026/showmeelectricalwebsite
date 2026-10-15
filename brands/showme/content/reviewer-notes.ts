@@ -19,10 +19,14 @@ const flagged = (items: { title: string; flags?: string[] }[]) =>
 export const previewNotice = {
   title: "Prototype for review — not indexable, not live",
   intro:
-    "Homepage prototype for the Show Me Electrical rebuild. The live WordPress site and the careers site are untouched. All photography is from the client's own media library.",
+    "Homepage prototype for the Show Me Electrical rebuild. The live WordPress site and the careers site are untouched. Every photograph is from the client's own media library; the two rotating images at the top of this page are the current site's own hero backgrounds, which are stock rather than Show Me Electrical's work — see the note below.",
 };
 
 export const reviewerNotes: { where: string; note: string }[] = [
+  {
+    where: "Homepage hero — the two rotating images",
+    note: "These are the two slide backgrounds from the current WordPress hero, carried across at the owner's request: a modern house entrance and a boardroom. Both are STOCK, not Show Me Electrical's own work, and the boardroom is a 3D rendering rather than a photograph. Neither is described anywhere on the page as a Show Me Electrical job. TO CONFIRM BEFORE LAUNCH: that the original stock licence covers continued use on the rebuilt site — a stock licence does not automatically carry over to a new build. The alternative is ready: two of the client's own job-site photos (a recessed tray ceiling, and an LED retrofit in a commercial drop ceiling) were in this hero until 2026-10-15 and can go back in. Everywhere else on the site, every image is the client's own work.",
+  },
   {
     where: "Services",
     note: "All three homepage cards link to their hub pages: /services/residential, /services/commercial and /services/industrial. The individual service names on those pages are not links until their own pages exist (later SEO expansion, see docs/page-plan.md).",
