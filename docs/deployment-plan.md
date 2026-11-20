@@ -5,6 +5,31 @@ rule, and revised **2026-10-13** to point at the re-audited release (§0).
 **Nothing in this plan has been executed.** Production, DNS and the live
 careers site stay unchanged until Tom approves the release.
 
+## Separated deployment — supersedes §1, §4 and the careers rows of §7 (2026-11-20)
+
+> Tom, 2026-11-20: "Prepare Show Me Electrical's main-site deployment so
+> promoting it does not replace or disrupt careers.showmeelectrical.com …
+> Do not change the careers deployment or customer DNS."
+
+The main site no longer launches by fast-forwarding the careers project's
+production branch. It has its own Vercel project, so **launching it never
+touches the careers deployment**:
+
+| Item | Value |
+|---|---|
+| Main-site project | `showmeelectrical-main` — `prj_idFiZRZ3ivLlqSkJDcYThY2uq6UV`, Next.js, Node 24.x, Vercel Authentication on everything except custom domains. **Not linked to Git**: a push to any branch builds nothing here; production changes only by an explicit deployment of a pinned commit. |
+| Current production | `dpl_BvWAteysbMZD8yiiFRHWoQ3wzv4E` — commit `10cc3ca` (head of `claude/template-completion`, docs-only past `9dde4e9`), READY. Only address: `showmeelectrical-main.vercel.app` (team sign-in). Checked: `/` 200, one H1, canonical `https://showmeelectrical.com`, `index, follow`; sitemap 16 URLs; `/careers` → 308 `careers.showmeelectrical.com/`. |
+| Production env | `NEXT_PUBLIC_SITE_URL=https://showmeelectrical.com`, `NEXT_PUBLIC_ALLOW_INDEXING=true` (safe: the only address is behind sign-in). **`RESEND_API_KEY` is not set** — it is a sensitive value and cannot be copied from the careers project. Until the owner adds it (the existing key or a new one restricted to `send.compassmarketing.ai`), `/api/inquiry` cannot send. |
+| Careers project | `showmeelectricalwebsite` — **unchanged**: production branch `claude/show-me-electrical-careers-k6km12`, deployment `dpl_4q2JCghjVErahoK8FSigLr41F2dT`, domain `careers.showmeelectrical.com`, its env vars. Nothing in this plan writes to it. `preview.showmeelectrical.com` stays where it is. |
+
+Cutover, when approved (§2 pre-flight still applies — WordPress backup first):
+
+1. Add `RESEND_API_KEY` to `showmeelectrical-main` (Production) and redeploy the pinned commit; `POST /api/inquiry` with `{"name":"probe"}` → 400.
+2. Add `showmeelectrical.com` and `www.showmeelectrical.com` (308 → apex) to **`showmeelectrical-main`**, not to the careers project. Copy the records Vercel displays into §6.1.
+3. §6.2–6.6 unchanged: only the apex A and `www` CNAME change at GoDaddy; `careers`, MX, SPF, DKIM, DMARC and the verification TXTs stay.
+
+Rollback for the main site is the DNS revert in §7; careers has nothing to roll back. A later main-site release is a new deployment of a new pinned commit to `showmeelectrical-main` (Instant Rollback to the previous one if needed).
+
 ## 0. What is being promoted
 
 > **Changed 2026-10-13.** The release moved from the 2026-09-19 build to the
