@@ -30,7 +30,9 @@ for (const c of cityPages) {
 }
 for (const d of serviceDetailPages) {
   if (d.parent) contentLinks.push({ from: d.path, href: d.parent, ok: isPublishedHref(d.parent) });
+  for (const href of blockHrefs(d.context?.body ?? [])) contentLinks.push({ from: d.path, href, ok: isPublishedHref(href) });
   for (const l of d.related?.links ?? []) contentLinks.push({ from: d.path, href: l.href, ok: isPublishedHref(l.href) });
+  for (const i of d.services.items) if (i.href) contentLinks.push({ from: d.path, href: i.href, ok: isPublishedHref(i.href) });
 }
 const badInternal = contentLinks.filter((l) => isInternalHref(l.href) && !l.ok);
 const badExternal = contentLinks.filter((l) => !isInternalHref(l.href) && !/^https:\/\//.test(l.href));

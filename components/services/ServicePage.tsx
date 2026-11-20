@@ -9,6 +9,7 @@ import ProcessSteps from "./ProcessSteps";
 import Faq from "./Faq";
 import RelatedLinks from "./RelatedLinks";
 import ClosingCta from "./ClosingCta";
+import Blocks from "@/components/site/Blocks";
 import { site } from "@/config/site.config";
 import { pageMetadata } from "@/lib/metadata";
 import {
@@ -108,6 +109,24 @@ export default function ServicePage({
           >
             <div className="mt-4">
               <TrustBar points={content.trust.points} />
+            </div>
+          </Section>
+        ) : null;
+
+      case "context":
+        return content.context ? (
+          <Section
+            key={key}
+            id="context"
+            tone="light"
+            eyebrow={content.context.eyebrow}
+            headingId="context-heading"
+            heading={content.context.heading}
+          >
+            {/* Not scroll-revealed: definitions and sourced facts are read,
+                and must stay in the accessibility tree from first paint. */}
+            <div className="mt-8 max-w-3xl">
+              <Blocks blocks={content.context.body} />
             </div>
           </Section>
         ) : null;

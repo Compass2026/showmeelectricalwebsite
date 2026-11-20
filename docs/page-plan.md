@@ -71,10 +71,24 @@ same call returned the map's 260/mo, confirming the location).
 Numbers are the taxonomy's. Volumes are the map's. None exist on the live
 site, so there are no existing URLs and no redirects.
 
-Status: **1 of 22 child pages built** (#3, as the template's representative
-individual-service page). The other 21 remain planned client work, separate
-from template acceptance; each needs its own sourced content file before it
-is registered in `content/services/index.ts` `serviceDetailPages`.
+Status: **3 of 22 child pages built** — #3, as the template's representative
+individual-service page, then #4 and #10 (2026-11-19, post-approval, on
+branch `compass/service-pages-breaker-outlet`; not in the approved release
+until promoted). The other 19 remain planned client work, separate from
+template acceptance; each needs its own sourced content file before it is
+registered in `content/services/index.ts` `serviceDetailPages`.
+
+**Slugs for #4 and #10 follow the Compass CRM's Foundation routes**
+(`/services/{hub}/{slug}`), not the slugs first proposed below:
+`circuit-breaker-repair` (was `circuit-breaker-replacement`) and
+`outlet-installation` (was `outlet-and-switch-installation`). Neither earlier
+slug was ever published, so no redirect is needed. #4's primary keyword is
+now "circuit breaker repair st louis", with "circuit breaker replacement st
+louis" and "why does my circuit breaker keep tripping" supporting; #10 adds
+"what is a gfci outlet" and "what is a dedicated circuit". When #4 was built
+the panel page (#3) was retargeted: its single-breaker situation links to #4
+and its breaker FAQ now asks the panel question, so the two pages do not
+compete for the tripping-breaker query.
 
 ### Residential (13) — under `/services/residential/`
 
@@ -83,13 +97,13 @@ is registered in `content/services/index.ts` `serviceDetailPages`.
 | 1 | Electrical Repair & Troubleshooting | electrical repair st louis | low | `/services/residential/electrical-repair` |
 | 2 | Emergency Electrical Service | emergency electrician st louis | 20 · **money kw #4** | `/services/residential/emergency-electrical-service` |
 | 3 | Electrical Panel Upgrades & Replacement | electrical panel upgrade st louis | <10 · **money kw #5** | `/services/residential/electrical-panel-upgrades` ✅ Built (template Batch B — the representative child page; content from the hub's approved copy only) |
-| 4 | Circuit Breaker Repair & Replacement | circuit breaker replacement st louis | low | `/services/residential/circuit-breaker-replacement` |
+| 4 | Circuit Breaker Repair & Replacement | circuit breaker repair st louis | low | `/services/residential/circuit-breaker-repair` ✅ Built 2026-11-19 (pending promotion) |
 | 5 | Home Rewiring | home rewiring st louis | 10 | `/services/residential/home-rewiring` |
 | 6 | New Construction Wiring | new construction electrical st louis | low | `/services/residential/new-construction-wiring` |
 | 7 | Remodel & Home Addition Electrical | remodel electrician st louis | low | `/services/residential/remodel-and-addition-electrical` |
 | 8 | Lighting & Fixture Installation | light fixture installation st louis | low | `/services/residential/lighting-installation` |
 | 9 | Ceiling Fan Installation | ceiling fan installation st louis | 40 · best service term | `/services/residential/ceiling-fan-installation` |
-| 10 | Outlet & Switch Installation | outlet installation st louis | low | `/services/residential/outlet-and-switch-installation` |
+| 10 | Outlet & Switch Installation | outlet installation st louis | low | `/services/residential/outlet-installation` ✅ Built 2026-11-19 (pending promotion) |
 | 11 | Smart Home & Security Wiring | smart home wiring st louis | low | `/services/residential/smart-home-wiring` |
 | 12 | EV Charger Installation | ev charger installation st louis | 20 | `/services/residential/ev-charger-installation` |
 | 13 | Generator Installation | generator installation st louis | 10 | `/services/residential/generator-installation` |
