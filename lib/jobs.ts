@@ -297,7 +297,7 @@ export function jobPostingJsonLd(job: Job) {
       "@type": "Organization",
       name: "Show Me Electrical Services",
       sameAs: WP_URL,
-      logo: `${WP_URL}/wp-content/uploads/2024/08/Show-me-electric-white-logo-4.png`,
+      logo: `${SITE_URL}/logo-square.png`,
     },
     jobLocation: {
       "@type": "Place",
@@ -309,10 +309,6 @@ export function jobPostingJsonLd(job: Job) {
         postalCode: ADDRESS.zip,
         addressCountry: "US",
       },
-    },
-    applicantLocationRequirements: {
-      "@type": "State",
-      name: "Missouri",
     },
     directApply: true,
     url: `${SITE_URL}/jobs/${job.slug}`,

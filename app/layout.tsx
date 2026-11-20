@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, WP_URL } from "@/lib/jobs";
+import { SITE_URL } from "@/lib/jobs";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -33,8 +33,10 @@ export const metadata: Metadata = {
     url: SITE_URL,
     images: [
       {
-        url: `${WP_URL}/wp-content/uploads/2024/08/Show-me-electric-white-logo-4.png`,
-        alt: "Show Me Electrical Services",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Show Me Electrical — now hiring in the Greater St. Louis area",
       },
     ],
   },
@@ -43,6 +45,7 @@ export const metadata: Metadata = {
     title: "Careers | Show Me Electrical",
     description:
       "Electrician jobs in St. Louis, MO — paid training and a clear path from Apprentice to certified Journeyman.",
+    images: ["/og-image.png"],
   },
   alternates: { canonical: SITE_URL },
 };
@@ -52,7 +55,21 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <head>
+        {/* Scroll reveals start hidden and are shown by JS; never hide content without it. */}
+        <noscript>
+          <style>{`.reveal{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
+      <body>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-lime-500 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-navy-950"
+        >
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

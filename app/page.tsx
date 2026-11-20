@@ -5,7 +5,7 @@ import CareerTimeline from "@/components/CareerTimeline";
 import JobCard from "@/components/JobCard";
 import ApplicationForm from "@/components/ApplicationForm";
 import Reveal from "@/components/Reveal";
-import { jobs, jobPostingJsonLd, SERVICE_AREA } from "@/lib/jobs";
+import { jobs, SERVICE_AREA } from "@/lib/jobs";
 
 export const dynamic = "force-static";
 
@@ -39,12 +39,6 @@ const whyCards = [
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jobs.map(jobPostingJsonLd)),
-        }}
-      />
       <Header />
       <main id="main">
         {/* ---------- Hero ---------- */}
