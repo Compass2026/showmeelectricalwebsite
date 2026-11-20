@@ -15,6 +15,13 @@ import { trustPoints, processSteps } from "@/content/shared";
  * circuit-breaker, EV-charger and remodel service items and the hub FAQ.
  * Trust facts and process steps are the shared, sourced sets.
  *
+ * RETARGETED 2026-11-19, when the circuit-breaker and outlet pages were
+ * built: the single-breaker situation now links to
+ * /services/residential/circuit-breaker-repair, which owns "why does my
+ * circuit breaker keep tripping"; this page's breaker FAQ asks the panel
+ * question instead (does a tripping breaker mean a new panel?), and the
+ * related links cross-link the two new pages. Nothing else changed.
+ *
  * DELIBERATELY ABSENT — not sourced, so not stated: prices, how long a
  * panel replacement takes, permit or utility specifics, amperage
  * recommendations, brand names, and any residential panel photograph (the
@@ -25,6 +32,7 @@ export const electricalPanelUpgrades: ServicePageContent = {
   slug: "electrical-panel-upgrades",
   path: "/services/residential/electrical-panel-upgrades",
   parent: "/services/residential",
+  modifiedAt: "2026-11-19",
 
   seo: {
     title: "Electrical Panel Upgrade St. Louis | Show Me Electrical",
@@ -96,6 +104,7 @@ export const electricalPanelUpgrades: ServicePageContent = {
           "One breaker trips over and over, won't reset, or is warm to the touch — but the rest of the panel behaves.",
         solution:
           "That may not need a new panel. We work out whether it's the breaker, the circuit or what's plugged into it, and replace the failing part rather than the whole panel when that's the right call.",
+        href: "/services/residential/circuit-breaker-repair",
       },
     ],
   },
@@ -121,8 +130,8 @@ export const electricalPanelUpgrades: ServicePageContent = {
       "Straight answers, based on what the company actually does. If yours isn't here, call — a free consultation is the fastest way to a real answer.",
     items: [
       {
-        q: "My breaker keeps tripping. What does that mean?",
-        a: "A breaker that trips once in a while is doing its job. One that trips regularly points to an overloaded circuit, faulty wiring or a failing breaker, and ignoring it risks overheating. We diagnose the cause and fix that, rather than just resetting it.",
+        q: "Does a breaker that keeps tripping mean I need a new panel?",
+        a: "Not necessarily. One breaker that keeps tripping points to that breaker, its circuit or what's plugged into it, and that may be a breaker repair rather than a panel. Breakers tripping across the panel under everyday loads, an older panel or a fuse box point to the panel — and then we assess it and tell you plainly whether an upgrade is the right work.",
       },
       {
         q: "Do you replace fuse boxes?",
@@ -150,6 +159,16 @@ export const electricalPanelUpgrades: ServicePageContent = {
   related: {
     heading: "Related",
     links: [
+      {
+        label: "Circuit breaker repair",
+        href: "/services/residential/circuit-breaker-repair",
+        description: "One breaker that keeps tripping, won't reset or feels warm — often a repair, not a new panel.",
+      },
+      {
+        label: "Outlet & switch installation",
+        href: "/services/residential/outlet-installation",
+        description: "New circuits and outlets once the panel can carry them, GFCI protection near water.",
+      },
       {
         label: "All residential services",
         href: "/services/residential",

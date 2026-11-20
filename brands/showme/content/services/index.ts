@@ -3,6 +3,8 @@ import { residential } from "./residential";
 import { commercial } from "./commercial";
 import { industrial } from "./industrial";
 import { electricalPanelUpgrades } from "./electrical-panel-upgrades";
+import { circuitBreakerRepair } from "./circuit-breaker-repair";
+import { outletInstallation } from "./outlet-installation";
 
 /**
  * REGISTRY OF IMPLEMENTED SERVICE PAGES.
@@ -31,6 +33,8 @@ export const servicePages: readonly ServicePageContent[] = [
 
 export const serviceDetailPages: readonly ServicePageContent[] = [
   electricalPanelUpgrades,
+  circuitBreakerRepair,
+  outletInstallation,
 ];
 
 export const allServicePages: readonly ServicePageContent[] = [

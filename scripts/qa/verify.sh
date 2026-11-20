@@ -63,7 +63,7 @@ run_brand () { # brand host port paths
   fuser -k "$port/tcp" 2>/dev/null || true
   sleep 1
 }
-run_brand showme showmeelectrical.com $PORT_A "/,/services/residential/electrical-panel-upgrades,/service-area/edwardsville-il,/blog/the-most-common-electrical-hazards-found-in-missouri-homes,/contact"
+run_brand showme showmeelectrical.com $PORT_A "/,/services/residential/electrical-panel-upgrades,/services/residential/circuit-breaker-repair,/services/residential/outlet-installation,/service-area/edwardsville-il,/blog/the-most-common-electrical-hazards-found-in-missouri-homes,/contact"
 run_brand harbor-lane harbor-lane.example $PORT_B "/,/locations/westfield,/service-area/northgate,/contact"
 echo "== production guards (each must fail with ITS OWN message; any other failure is a real build error)"
 guard () { # name expected-message env...

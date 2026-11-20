@@ -9,7 +9,8 @@ import { trustPoints, processSteps } from "@/content/shared";
  * (20/mo, HIGH competition). The 13 services are the approved taxonomy's
  * residential entries, numbered as in the map; each becomes its own page in a
  * later milestone and gets an `href` then (panel upgrades has one — the
- * representative individual-service page, template Batch B).
+ * representative individual-service page, template Batch B; circuit
+ * breaker repair and outlet & switch installation followed 2026-11-19).
  *
  * PROVENANCE:
  *  - Service names: approved taxonomy v1.1 (client-approved 2026-09-02).
@@ -110,6 +111,7 @@ export const residential: ServicePageContent = {
           "One breaker trips over and over, won't reset, or is warm to the touch.",
         solution:
           "We work out whether it's the breaker, the circuit or what's plugged into it, and replace the failing part rather than the whole panel when that's the right call.",
+        href: "/services/residential/circuit-breaker-repair",
       },
       {
         name: "Home Rewiring",
@@ -152,6 +154,7 @@ export const residential: ServicePageContent = {
           "Not enough outlets, two-prong outlets, no GFCI protection near water, or extension cords doing a permanent job.",
         solution:
           "New and replacement outlets and switches, GFCI protection where code requires it, dimmers and USB outlets.",
+        href: "/services/residential/outlet-installation",
       },
       {
         name: "Smart Home & Security Wiring",

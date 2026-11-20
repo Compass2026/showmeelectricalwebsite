@@ -1,3 +1,5 @@
+import type { Block } from "../blocks";
+
 /**
  * SERVICE PAGE CONTENT MODEL
  *
@@ -25,6 +27,7 @@ export type ServiceSectionKey =
   | "services"
   | "gallery"
   | "trust"
+  | "context"
   | "process"
   | "faqs"
   | "related"
@@ -148,6 +151,19 @@ export interface ServicePageContent {
     heading: string;
     intro?: string;
     points: TrustPoint[];
+  };
+
+  /**
+   * Explanatory prose as typed blocks — the place for a definition, a quoted
+   * external fact and its sources list (`{ type: "sources" }`). Same shape
+   * as a served-city page's `context`; internal links are checked by QA and
+   * external links must be https.
+   */
+  context?: {
+    /** Small label above the heading. Optional; nothing is shown if absent. */
+    eyebrow?: string;
+    heading: string;
+    body: Block[];
   };
 
   process?: {
