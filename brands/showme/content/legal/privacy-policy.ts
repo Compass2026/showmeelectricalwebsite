@@ -11,7 +11,11 @@ import type { LegalDocument } from "@/content/legal/types";
  * email providers that process a submission; §5 describes the contact form
  * as inquiry-only with no text-messaging enrolment; §7 states that no
  * analytics or advertising cookies are set (D-006). Business programmes run
- * outside the Website are left as written.
+ * outside the Website are left as written. Revised 2026-11-20 when GA4 went
+ * live on the main site (D-008, Tom's authorization): §1 technical data, §4
+ * providers and §7 now describe Google Analytics as built — usage data,
+ * first-party cookies, the phone-click and form-submit events, no
+ * advertising cookies.
  *
  * Wording is reproduced verbatim for review — nothing has been replaced with
  * generic legal text. Section headings were h3 under an h2 page title at the
@@ -26,7 +30,7 @@ export const doc: LegalDocument = {
   seo: {
     description: "How Show Me Electrical collects, uses, shares and protects the personal information you provide through our website, phone, email and SMS.",
   },
-  lastUpdated: "2026-09-19",
+  lastUpdated: "2026-11-20",
   body: [
     { type: "p", text: "Show Me Electrical (“Company,” “we,” “our,” or “us”) respects your privacy and is committed to protecting it through this Privacy Policy. This policy describes the types of information we may collect from you or that you may provide when you visit our website https://showmeelectrical.com (the “Website”), and our practices for collecting, using, maintaining, protecting, and disclosing that information." },
     { type: "h2", text: "1. Information We Collect" },
@@ -34,7 +38,7 @@ export const doc: LegalDocument = {
     { type: "ul", items: [
       "Contact Information such as your name, phone number, email address, and physical address.",
       "Service Information such as details about your electrical project, installation, repair, or maintenance needs.",
-      "Technical Data such as your IP address, browser type and the pages you request, which our hosting provider records in ordinary server logs to operate and secure the Website. The Website does not currently use analytics tools.",
+      "Technical Data such as your IP address, browser type and the pages you request, which our hosting provider records in ordinary server logs to operate and secure the Website, and usage data — the pages you visit, how you arrived at the Website, and whether you tap our phone number or send our contact form — collected through Google Analytics (see section 7).",
     ] },
     { type: "h2", text: "2. How We Collect Information" },
     { type: "p", text: "We collect your information when you:" },
@@ -56,7 +60,7 @@ export const doc: LegalDocument = {
     { type: "p", text: "We do not sell or rent your personal information. We may share your data only with:" },
     { type: "ul", items: [
       "Authorized employees and agents of Show Me Electrical.",
-      "Third-party service providers who help operate our Website — including our hosting provider and the email service that delivers your form submission to us — CRM systems, or marketing tools.",
+      "Third-party service providers who help operate our Website — including our hosting provider, the email service that delivers your form submission to us, and Google Analytics — CRM systems, or marketing tools.",
       "Government or legal authorities, if required by law.",
     ] },
     { type: "p", text: "Mobile information will not be shared with third parties or affiliates for marketing or promotional purposes." },
@@ -66,7 +70,8 @@ export const doc: LegalDocument = {
     { type: "h2", text: "6. Data Security" },
     { type: "p", text: "We implement reasonable administrative, technical, and physical security measures to protect your personal information from unauthorized access, disclosure, or misuse. However, no method of transmission over the internet is 100% secure." },
     { type: "h2", text: "7. Cookies and Tracking Technologies" },
-    { type: "p", text: "Our Website does not currently set analytics or advertising cookies. If we add analytics in future, this section will be updated to describe it. You can control or disable cookies through your browser settings." },
+    { type: "p", text: "Our Website uses Google Analytics, a web analytics service provided by Google, to understand how visitors use the Website — for example which pages are viewed, how visitors arrive, and whether a visitor taps our phone number or sends our contact form. Google Analytics sets first-party cookies (such as “_ga”) and sends this usage information, including your IP address and browser details, to Google. When you send the contact form, Google receives only that a form was sent and the service you chose — never your name, contact details or message. The Website does not set advertising cookies." },
+    { type: "p", text: "You can learn how Google uses this information at https://policies.google.com/technologies/partner-sites and opt out of Google Analytics with Google’s browser add-on at https://tools.google.com/dlpage/gaoptout. You can also control or disable cookies through your browser settings." },
     { type: "h2", text: "8. Your Rights and Choices" },
     { type: "p", text: "You have the right to:" },
     { type: "ul", items: [
