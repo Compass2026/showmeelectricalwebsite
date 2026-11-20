@@ -37,6 +37,18 @@ export interface Article {
   image?: Photo;
   body: Block[];
   /**
+   * Provenance of an article published by the Compass CRM (compass-blog.json).
+   * Present only on entries in brands/<brand>/content/blog/compass-posts.ts;
+   * the post page renders `data-compass-release` from it so the CRM can verify
+   * the exact approved release is live. Hand-written posts never carry it.
+   */
+  compass?: {
+    release_hash: string;
+    draft_id: string;
+    draft_version: number;
+    keyword_id: string | null;
+  };
+  /**
    * Reviewer flags: claims in the source that conflict with confirmed
    * business facts or need confirmation. Shown in the reviewer notice, never
    * on the page.

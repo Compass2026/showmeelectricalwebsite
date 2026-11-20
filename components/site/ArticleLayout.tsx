@@ -89,7 +89,10 @@ export default function ArticleLayout({
         </div>
       </header>
 
-      <article className="bg-white py-14 sm:py-16">
+      <article
+        className="bg-white py-14 sm:py-16"
+        data-compass-release={article.compass?.release_hash}
+      >
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           {article.image && (
             <figure className="mb-10">
