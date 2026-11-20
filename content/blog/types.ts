@@ -14,6 +14,13 @@ export interface Article {
   path: string;
   title: string;
   seo: {
+    /**
+     * The approved SEO title, when it differs from the on-page title (H1).
+     * Used for the document <title>, og:title and twitter:title, with the
+     * brand suffix only while the whole stays within 60 characters. Omit it
+     * and `title` is used, exactly as before.
+     */
+    title?: string;
     /** ≤ 155 characters. */
     description: string;
   };

@@ -28,10 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = findArticle(slug);
   if (!post) return {};
-  // Brand suffix only while the whole title stays within 60 characters.
-  const suffixed = `${post.title} | ${site.name}`;
+  // The SEO title (approved meta title) when the post carries one, else the
+  // on-page title; the H1 stays `post.title`. Brand suffix only while the
+  // whole title stays within 60 characters — never truncated.
+  const seoTitle = post.seo.title?.trim() || post.title;
+  const suffixed = `${seoTitle} | ${site.name}`;
   return pageMetadata({
-    title: suffixed.length <= 60 ? suffixed : post.title,
+    title: suffixed.length <= 60 ? suffixed : seoTitle,
     description: post.seo.description,
     path: post.path,
     image: post.image?.src,
