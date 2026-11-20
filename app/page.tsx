@@ -7,8 +7,6 @@ import ApplicationForm from "@/components/ApplicationForm";
 import Reveal from "@/components/Reveal";
 import { jobs, SERVICE_AREA } from "@/lib/jobs";
 
-export const dynamic = "force-static";
-
 const whyCards = [
   {
     title: "Paid Training",
