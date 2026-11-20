@@ -4,6 +4,7 @@ import "@brand/theme.css";
 import { fontClassNames } from "@brand/fonts";
 import { site } from "@/config/site.config";
 import DemoNotice from "@/components/site/DemoNotice";
+import Analytics from "@/components/site/Analytics";
 
 /**
  * Indexing switch.
@@ -48,6 +49,7 @@ export default function RootLayout({
           <DemoNotice what={`${site.name}, its people, addresses, phone numbers and services do not exist.`} />
         )}
         {children}
+        <Analytics />
       </body>
     </html>
   );

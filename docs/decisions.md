@@ -139,3 +139,20 @@ inquiry stands as: **provider (Resend) reports delivered; human inbox
 receipt unverified.** No further test messages are sent. The project
 proceeds; a receipt check by whoever reads info@showmeelectrical.com is a
 post-launch item.
+
+## D-008 — GA4 on the main site (2026-11-20)
+
+**Decision (Tom):** configure GA4 on the live main site and release it.
+Property `properties/558662996`, web stream for `showmeelectrical.com`,
+measurement id `G-678R18K8VH` (Compass CRM record, 2026-10-12).
+Supersedes the "none at launch" half of D-006; the privacy half stands —
+the policy describes the site as it is, so §1, §4 and §7 now describe
+Google Analytics and the policy date moved to 2026-11-20.
+
+**Applied:** `lib/analytics.ts` + `components/site/Analytics.tsx`, gated by
+`NEXT_PUBLIC_GA_ID`, which is set on the **Production** target of
+`showmeelectrical-main` only. Previews and the careers project have no id,
+so they load no tag. Events: `phone_click` (every `tel:` link) and
+`form_submit` (the /contact inquiry form, on a confirmed server success
+only; the service choice is the only form value sent). No GTM, no
+advertising tags, no consent banner (none existed; US-only local business).

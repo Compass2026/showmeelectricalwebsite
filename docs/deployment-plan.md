@@ -266,4 +266,4 @@ forward in Git.
 | After every deployment | Routing matrix on both hosts; robots meta on `/` of each host; `POST /api/inquiry` invalid body → 400. |
 | Delivery monitoring | Resend shows every accepted inquiry with its delivery status; a `delivered` status is the provider's evidence, inbox receipt is the business's. No scheduled test submissions. |
 | When a client sending domain is verified | Follow §3a.1: set `INQUIRY_FROM`, then one authorized inquiry to confirm Reply-To. |
-| When GA4 is set up (D-006 follow-up) | Add the tag, update privacy §7, bump the policy date. |
+| ~~When GA4 is set up (D-006 follow-up)~~ | **Done 2026-11-20 (D-008):** tag added behind `NEXT_PUBLIC_GA_ID` (Production target of `showmeelectrical-main` only), privacy §1/§4/§7 updated, policy dated 2026-11-20. After every deployment: exactly one `gtag/js?id=G-678R18K8VH` on `/` of the main host, none on previews or the careers host. |
