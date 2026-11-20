@@ -9,7 +9,8 @@ const FROM = "Show Me Electrical Careers <careers@send.compassmarketing.ai>";
 /** Override with APPLICATION_RECIPIENT (comma-separated for multiple). */
 const TO = ["info@showmeelectrical.com", "thomas@compassmarketing.ai"];
 
-const MAX_RESUME_BYTES = 5 * 1024 * 1024;
+// Vercel caps request bodies at 4.5MB; keep the file safely under it.
+const MAX_RESUME_BYTES = 4 * 1024 * 1024;
 const RESUME_TYPES: Record<string, string> = {
   "application/pdf": ".pdf",
   "application/msword": ".doc",
@@ -52,6 +53,18 @@ function esc(value: string): string {
 function field(form: FormData, name: string, maxLen = 200): string {
   const value = form.get(name);
   return typeof value === "string" ? value.trim().slice(0, maxLen) : "";
+}
+
+/** Single-line field: collapses any line breaks (names end up in the subject). */
+function lineField(form: FormData, name: string, maxLen = 200): string {
+  return field(form, name, maxLen).replace(/[\r\n]+/g, " ");
+}
+
+/** Resolves the file extension from MIME type, falling back to the file name. */
+function resumeExtension(file: File): string | undefined {
+  if (RESUME_TYPES[file.type]) return RESUME_TYPES[file.type];
+  const match = /\.(pdf|docx?)$/i.exec(file.name);
+  return match ? `.${match[1].toLowerCase()}` : undefined;
 }
 
 function row(label: string, value: string): string {
@@ -120,10 +133,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const firstName = field(form, "firstName", 100);
-  const lastName = field(form, "lastName", 100);
-  const email = field(form, "email", 200);
-  const phone = field(form, "phone", 30);
+  const firstName = lineField(form, "firstName", 100);
+  const lastName = lineField(form, "lastName", 100);
+  const email = lineField(form, "email", 200);
+  const phone = lineField(form, "phone", 30);
   const roleSlug = field(form, "role", 60);
   const job = getJob(roleSlug);
 
@@ -183,11 +196,12 @@ export async function POST(request: NextRequest) {
   if (resume instanceof File && resume.size > 0) {
     if (resume.size > MAX_RESUME_BYTES) {
       return NextResponse.json(
-        { error: "Resume is too large (max 5MB)." },
+        { error: "Resume is too large (max 4MB)." },
         { status: 400 }
       );
     }
-    if (!RESUME_TYPES[resume.type]) {
+    const ext = resumeExtension(resume);
+    if (!ext) {
       return NextResponse.json(
         { error: "Resume must be a PDF or Word document." },
         { status: 400 }
@@ -196,7 +210,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await resume.arrayBuffer());
     const safeName =
       resume.name.replace(/[^\w.\- ]/g, "_").slice(0, 100) ||
-      `resume${RESUME_TYPES[resume.type]}`;
+      `resume${ext}`;
     attachments.push({ filename: safeName, content: buffer.toString("base64") });
   }
 

@@ -48,15 +48,21 @@ const initialState: FormState = {
   adminSummary: "",
 };
 
-const MAX_RESUME_BYTES = 5 * 1024 * 1024;
+// Vercel rejects request bodies over 4.5MB, so keep the file safely under it.
+const MAX_RESUME_BYTES = 4 * 1024 * 1024;
 const RESUME_TYPES = [
   "application/pdf",
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
+// Some browsers/OSes report an empty MIME type for Word files; fall back to the extension.
+const RESUME_EXTENSIONS = /\.(pdf|docx?)$/i;
 
 export function formatPhone(value: string): string {
-  const digits = value.replace(/\D/g, "").slice(0, 10);
+  let digits = value.replace(/\D/g, "");
+  // Drop a leading US country code ("1-314-…" or "+1 314 …").
+  if (digits.length === 11 && digits.startsWith("1")) digits = digits.slice(1);
+  digits = digits.slice(0, 10);
   if (digits.length === 0) return "";
   if (digits.length < 4) return `(${digits}`;
   if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
@@ -174,12 +180,12 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
       setResume(null);
       return;
     }
-    if (!RESUME_TYPES.includes(file.type)) {
+    if (!RESUME_TYPES.includes(file.type) && !RESUME_EXTENSIONS.test(file.name)) {
       setErrors((e) => ({ ...e, resume: "Please upload a PDF or Word document." }));
       return;
     }
     if (file.size > MAX_RESUME_BYTES) {
-      setErrors((e) => ({ ...e, resume: "File is too large (max 5MB)." }));
+      setErrors((e) => ({ ...e, resume: "File is too large (max 4MB)." }));
       return;
     }
     setResume(file);
@@ -203,7 +209,12 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
       const res = await fetch("/api/apply", { method: "POST", body: data });
       if (!res.ok) {
         const body = await res.json().catch(() => null);
-        throw new Error(body?.error ?? "Something went wrong. Please try again.");
+        throw new Error(
+          body?.error ??
+            (res.status === 413
+              ? "Your resume is too large to upload. Please attach a smaller file, or submit without it."
+              : "Something went wrong. Please try again or call 314-571-9756.")
+        );
       }
       setStatus("success");
       scrollTop();
@@ -217,7 +228,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
 
   if (status === "success") {
     return (
-      <div ref={topRef} className="rounded-2xl border border-lime-500/40 bg-white p-10 text-center shadow-xl">
+      <div ref={topRef} className="scroll-mt-36 rounded-2xl border border-lime-500/40 bg-white p-10 text-center shadow-xl">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-lime-500/15">
           <svg className="h-8 w-8 text-lime-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -240,7 +251,7 @@ function ApplicationFormInner({ preselectedRole }: { preselectedRole: string }) 
     }`;
 
   return (
-    <div ref={topRef} className="rounded-2xl bg-white p-6 shadow-xl sm:p-10">
+    <div ref={topRef} className="scroll-mt-36 rounded-2xl bg-white p-6 shadow-xl sm:p-10">
       {/* Step indicator */}
       <ol className="mb-8 flex items-center gap-2" aria-label="Application progress">
         {[
@@ -699,7 +710,7 @@ function ResumeField({
   onChange: (f: File | null) => void;
 }) {
   return (
-    <Field label="Resume (optional — PDF or Word, max 5MB)" error={error}>
+    <Field label="Resume (optional — PDF or Word, max 4MB)" error={error}>
       <input
         type="file"
         accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -720,7 +731,9 @@ function ReviewRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid gap-1 px-4 py-3 sm:grid-cols-[180px_1fr] sm:gap-4">
       <dt className="text-sm font-semibold text-navy-900/60">{label}</dt>
-      <dd className="text-sm break-words text-navy-900">{value || "—"}</dd>
+      <dd className="text-sm break-words text-navy-900">
+        {value === "yes" ? "Yes" : value === "no" ? "No" : value || "—"}
+      </dd>
     </div>
   );
 }
