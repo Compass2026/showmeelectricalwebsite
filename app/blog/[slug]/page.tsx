@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteHeader from "@/components/site/SiteHeader";
@@ -19,6 +21,14 @@ import {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
+  // A Compass hero is committed with its post; a post whose file is missing
+  // fails the build instead of shipping a broken image.
+  for (const post of articles) {
+    const src = post.heroImage?.src;
+    if (src && !existsSync(path.join(process.cwd(), "public", src))) {
+      throw new Error(`Blog post "${post.slug}" names hero image ${src}, which is not in public/.`);
+    }
+  }
   return articles.map((post) => ({ slug: post.slug }));
 }
 
@@ -37,8 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: suffixed.length <= 60 ? suffixed : seoTitle,
     description: post.seo.description,
     path: post.path,
-    image: post.image?.src,
-    imageAlt: post.image?.alt,
+    image: (post.image ?? post.heroImage)?.src,
+    imageAlt: (post.image ?? post.heroImage)?.alt,
     type: "article",
     publishedTime: post.publishedAt,
     modifiedTime: post.modifiedAt,
@@ -76,7 +86,7 @@ export default async function BlogPostPage({ params }: Props) {
   const jsonLd = [
     localBusinessJsonLd(),
     websiteJsonLd(),
-    blogPostingJsonLd(post),
+    blogPostingJsonLd({ ...post, image: post.image ?? post.heroImage }),
     breadcrumbJsonLd(breadcrumbs, post.path),
   ];
 
