@@ -3,13 +3,19 @@ import type { Crumb, Photo } from "@/content/services/types";
 import { post as rewiring } from "./top-5-signs-your-home-needs-electrical-rewiring";
 import { post as hazards } from "./the-most-common-electrical-hazards-found-in-missouri-homes";
 import { post as callImmediately } from "./top-signs-you-need-to-call-an-electrician-immediately";
+import { compassPosts } from "./compass-posts";
+import { mergeCompassPosts } from "@/content/blog/compass";
 
 /**
  * REGISTRY of published articles — the only list the blog index, the post
  * routes and the sitemap read. A post that is not here does not exist on the
  * site. Newest first; posts without a date sort last, in the order listed.
+ *
+ * Hand-written posts are listed here; posts the Compass CRM publishes arrive
+ * through ./compass-posts.ts (generated). The merge fails the build on a
+ * duplicate slug or a Compass post outside /blog/<slug>.
  */
-export const articles: Article[] = [rewiring, hazards, callImmediately].sort(
+export const articles: Article[] = mergeCompassPosts([rewiring, hazards, callImmediately], compassPosts).sort(
   (a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? "")
 );
 

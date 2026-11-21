@@ -1,0 +1,1 @@
+{"version":1,"adapter":"foundation_brand_content","brand":"showme","keyword_provenance":true,"markdown":false,"blocks":true,"seo_fields":true,"tldr":true,"hero_image":true,"hero_image_dir":"public/blog/images","hero_image_url_prefix":"/blog/images/","posts_file":"brands/showme/content/blog/compass-posts.ts","blog_route":"/blog/{slug}"}

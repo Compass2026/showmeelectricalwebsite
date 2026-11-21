@@ -89,8 +89,35 @@ export default function ArticleLayout({
         </div>
       </header>
 
-      <article className="bg-white py-14 sm:py-16">
+      <article
+        className="bg-white py-14 sm:py-16"
+        data-compass-release={article.compass?.release_hash}
+      >
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          {/* Compass posts: the approved summary, then the approved hero
+              (title → TL;DR → hero → article). The hero is a fixed-size,
+              16:9 frame (width/height attributes plus aspect-ratio), so
+              nothing shifts as it loads; served as committed (unoptimized),
+              so its src is the approved file. No caption: an illustrative
+              flag is provenance, not page copy — the alt describes it. */}
+          {article.tldr && (
+            <p className="mb-8 rounded-xl border border-primary-900/10 bg-surface px-5 py-4 text-[1.0625rem] leading-relaxed text-ink/85">
+              <strong className="font-semibold text-primary-900">TL;DR:</strong> {article.tldr}
+            </p>
+          )}
+          {article.heroImage && (
+            <div className="mb-10 overflow-hidden rounded-xl border border-primary-900/10">
+              <Image
+                src={article.heroImage.src}
+                alt={article.heroImage.alt}
+                width={article.heroImage.width}
+                height={article.heroImage.height}
+                unoptimized
+                priority
+                className="aspect-[16/9] h-auto w-full object-cover"
+              />
+            </div>
+          )}
           {article.image && (
             <figure className="mb-10">
               <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-primary-900/10">
