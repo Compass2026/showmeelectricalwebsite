@@ -12,6 +12,7 @@ import {
   type InquiryResponse,
   type ServiceOptionGroup,
 } from "@/lib/inquiry";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * INQUIRY FORM — reusable. Every visible string comes from `labels`; the
@@ -183,6 +184,13 @@ export default function InquiryForm({
       }
 
       if (res.ok && body.ok === true) {
+        // Only a confirmed delivery counts. No visitor details are sent to
+        // analytics — the service choice is a fixed list, never free text.
+        trackEvent("form_submit", {
+          form_id: "inquiry",
+          service: data.service || undefined,
+          page_path: window.location.pathname,
+        });
         setStatus("success");
         return;
       }

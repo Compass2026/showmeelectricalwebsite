@@ -144,6 +144,7 @@ value. Env vars are snapshotted per deployment, so redeploy after changing one.
 | `INQUIRY_DELIVERY` | No | *(unset = real delivery)* | `mock` returns success without sending; `fail` simulates a provider failure. **Ignored when `VERCEL_ENV=production`.** For local and preview testing only. |
 | `NEXT_PUBLIC_SITE_URL` | No | `https://showmeelectrical.com` | Production domain for canonicals and structured data. |
 | `NEXT_PUBLIC_ALLOW_INDEXING` | No | *(unset = noindex)* | See below. |
+| `NEXT_PUBLIC_GA_ID` | No | *(unset = no analytics)* | GA4 measurement id (`G-…`). **Production target of `showmeelectrical-main` only** — never preview, never the careers project. Build-time: loads gtag.js once from `app/layout.tsx` and sends `phone_click` (any `tel:` link) and `form_submit` (contact form, confirmed success only). Ignored for a fictional brand. See `lib/analytics.ts`. |
 
 ### Preview vs production indexing
 
